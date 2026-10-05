@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Unofficial Windows x64 binaries for selected PostgreSQL extensions.">
+  <title>pgextwin — PostgreSQL Extensions for Windows</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell">
+      <p class="eyebrow">pgextwin</p>
+      <h1>PostgreSQL Extensions for Windows</h1>
+      <p class="lead">Unofficial Windows x64 binaries for selected PostgreSQL extensions, designed for standard Windows PostgreSQL installations.</p>
+      <p class="lead ja" lang="ja">標準的なWindows版PostgreSQLで利用しやすい、PostgreSQL拡張機能の非公式Windows x64バイナリを提供します。</p>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section aria-labelledby="extensions-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Catalog</p>
+          <h2 id="extensions-heading">Available extensions</h2>
+        </div>
+        <button id="reload" type="button">Reload catalog</button>
+      </div>
+
+      <div id="status" class="status" role="status" aria-live="polite">Loading catalog…</div>
+      <div id="extensions" class="extension-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="info" aria-labelledby="about-heading">
+      <p class="eyebrow">About</p>
+      <h2 id="about-heading">Built from pinned upstream source</h2>
+      <p>pgextwin is an independent community project. Each package identifies its upstream project, source version, supported PostgreSQL major version, architecture, and license.</p>
+      <p lang="ja">pgextwinは独立したコミュニティプロジェクトです。各配布物にはupstream、使用ソース、対応PostgreSQL、アーキテクチャ、ライセンスを明記します。</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell">
+      <a href="https://github.com/pgextwin">GitHub Organization</a>
+      <a href="https://github.com/pgextwin/catalog">Catalog</a>
+      <a href="https://github.com/pgextwin/build">Build infrastructure</a>
+    </div>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
