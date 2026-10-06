@@ -12,4 +12,10 @@ Serve this directory with any static HTTP server. Opening `index.html` directly 
 
 ## Deployment
 
-The intended deployment target is GitHub Pages from the `main` branch. Enabling Pages is an administrative repository setting and is intentionally separate from source development.
+The website is deployed with GitHub Pages from the `main` branch. Pages deployment is handled by GitHub, and the latest deployment is successful.
+
+## Current milestone
+
+The published website consumes the current `pgextwin/catalog` schema v1 and renders the initial eight extensions. All eight have published Releases and catalog entries, so the **initial extension roadmap is complete**.
+
+Website v2 is a separate future milestone and is not implemented here.
