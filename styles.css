@@ -9,6 +9,9 @@
   --accent: #7dd3fc;
   --accent-text: #062332;
   --focus: #facc15;
+  --maintained: #86efac;
+  --historical: #fbbf24;
+  --unknown: #d1d5db;
   --max: 1120px;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -152,20 +155,60 @@ button {
   color: var(--muted);
 }
 
+.pg-heading {
+  margin-bottom: 0.45rem;
+  font-weight: 800;
+}
+
 .pg-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
+  display: grid;
+  gap: 0.55rem;
   padding: 0;
   list-style: none;
 }
 
-.pg-list li {
+.pg-version {
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: 0.7rem;
   background: var(--surface-2);
-  padding: 0.2rem 0.65rem;
-  font-weight: 700;
+  padding: 0.65rem 0.75rem;
+}
+
+.pg-version-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem 0.75rem;
+}
+
+.lifecycle-badge {
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0.12rem 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.lifecycle-badge--maintained {
+  color: var(--maintained);
+}
+
+.lifecycle-badge--historical {
+  color: var(--historical);
+}
+
+.lifecycle-badge--unknown {
+  color: var(--unknown);
+}
+
+.pg-version-detail,
+.pg-version-upstream {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.88rem;
 }
 
 .card-actions {
@@ -180,6 +223,19 @@ button {
   border-top: 1px solid var(--border);
   padding-top: 2rem;
   max-width: 78ch;
+}
+
+.lifecycle-notice {
+  margin-top: 1.25rem;
+  border: 1px solid var(--border);
+  border-left: 0.35rem solid var(--accent);
+  border-radius: 0.55rem;
+  background: var(--surface);
+  padding: 0.85rem 1rem;
+}
+
+.lifecycle-notice p {
+  margin: 0.35rem 0;
 }
 
 .site-footer {
@@ -204,6 +260,9 @@ button {
     --accent: #0369a1;
     --accent-text: #ffffff;
     --focus: #92400e;
+    --maintained: #166534;
+    --historical: #92400e;
+    --unknown: #4b5563;
   }
 
   .site-header {

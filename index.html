@@ -31,11 +31,19 @@
       <div id="extensions" class="extension-grid" aria-live="polite"></div>
     </section>
 
+    <section class="info" aria-labelledby="lifecycle-heading">
+      <p class="eyebrow">PostgreSQL lifecycle</p>
+      <h2 id="lifecycle-heading">Availability and maintenance are different</h2>
+      <p><strong>Available</strong> means pgextwin has a published and verified binary for that PostgreSQL major. <strong>Maintained</strong> means the PostgreSQL major is still within its community support period, derived from pgextwin/build lifecycle metadata. The EOL date itself remains maintained; historical status begins on the following UTC calendar day.</p>
+      <p lang="ja"><strong>Available</strong> は、そのPostgreSQL major向けの検証済み公開バイナリがpgextwinに存在することを示します。<strong>Maintained</strong> は、pgextwin/buildのLifecycle metadataから判定したPostgreSQLコミュニティのサポート期間内であることを示します。EOL当日まではmaintainedで、翌UTC日からhistorical扱いになります。</p>
+      <div id="lifecycle-notice" class="lifecycle-notice" aria-live="polite"></div>
+    </section>
+
     <section class="info" aria-labelledby="about-heading">
       <p class="eyebrow">About</p>
       <h2 id="about-heading">Built from pinned upstream source</h2>
-      <p>pgextwin is an independent community project. Each package identifies its upstream project, source version, supported PostgreSQL major version, architecture, and license.</p>
-      <p lang="ja">pgextwinは独立したコミュニティプロジェクトです。各配布物にはupstream、使用ソース、対応PostgreSQL、アーキテクチャ、ライセンスを明記します。</p>
+      <p>pgextwin is an independent community project. Each package identifies its upstream project, source version, PostgreSQL major version, architecture, and license.</p>
+      <p lang="ja">pgextwinは独立したコミュニティプロジェクトです。各配布物にはupstream、使用ソース、PostgreSQL major、アーキテクチャ、ライセンスを明記します。</p>
     </section>
   </main>
 
@@ -47,6 +55,7 @@
     </div>
   </footer>
 
+  <script src="lifecycle.js" defer></script>
   <script src="app.js" defer></script>
 </body>
 </html>
