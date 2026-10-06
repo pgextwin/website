@@ -25,6 +25,19 @@ function upstreamUrl(repository) {
   return `https://github.com/${repository}`;
 }
 
+function upstreamVersionLabel(record) {
+  if (record.upstream && record.upstream.version) return record.upstream.version;
+  if (record.upstream && record.upstream.perPostgresql) return "Per PostgreSQL";
+  return "Unknown";
+}
+
+function upstreamVersionForMajor(record, major) {
+  const mapping = record.upstream && record.upstream.perPostgresql;
+  if (!mapping) return null;
+  const info = mapping[String(major)];
+  return info && info.version ? info.version : null;
+}
+
 function renderExtension(record) {
   const card = element("article", "extension-card");
 
@@ -38,7 +51,7 @@ function renderExtension(record) {
 
   const meta = element("dl", "meta");
   const pairs = [
-    ["Upstream", record.upstream.version],
+    ["Upstream", upstreamVersionLabel(record)],
     ["Build", record.latest.releaseTag],
     ["Architecture", `Windows ${record.architecture}`],
     ["License", record.license]
@@ -65,7 +78,8 @@ function renderExtension(record) {
 
   for (const major of majors) {
     const item = element("li");
-    item.append(text(`PG ${major}`));
+    const version = upstreamVersionForMajor(record, major);
+    item.append(text(version ? `PG ${major} · ${version}` : `PG ${major}`));
     pgList.append(item);
   }
   card.append(pgList);
