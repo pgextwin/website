@@ -12,4 +12,10 @@ Extension情報は公開リポジトリ `pgextwin/catalog` のメタデータを
 
 ## 公開
 
-GitHub Pagesで `main` branchを公開する構成を想定しています。Pagesの有効化はRepository管理設定なので、ソース実装とは分離します。
+WebsiteはGitHub Pagesで `main` branchから公開しています。PagesのdeployはGitHub側で実行され、直近のdeploymentも成功しています。
+
+## 現在のmilestone
+
+公開Websiteは `pgextwin/catalog` の現行schema v1を読み込み、初期8 Extensionを表示します。初期8 ExtensionのRelease公開・catalog登録はすべて完了しており、**Initial extension roadmap: 完了**です。
+
+Website v2は後続の独立した作業であり、このmilestoneでは着手しません。
