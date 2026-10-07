@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  lifecycle-tests:
+  website-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Check out website
@@ -22,5 +22,11 @@ jobs:
         with:
           node-version: "24"
 
-      - name: Run lifecycle tests
+      - name: Check JavaScript syntax
+        run: |
+          node --check lifecycle.js
+          node --check catalog-view.js
+          node --check app.js
+
+      - name: Run website tests
         run: node --test tests/*.test.js
