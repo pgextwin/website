@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Unofficial Windows x64 binaries for selected PostgreSQL extensions.">
+  <meta name="description" content="Discover and directly download unofficial Windows x64 binaries for selected PostgreSQL extensions.">
   <title>pgextwin — PostgreSQL Extensions for Windows</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -12,8 +12,8 @@
     <div class="shell">
       <p class="eyebrow">pgextwin</p>
       <h1>PostgreSQL Extensions for Windows</h1>
-      <p class="lead">Unofficial Windows x64 binaries for selected PostgreSQL extensions, designed for standard Windows PostgreSQL installations.</p>
-      <p class="lead ja" lang="ja">標準的なWindows版PostgreSQLで利用しやすい、PostgreSQL拡張機能の非公式Windows x64バイナリを提供します。</p>
+      <p class="lead">Find Windows x64 extension binaries by PostgreSQL version, download the canonical Release asset directly, and inspect runtime requirements, CI-tested capabilities, checksums, and supply-chain evidence.</p>
+      <p class="lead ja" lang="ja">PostgreSQLバージョンからWindows x64拡張機能を探し、正規Release assetを直接downloadできます。導入前提、CIで検証される機能、SHA-256、supply-chain evidenceも確認できます。</p>
     </div>
   </header>
 
@@ -27,8 +27,23 @@
         <button id="reload" type="button">Reload catalog</button>
       </div>
 
+      <div class="filters" aria-label="Extension filters">
+        <div class="filter-field filter-field--search">
+          <label for="search">Search extensions</label>
+          <input id="search" name="search" type="search" autocomplete="off" placeholder="Name, description, or upstream repository">
+        </div>
+        <div class="filter-field">
+          <label for="pg-filter">PostgreSQL version</label>
+          <select id="pg-filter" name="pg-filter">
+            <option value="">All PostgreSQL versions</option>
+          </select>
+        </div>
+      </div>
+
       <div id="status" class="status" role="status" aria-live="polite">Loading catalog…</div>
-      <div id="extensions" class="extension-grid" aria-live="polite"></div>
+      <p id="results-count" class="results-count" role="status" aria-live="polite"></p>
+      <div id="empty-state" class="empty-state" role="status" hidden>No extensions match the current filters.</div>
+      <div id="extensions" class="extension-grid"></div>
     </section>
 
     <section class="info" aria-labelledby="lifecycle-heading">
@@ -37,6 +52,12 @@
       <p><strong>Available</strong> means pgextwin has a published and verified binary for that PostgreSQL major. <strong>Maintained</strong> means the PostgreSQL major is still within its community support period, derived from pgextwin/build lifecycle metadata. The EOL date itself remains maintained; historical status begins on the following UTC calendar day.</p>
       <p lang="ja"><strong>Available</strong> は、そのPostgreSQL major向けの検証済み公開バイナリがpgextwinに存在することを示します。<strong>Maintained</strong> は、pgextwin/buildのLifecycle metadataから判定したPostgreSQLコミュニティのサポート期間内であることを示します。EOL当日まではmaintainedで、翌UTC日からhistorical扱いになります。</p>
       <div id="lifecycle-notice" class="lifecycle-notice" aria-live="polite"></div>
+    </section>
+
+    <section class="info" aria-labelledby="integrity-heading">
+      <p class="eyebrow">Integrity and evidence</p>
+      <h2 id="integrity-heading">Checksums are release-specific integrity information</h2>
+      <p>Each binary shows the full ZIP SHA-256 synchronized with the published <code>SHA256SUMS.txt</code>. Supply-chain evidence is shown as release metadata, not as a safety or trust verdict. Vulnerability reports, when present, are point-in-time Grype scans.</p>
     </section>
 
     <section class="info" aria-labelledby="about-heading">
@@ -56,6 +77,7 @@
   </footer>
 
   <script src="lifecycle.js" defer></script>
+  <script src="catalog-view.js" defer></script>
   <script src="app.js" defer></script>
 </body>
 </html>
