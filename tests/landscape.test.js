@@ -50,3 +50,33 @@ test("formal roadmap search and existing non-candidate alphabetizing",()=>{
   const sorted=view.sortRecords([{...notPlanned(),name:"z",displayName:"Z not planned"},a,{...notPlanned(),name:"a",displayName:"A not planned"}]);
   assert.deepEqual(sorted.filter(x=>x.status!=="candidate").map(x=>x.displayName),["A not planned","Z not planned"]);
 });
+
+// Step 18: deployed clients must accept both the legacy and migrated Landscape records.
+test("implemented Wave 2 selection history remains valid and visibly distinct",()=>{
+  const record={...base,status:"implemented",pgextwinCatalogName:"example",roadmap:{decision:"wave-2",order:1,decisionDate:"2026-10-08",rationale:"Historical top priority"}};
+  assert.equal(view.validateRecord(record).valid,true);
+  assert.match(view.roadmapLabel(record),/Wave 2 #1/);
+  assert.match(view.roadmapLabel(record),/selection history/);
+  assert.equal(view.filterRecords([record],{status:"candidate"}).length,0);
+  assert.equal(view.filterRecords([record],{status:"implemented"}).length,1);
+  assert.equal(view.filterRecords([record],{query:"Historical top priority"}).length,1);
+});
+test("implemented refuses reserve/research and invalid/missing catalog reference",()=>{
+  const old={...base,status:"implemented",pgextwinCatalogName:"example"};
+  assert.equal(view.validateRecord(old).valid,true);
+  for(const decision of ["reserve","research"]){
+    assert.equal(view.validateRecord({...old,roadmap:{decision,decisionDate:"2026-10-08",rationale:"Reserved"}}).valid,false);
+  }
+  assert.equal(view.validateRecord({...old,pgextwinCatalogName:"different",roadmap:{decision:"wave-2",order:1,decisionDate:"2026-10-08",rationale:"Rank"}}).valid,false);
+  assert.equal(view.validateRecord({...old,roadmap:{decision:"wave-2",order:1,decisionDate:"2026-10-08",rationale:"Rank",unexpected:true}}).valid,false);
+  assert.equal(view.validateRecord({...notPlanned(),roadmap:{decision:"wave-2",order:1,decisionDate:"2026-10-08",rationale:"Rank"}}).valid,false);
+});
+test("old candidates and migrated implemented Wave 2 entries coexist",()=>{
+  const road=(order)=>({decision:"wave-2",order,decisionDate:"2026-10-08",rationale:"Historic decision"});
+  const implemented={...base,name:"plpgsql_check",displayName:"plpgsql_check",status:"implemented",pgextwinCatalogName:"plpgsql_check",roadmap:road(1)};
+  const hypopg={...candidate(),name:"hypopg",displayName:"HypoPG",roadmap:road(2)};
+  const wal={...candidate(),name:"wal2json",displayName:"wal2json",roadmap:road(3)};
+  assert.ok([implemented,hypopg,wal].every(x=>view.validateRecord(x).valid));
+  assert.deepEqual(view.sortRecords([wal,implemented,hypopg]).filter(x=>x.status==="candidate").map(x=>x.name),["hypopg","wal2json"]);
+  assert.equal(view.filterRecords([implemented,hypopg,wal],{status:"implemented"}).length,1);
+});
