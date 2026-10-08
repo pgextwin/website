@@ -85,6 +85,17 @@ try {
     })()`);
     assert.equal(counts[status],expected);
   }
+  const waveLabels=await evaluate(`(() => {
+    const s=document.getElementById("landscape-filter");
+    s.value="candidate";s.dispatchEvent(new Event("change",{bubbles:true}));
+    return [...document.querySelectorAll("#landscape-grid article")].map(x=>({
+      name:x.querySelector("h3")?.textContent,
+      label:x.querySelector(".landscape-roadmap-label")?.textContent
+    }));
+  })()`);
+  assert.deepEqual(waveLabels.slice(0,3).map(x=>x.label?.split(" / ")[0]),["Wave 2 #1","Wave 2 #2","Wave 2 #3"]);
+  assert.ok(waveLabels.some(x=>x.label?.includes("Reserve candidate")));
+  assert.ok(waveLabels.some(x=>x.label?.includes("Further research")));
   assert.equal(await evaluate(`(() => {
     document.getElementById("landscape-filter").value="";
     document.getElementById("landscape-filter").dispatchEvent(new Event("change",{bubbles:true}));

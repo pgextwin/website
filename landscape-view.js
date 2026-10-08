@@ -37,6 +37,37 @@
       distributions.includes(source.postgresqlDistribution) && compatibility.includes(source.compatibility) &&
       nonempty(source.notes);
   }
+  function validateRoadmap(roadmap) {
+    if (!roadmap || typeof roadmap !== "object" || Array.isArray(roadmap)) return false;
+    if (!["wave-2","reserve","research"].includes(roadmap.decision) ||
+        !validDate(roadmap.decisionDate) || !nonempty(roadmap.rationale)) return false;
+    const keys=Object.keys(roadmap);
+    if (keys.some(k=>!["decision","order","decisionDate","rationale"].includes(k))) return false;
+    return roadmap.decision === "wave-2"
+      ? Number.isInteger(roadmap.order) && roadmap.order>=1 && roadmap.order<=3
+      : !Object.hasOwn(roadmap,"order");
+  }
+  function roadmapLabel(record) {
+    const r=record && record.roadmap;
+    if (!r) return "Decision pending / 正式選定待ち";
+    if (r.decision === "wave-2") return "Wave 2 #" + r.order + " / 第2弾 #" + r.order;
+    if (r.decision === "reserve") return "Reserve candidate / 次点候補";
+    if (r.decision === "research") return "Further research / 継続調査";
+    return "Decision pending / 正式選定待ち";
+  }
+  function sortRecords(records) {
+    // Keep the historical alphabetical positions of implemented/not-planned entries.
+    const alphabetical=[...(Array.isArray(records)?records:[])].sort((a,b)=>a.displayName.localeCompare(b.displayName));
+    const candidateOrder={ "wave-2":0, reserve:1, research:2 };
+    const candidates=alphabetical.filter(r=>r.status==="candidate").sort((a,b)=>{
+      const da=a.roadmap?.decision,db=b.roadmap?.decision;
+      const ka=Object.hasOwn(candidateOrder,da)?candidateOrder[da]:3;
+      const kb=Object.hasOwn(candidateOrder,db)?candidateOrder[db]:3;
+      return ka-kb || (ka===0?(a.roadmap.order-b.roadmap.order):0) || a.displayName.localeCompare(b.displayName);
+    });
+    let i=0;
+    return alphabetical.map(r=>r.status==="candidate"?candidates[i++]:r);
+  }
   function validateRecord(record, expectedName) {
     if (!record || record.schemaVersion !== 1 || !namePattern.test(record.name || "") ||
       (expectedName && record.name !== expectedName) || !nonempty(record.displayName) ||
@@ -53,12 +84,15 @@
     if (record.status === "candidate" && (!nonempty(record.candidateRationale) ||
       !nonempty(record.license) || !nonempty(record.currentStableVersion) ||
       !["supported","not-supported","unknown"].includes(record.pg18Support) ||
-      !["documented","under-review","unknown"].includes(record.pg19Readiness) ||
+      !["documented","upstream-ci-probe","under-review","unknown","known-incompatible"].includes(record.pg19Readiness) ||
       !["build-instructions","native-binary","unknown","not-supported"].includes(record.windowsUpstreamSupport) ||
       !["none-identified","limited","public","unknown"].includes(record.knownWindowsBinaryAvailability) ||
-      !["low","medium","high","unknown"].includes(record.estimatedWindowsEffort) ||
+      !["low","medium","high","very-high","unknown"].includes(record.estimatedWindowsEffort) ||
       !["high","medium","low","unranked"].includes(record.preliminaryPriority))) {
       return {valid:false,reason:"Candidate metadata invalid"};
+    }
+    if (record.roadmap !== undefined && (record.status !== "candidate" || !validateRoadmap(record.roadmap))) {
+      return {valid:false,reason:"Invalid candidate roadmap"};
     }
     if (record.status === "not-planned" && (!nonempty(record.notPlannedReason) ||
       !nonempty(record.reasonCode) || record.windowsBinarySources.length === 0)) {
@@ -84,7 +118,7 @@
     if (options.status && record.status !== options.status) return false;
     if (options.sourceType && !record.windowsBinarySources.some(s => s.type === options.sourceType)) return false;
     return !q || [record.name,record.displayName,record.description,record.upstreamRepository,
-      record.candidateRationale,record.notPlannedReason,...record.windowsBinarySources.map(s => s.provider)]
+      record.candidateRationale,record.notPlannedReason,record.roadmap?.rationale,record.roadmap?.decision,...record.windowsBinarySources.map(s => s.provider)]
       .filter(Boolean).join(" ").toLowerCase().includes(q);
   }
   function filterRecords(records, options) {
@@ -136,6 +170,6 @@
     }));
     return partitionResults(results,index.extensions);
   }
-  return {safeHttpsUrl,validDate,validateIndex,validateRecord,partitionResults,filterRecords,sourceLabel,
+  return {safeHttpsUrl,validDate,validateIndex,validateRecord,validateRoadmap,roadmapLabel,sortRecords,partitionResults,filterRecords,sourceLabel,
     statusLabels,typeLabels,accessLabels,targetLabels,compatibilityLabels,load};
 });
