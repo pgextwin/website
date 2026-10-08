@@ -80,7 +80,7 @@
       article.append(node("h4",null,"Why consider it / 候補理由"));
       article.append(node("p",null,record.candidateRationale));
       article.append(node("h4",null,"Selection rationale / 正式選定の理由"));
-      article.append(node("p",null,record.roadmap?.rationale || "Formal decision pending / 正式決定は未登録です。");
+      article.append(node("p",null,record.roadmap?.rationale || "Formal decision pending / 正式決定は未登録です。"));
       if (record.windowsBinarySources.length === 0) {
         article.append(node("p","landscape-muted","No generally available Windows binary identified / 一般入手可能なWindowsバイナリは未確認（使用不可という意味ではありません）。"));
       }
