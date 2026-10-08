@@ -13,8 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
+      - name: Check out pinned website revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Check live GitHub Pages and independent Landscape Registry
         run: |
           node --version
-          curl --fail --silent --show-error --location https://raw.githubusercontent.com/pgextwin/website/main/scripts/verify-published-pages.mjs --output /tmp/verify-published-pages.mjs
-          node /tmp/verify-published-pages.mjs
+          node scripts/verify-published-pages.mjs
