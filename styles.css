@@ -144,6 +144,7 @@ button:disabled { cursor: wait; opacity: 0.65; }
 .landscape-disclaimer { border-inline-start: 3px solid var(--accent); padding-inline-start: 1rem; color: var(--muted); }
 .landscape-card { overflow-wrap: anywhere; }
 .landscape-card .meta { grid-template-columns: minmax(9rem,auto) minmax(0,1fr); }
+.landscape-roadmap-label { font-size: 1.04rem; font-weight: 850; color: var(--text); border-inline-start: 4px solid var(--accent); padding-inline-start: 0.7rem; }
 .landscape-status-label { display: inline-block; padding: 0.25rem 0.6rem; border: 1px solid var(--border); border-radius: 0.45rem; background: var(--surface-2); font-weight: 750; }
 .landscape-sources { list-style: none; padding: 0; display: grid; gap: 0.8rem; }
 .landscape-source { padding: 0.8rem; background: var(--surface-2); border: 1px solid var(--border); border-radius: 0.6rem; }

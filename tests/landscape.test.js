@@ -21,3 +21,32 @@ test("index rejects duplicate names",()=>assert.equal(view.validateIndex({schema
 test("partial record failures keep successful items",()=>{const out=view.partitionResults([{status:"fulfilled",value:candidate()},{status:"rejected",reason:"HTTP 500"},{status:"fulfilled",value:{...base,status:"broken"}}],["example","failed","bad"]);assert.equal(out.records.length,1);assert.equal(out.failures.length,2);});
 test("landscape index failure isolated at fetch boundary",async()=>{await assert.rejects(view.load(async()=>({ok:false,status:503}),"https://example.org"),/Landscape index HTTP 503/);});
 test("partial fetch failure is non-fatal",async()=>{const f=async url=>({ok:!url.endsWith("bad.json"),status:404,json:async()=>url.endsWith("index.json")?{schemaVersion:1,extensions:["example","bad"]}:candidate()});const out=await view.load(f,"https://example.org");assert.equal(out.records.length,1);assert.equal(out.failures.length,1);});
+
+test("formal Wave 2 labels and ranked candidate order",()=>{
+  const make=(name,decision,order)=>({...candidate(),name,displayName:name,roadmap:{decision,decisionDate:"2026-10-08",rationale:"Reviewed upstream sources",...(order?{order}:{})}});
+  const records=[make("z_last","wave-2",3),make("a_reserve","reserve"),make("h_first","wave-2",1),make("b_second","wave-2",2),make("c_research","research")];
+  assert.deepEqual(view.sortRecords(records).map(x=>x.name),["h_first","b_second","z_last","a_reserve","c_research"]);
+  assert.match(view.roadmapLabel(records[2]),/Wave 2 #1/);
+  assert.match(view.roadmapLabel(records[1]),/Reserve candidate/);
+  assert.match(view.roadmapLabel(records[4]),/Further research/);
+});
+test("legacy candidate without roadmap uses nonbreaking fallback",()=>{
+  const record=candidate();
+  assert.equal(view.validateRecord(record).valid,true);
+  assert.match(view.roadmapLabel(record),/Decision pending/);
+});
+test("invalid candidate roadmap rejected",()=>{
+  for(const bad of [{decision:"wave-2",decisionDate:"2026-10-08",rationale:"ok"},
+    {decision:"wave-2",order:2,decisionDate:"2026-02-31",rationale:"ok"},
+    {decision:"reserve",order:1,decisionDate:"2026-10-08",rationale:"ok"},
+    {decision:"research",decisionDate:"2026-10-08",rationale:" "}]){
+    assert.equal(view.validateRecord({...candidate(),roadmap:bad}).valid,false);
+  }
+  assert.equal(view.validateRecord({...notPlanned(),roadmap:{decision:"research",decisionDate:"2026-10-08",rationale:"x"}}).valid,false);
+});
+test("formal roadmap search and existing non-candidate alphabetizing",()=>{
+  const a={...candidate(),name:"x",displayName:"Z candidate",roadmap:{decision:"wave-2",order:1,decisionDate:"2026-10-08",rationale:"Important planner evidence"}};
+  assert.equal(view.filterRecords([a],{query:"planner evidence"}).length,1);
+  const sorted=view.sortRecords([{...notPlanned(),name:"z",displayName:"Z not planned"},a,{...notPlanned(),name:"a",displayName:"A not planned"}]);
+  assert.deepEqual(sorted.filter(x=>x.status!=="candidate").map(x=>x.displayName),["A not planned","Z not planned"]);
+});

@@ -52,9 +52,11 @@
     field(meta,"Upstream",record.upstreamRepository);
     field(meta,"Last reviewed / 最終確認",record.lastReviewed + " (recheck before use)");
     if (record.status === "candidate") {
+      article.append(node("p","landscape-roadmap-label",view.roadmapLabel(record)));
+      field(meta,"Formal roadmap / 正式選定",view.roadmapLabel(record));
+      if (record.roadmap) field(meta,"Decision date / 決定日",record.roadmap.decisionDate);
       field(meta,"Stable version",record.currentStableVersion);
       field(meta,"License",record.license);
-      field(meta,"Priority (provisional)",record.preliminaryPriority);
       field(meta,"Windows build effort",record.estimatedWindowsEffort);
       field(meta,"PG18",record.pg18Support);
       field(meta,"PG19 readiness",record.pg19Readiness);
@@ -77,6 +79,8 @@
     if (record.status === "candidate") {
       article.append(node("h4",null,"Why consider it / 候補理由"));
       article.append(node("p",null,record.candidateRationale));
+      article.append(node("h4",null,"Selection rationale / 正式選定の理由"));
+      article.append(node("p",null,record.roadmap?.rationale || "Formal decision pending / 正式決定は未登録です。");
       if (record.windowsBinarySources.length === 0) {
         article.append(node("p","landscape-muted","No generally available Windows binary identified / 一般入手可能なWindowsバイナリは未確認（使用不可という意味ではありません）。"));
       }
@@ -116,7 +120,7 @@
     status.textContent = "Loading independent Landscape registry…";
     try {
       const result = await view.load(fetch,BASE);
-      records = result.records.sort((a,b) => a.displayName.localeCompare(b.displayName));
+      records = view.sortRecords(result.records);
       failures = result.failures.length;
       for (const f of result.failures) console.warn("Landscape record unavailable:",f.name,f.reason);
       render();
