@@ -1,0 +1,20 @@
+name: Verify published Pages / Step 14
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check live GitHub Pages and independent Landscape Registry
+        run: |
+          node --version
+          curl --fail --silent --show-error --location https://raw.githubusercontent.com/pgextwin/website/main/scripts/verify-published-pages.mjs --output /tmp/verify-published-pages.mjs
+          node /tmp/verify-published-pages.mjs
