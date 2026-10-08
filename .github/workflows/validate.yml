@@ -27,6 +27,8 @@ jobs:
           node --check lifecycle.js
           node --check catalog-view.js
           node --check app.js
+          node --check landscape-view.js
+          node --check landscape-app.js
 
       - name: Run website tests
         run: node --test tests/*.test.js
