@@ -19,3 +19,7 @@ jobs:
         run: |
           node --version
           node scripts/verify-published-pages.mjs
+      - name: Verify rendered catalog, filters and mobile layout in headless Chrome
+        run: |
+          google-chrome --version
+          node scripts/verify-published-ui.mjs
