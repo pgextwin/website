@@ -29,6 +29,8 @@ jobs:
           node --check app.js
           node --check landscape-view.js
           node --check landscape-app.js
+          node --check scripts/verify-published-pages.mjs
+          node --check scripts/verify-published-ui.mjs
 
       - name: Run website tests
         run: node --test tests/*.test.js
