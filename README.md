@@ -59,3 +59,11 @@ Tests cover search, dynamic major derivation/filtering, combined filters, runtim
 ## CI and deployment
 
 `.github/workflows/validate.yml` runs `node --check` for the JavaScript entry points and `node --test tests/*.test.js` for pull requests and pushes to `main`. GitHub Actions keep `contents: read` and use full-SHA-pinned official actions. GitHub Pages deploys the static `main` branch independently of the runtime data sources.
+
+## Windows Extension Landscape (Step 14)
+
+Three independent runtime data sources now coexist: distribution Catalog v2 (published pgextwin binaries and downloads), build lifecycle metadata (PostgreSQL EOL), and Landscape Registry v1 (`catalog/landscape/index.json`, candidates and alternative acquisition sources). Failure of the Landscape fetch never blocks the published download Catalog; record-level Landscape failures preserve valid records.
+
+The second section provides search, status and source-type filters, separate last-reviewed dates, rationale, license, tentative effort/priority, and provider-specific acquisition links. Public vs commercial availability and ordinary PostgreSQL vs vendor/conda-specific compatibility are explicit. External source URLs must be HTTPS and are rendered via DOM/textContent without innerHTML. Unavailable candidate binary evidence never implies Windows incompatibility. External binaries are not validated or supported by pgextwin. Native semantic controls, keyboard focus and responsive narrow layout remain in place.
+
+`node --test tests/*.test.js` includes Landscape validation, filters, source presentation, partial failure, and HTTPS tests in addition to the preexisting Catalog/Lifecycle suites.

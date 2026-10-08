@@ -46,6 +46,50 @@
       <div id="extensions" class="extension-grid"></div>
     </section>
 
+
+    <section class="landscape-section" aria-labelledby="landscape-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Independent Landscape Registry</p>
+          <h2 id="landscape-heading">Windows extension landscape</h2>
+        </div>
+        <button id="landscape-reload" type="button">Reload landscape</button>
+      </div>
+      <p>Find pgextwin downloads, future candidates, and alternative Windows binary sources. <strong>Not planned by pgextwin does not mean unavailable or incompatible with Windows.</strong></p>
+      <p lang="ja">pgextwin配布中・今後の候補・他のWindowsバイナリ配布元を区別します。<strong>「pgextwinで実装予定なし」は「Windowsで使用不可」の意味ではありません。</strong></p>
+      <p class="landscape-disclaimer">External distributions are provided by their listed projects or vendors. pgextwin does not guarantee their correctness, security, freshness, support, or compatibility. Check provider conditions and version-specific requirements before installation.</p>
+      <p lang="ja" class="landscape-disclaimer">外部配布物の正確性・安全性・更新状況・サポート・互換性をpgextwinが保証するものではありません。利用条件と対応するPostgreSQL環境を必ず確認してください。</p>
+      <div class="filters landscape-filters" aria-label="Landscape search and filters">
+        <div class="filter-field">
+          <label for="landscape-search">Search landscape / 検索</label>
+          <input id="landscape-search" type="search" autocomplete="off" placeholder="Extension or provider">
+        </div>
+        <div class="filter-field">
+          <label for="landscape-filter">Distribution status / 区分</label>
+          <select id="landscape-filter">
+            <option value="">All / すべて</option>
+            <option value="implemented">Available in pgextwin / 配布中</option>
+            <option value="candidate">Future candidate / 今後の候補</option>
+            <option value="not-planned">Not planned / 他の配布元</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label for="landscape-source-filter">External source type / 取得元種別</label>
+          <select id="landscape-source-filter">
+            <option value="">All sources / すべて</option>
+            <option value="upstream-official">Official / 公式</option>
+            <option value="community">Community / コミュニティ</option>
+            <option value="vendor">Vendor / ベンダー</option>
+            <option value="package-manager">Package manager</option>
+          </select>
+        </div>
+      </div>
+      <div id="landscape-status" class="status" role="status" aria-live="polite">Loading landscape…</div>
+      <p id="landscape-count" class="results-count" role="status" aria-live="polite"></p>
+      <p id="landscape-empty" class="empty-state" hidden>No matching Landscape entries.</p>
+      <div id="landscape-grid" class="extension-grid"></div>
+    </section>
+
     <section class="info" aria-labelledby="lifecycle-heading">
       <p class="eyebrow">PostgreSQL lifecycle</p>
       <h2 id="lifecycle-heading">Availability and maintenance are different</h2>
@@ -79,5 +123,7 @@
   <script src="lifecycle.js" defer></script>
   <script src="catalog-view.js" defer></script>
   <script src="app.js" defer></script>
+  <script src="landscape-view.js" defer></script>
+  <script src="landscape-app.js" defer></script>
 </body>
 </html>

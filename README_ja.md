@@ -59,3 +59,9 @@ Search、dynamic major導出/filter、AND filter、runtime wording、background 
 ## CI / 公開
 
 `.github/workflows/validate.yml`はPull Requestと`main` pushでJavaScriptの`node --check`と`node --test tests/*.test.js`を実行します。GitHub Actionsは`contents: read`を維持し、公式Actionはfull SHA pinのままです。GitHub Pagesは静的`main` branchを公開し、runtime metadataの正規情報源とは独立しています。
+
+## Windows Extension Landscape（Step 14）
+
+Websiteは3つの独立したデータをruntime取得します。配布中の実物だけを示すCatalog v2、PostgreSQL Lifecycle、そして候補・外部入手先を示す独立したLandscape Registry v1です。Landscapeの取得が失敗しても従来のdownload UIは動作し、部分的なrecordエラーでも有効な項目を表示します。
+
+Landscapeは検索、状態/取得元種別フィルター、最終確認日、候補の暫定優先度、理由、外部の取得リンクを掲載します。外部配布元のpublic/commercialと通常PostgreSQL/ベンダー版/Conda環境は区別して説明し、安全性・互換性・更新をpgextwinが保証しない旨を明記します。HTTPSのURLだけをDOM APIでリンク化し、キーボード操作、拡大表示、モバイル幅に対応します。
