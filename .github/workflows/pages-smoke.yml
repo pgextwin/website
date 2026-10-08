@@ -1,0 +1,21 @@
+name: Verify published Pages / Step 14
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check out pinned website revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Check live GitHub Pages and independent Landscape Registry
+        run: |
+          node --version
+          node scripts/verify-published-pages.mjs
