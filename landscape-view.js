@@ -50,7 +50,7 @@
   function roadmapLabel(record) {
     const r=record && record.roadmap;
     if (!r) return "Decision pending / 正式選定待ち";
-    if (r.decision === "wave-2") return "Wave 2 #" + r.order + " / 第2弾 #" + r.order;
+    if (r.decision === "wave-2") return "Wave 2 #" + r.order + " / 第2弾 #" + r.order + (record.status === "implemented" ? " — selection history (now distributed) / 選定履歴（現在配布中）" : "");
     if (r.decision === "reserve") return "Reserve candidate / 次点候補";
     if (r.decision === "research") return "Further research / 継続調査";
     return "Decision pending / 正式選定待ち";
@@ -91,8 +91,9 @@
       !["high","medium","low","unranked"].includes(record.preliminaryPriority))) {
       return {valid:false,reason:"Candidate metadata invalid"};
     }
-    if (record.roadmap !== undefined && (record.status !== "candidate" || !validateRoadmap(record.roadmap))) {
-      return {valid:false,reason:"Invalid candidate roadmap"};
+    if (record.roadmap !== undefined && (!validateRoadmap(record.roadmap) ||
+      (record.status !== "candidate" && !(record.status === "implemented" && record.roadmap.decision === "wave-2")))) {
+      return {valid:false,reason:"Invalid roadmap for distribution status"};
     }
     if (record.status === "not-planned" && (!nonempty(record.notPlannedReason) ||
       !nonempty(record.reasonCode) || record.windowsBinarySources.length === 0)) {
