@@ -367,7 +367,7 @@ function renderLifecycleNotice(lifecycleByMajor, effectiveDate) {
     ));
     japanese.append(text(
       `PostgreSQL 14は${formatJapaneseCalendarDate(entry.eol)}までメンテナンス対象です。` +
-      `EOL後も既存バイナリは保持しますが、${formatJapaneseCalendarDate(nextDate)}以降の通常の新規build対象からは除外します。`
+      `EOL後も既存バイナリは保持しますが、${formatJapaneseCalendarDate(nextDate)}以降の通常の新規ビルド対象からは除外します。`
     ));
   } else if (status === "historical") {
     const nextDate = lifecycle.nextCalendarDate(entry.eol);
@@ -377,14 +377,14 @@ function renderLifecycleNotice(lifecycleByMajor, effectiveDate) {
     ));
     japanese.append(text(
       `PostgreSQL 14は${formatJapaneseCalendarDate(entry.eol)}にEOLを迎えました。` +
-      `既存バイナリはhistorical downloadとして保持し、通常の新規buildでは${formatJapaneseCalendarDate(nextDate)}以降PG14を対象外としています。`
+      `既存バイナリは過去バージョンのダウンロードとして保持し、通常の新規ビルドでは${formatJapaneseCalendarDate(nextDate)}以降PG14を対象外としています。`
     ));
   } else {
     english.append(text(
       "PostgreSQL lifecycle data is unavailable. Published binary availability is still shown from the catalog, but current maintenance status cannot be determined."
     ));
     japanese.append(text(
-      "PostgreSQL Lifecycle metadataを取得できません。Catalogに基づく公開済みバイナリの表示は継続しますが、現在のmaintenance状態は判定できません。"
+      "PostgreSQLのライフサイクル情報を取得できません。カタログに基づく公開済みバイナリの表示は継続しますが、現在の保守状況は判定できません。"
     ));
   }
   lifecycleNoticeElement.append(document.documentElement.lang === "ja" ? japanese : english);
