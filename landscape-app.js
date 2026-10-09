@@ -70,7 +70,7 @@
         article.append(node("p","landscape-roadmap-label",view.roadmapLabel(record)));
         field(meta,"Historical roadmap / 選定履歴",view.roadmapLabel(record));
         field(meta,"Decision date / 選定日",record.roadmap.decisionDate);
-        article.append(node("p","landscape-muted","Original selection rationale / 当時の選定理由: " + record.roadmap.rationale));
+        article.append(node("p","landscape-muted",(document.documentElement.lang === "ja" ? "当時の選定理由：" : "Original selection rationale: ") + t(record.roadmap.rationale)));
       }
       article.append(node("p",null,"Published, verified binaries are in the distribution catalog. / 配布中のバイナリは上部のCatalogを参照してください。"));
       const actions = node("p");
