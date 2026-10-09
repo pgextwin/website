@@ -4,6 +4,10 @@ on:
     branches:
       - main
   workflow_dispatch:
+  repository_dispatch:
+    types: [catalog-updated]
+  schedule:
+    - cron: "30 0 * * *" # 09:30 JST; not guaranteed at exact minute
 
 permissions:
   contents: read
@@ -19,6 +23,8 @@ jobs:
         run: |
           node --version
           node scripts/verify-published-pages.mjs
+      - name: Verify published release assets, SHA-256 and Test Contract source
+        run: node scripts/verify-catalog-release.mjs
       - name: Verify rendered catalog, filters and mobile layout in headless Chrome
         run: |
           google-chrome --version
