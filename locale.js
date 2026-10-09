@@ -57,6 +57,7 @@
     }
     function translateSuffix(s) {
       return s.replace(/ \d+ catalog records? could not be loaded or validated; other records remain available\./g, m=>t(m))
+        .replace(/ \d+ entry\/entries failed; valid entries remain visible\./g, m=>t(m))
         .replace(/ Lifecycle status uses the \d{4}-\d{2}-\d{2} UTC calendar date\./g,m=>t(m))
         .replace(" Lifecycle data unavailable; binary availability and downloads are still shown.",t(" Lifecycle data unavailable; binary availability and downloads are still shown."))
         .replace(" External source details are point-in-time research, not pgextwin guarantees.",t(" External source details are point-in-time research, not pgextwin guarantees."));
