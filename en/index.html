@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Discover and directly download unofficial Windows x64 binaries for selected PostgreSQL extensions.">
+  <title>pgextwin — PostgreSQL Extensions for Windows</title>
+  <link rel="canonical" href="https://pgextwin.github.io/website/en/">
+  <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/">
+  <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/">
+  <link rel="alternate" hreflang="x-default" href="https://pgextwin.github.io/website/">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell">
+      <nav class="language-nav" aria-label="Language"><a href="../en/" lang="en" aria-current="page">English</a><a href="../ja/" lang="ja">日本語</a></nav>
+      <p class="eyebrow">pgextwin</p>
+      <h1>PostgreSQL Extensions for Windows</h1>
+      <p class="lead">Find Windows x64 extension binaries by PostgreSQL version, download the canonical Release asset directly, and inspect runtime requirements, CI-tested capabilities, checksums, and supply-chain evidence.</p>
+
+
+    </div>
+  </header>
+
+  <main class="shell">
+    <section aria-labelledby="extensions-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Catalog</p>
+          <h2 id="extensions-heading">Available extensions</h2>
+        </div>
+        <button id="reload" type="button">Reload catalog</button>
+      </div>
+
+      <div class="filters" aria-label="Extension filters">
+        <div class="filter-field filter-field--search">
+          <label for="search">Search extensions</label>
+          <input id="search" name="search" type="search" autocomplete="off" placeholder="Name, description, or upstream repository">
+        </div>
+        <div class="filter-field">
+          <label for="pg-filter">PostgreSQL version</label>
+          <select id="pg-filter" name="pg-filter">
+            <option value="">All PostgreSQL versions</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="status" class="status" role="status" aria-live="polite">Loading catalog…</div>
+      <p id="results-count" class="results-count" role="status" aria-live="polite"></p>
+      <div id="empty-state" class="empty-state" role="status" hidden>No extensions match the current filters.</div>
+      <div id="extensions" class="extension-grid"></div>
+    </section>
+
+
+    <section class="landscape-section" aria-labelledby="landscape-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Independent Landscape Registry</p>
+          <h2 id="landscape-heading">Windows extension landscape</h2>
+        </div>
+        <button id="landscape-reload" type="button">Reload landscape</button>
+      </div>
+      <p>Find pgextwin downloads, future candidates, and alternative Windows binary sources. <strong>Not planned by pgextwin does not mean unavailable or incompatible with Windows.</strong></p>
+
+
+      <p class="landscape-disclaimer">External distributions are provided by their listed projects or vendors. pgextwin does not guarantee their correctness, security, freshness, support, or compatibility. Check provider conditions and version-specific requirements before installation.</p>
+
+
+      <div class="filters landscape-filters" aria-label="Landscape search and filters">
+        <div class="filter-field">
+          <label for="landscape-search">Search landscape</label>
+          <input id="landscape-search" type="search" autocomplete="off" placeholder="Extension or provider">
+        </div>
+        <div class="filter-field">
+          <label for="landscape-filter">Distribution status</label>
+          <select id="landscape-filter">
+            <option value="">All</option>
+            <option value="implemented">Available in pgextwin</option>
+            <option value="candidate">Future candidate</option>
+            <option value="not-planned">Not planned</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label for="landscape-source-filter">External source type</label>
+          <select id="landscape-source-filter">
+            <option value="">All sources</option>
+            <option value="upstream-official">Official</option>
+            <option value="community">Community</option>
+            <option value="vendor">Vendor</option>
+            <option value="package-manager">Package manager</option>
+          </select>
+        </div>
+      </div>
+      <div id="landscape-status" class="status" role="status" aria-live="polite">Loading landscape…</div>
+      <p id="landscape-count" class="results-count" role="status" aria-live="polite"></p>
+      <p id="landscape-empty" class="empty-state" hidden>No matching Landscape entries.</p>
+      <div id="landscape-grid" class="extension-grid"></div>
+    </section>
+
+    <section class="info" aria-labelledby="lifecycle-heading">
+      <p class="eyebrow">PostgreSQL lifecycle</p>
+      <h2 id="lifecycle-heading">Availability and maintenance are different</h2>
+      <p><strong>Available</strong> means pgextwin has a published and verified binary for that PostgreSQL major. <strong>Maintained</strong> means the PostgreSQL major is still within its community support period, derived from pgextwin/build lifecycle metadata. The EOL date itself remains maintained; historical status begins on the following UTC calendar day.</p>
+
+
+      <div id="lifecycle-notice" class="lifecycle-notice" aria-live="polite"></div>
+    </section>
+
+    <section class="info" aria-labelledby="integrity-heading">
+      <p class="eyebrow">Integrity and evidence</p>
+      <h2 id="integrity-heading">Checksums are release-specific integrity information</h2>
+      <p>Each binary shows the full ZIP SHA-256 synchronized with the published <code>SHA256SUMS.txt</code>. Supply-chain evidence is shown as release metadata, not as a safety or trust verdict. Vulnerability reports, when present, are point-in-time Grype scans.</p>
+    </section>
+
+    <section class="info" aria-labelledby="about-heading">
+      <p class="eyebrow">About</p>
+      <h2 id="about-heading">Built from pinned upstream source</h2>
+      <p>pgextwin is an independent community project. Each package identifies its upstream project, source version, PostgreSQL major version, architecture, and license.</p>
+
+
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell">
+      <a href="https://github.com/pgextwin">GitHub Organization</a>
+      <a href="https://github.com/pgextwin/catalog">Catalog</a>
+      <a href="https://github.com/pgextwin/build">Build infrastructure</a>
+    </div>
+  </footer>
+
+  <script src="../lifecycle.js" defer></script>
+  <script src="../catalog-view.js" defer></script>
+  <script src="../locale.js" defer></script>
+  <script src="../app.js" defer></script>
+  <script src="../landscape-view.js" defer></script>
+  <script src="../landscape-app.js" defer></script>
+</body>
+</html>

@@ -26,6 +26,7 @@ jobs:
         run: |
           node --check lifecycle.js
           node --check catalog-view.js
+          node --check locale.js
           node --check app.js
           node --check landscape-view.js
           node --check landscape-app.js
@@ -35,3 +36,15 @@ jobs:
 
       - name: Run website tests
         run: node --test tests/*.test.js
+
+  lifecycle-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out website
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: "24"
+      - name: Verify PostgreSQL lifecycle rules
+        run: node --test tests/lifecycle.test.js

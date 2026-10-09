@@ -4,6 +4,16 @@
 
 Static Website v2 for discovering pgextwin Windows x64 PostgreSQL extension binaries. The site remains vanilla HTML/CSS/JavaScript with no frontend framework or build step.
 
+## Language-specific pages
+
+- `https://pgextwin.github.io/website/`: redirects by the **primary browser/device language** (`ja`, `ja-JP`, etc. → `ja/`; all other languages → `en/`). Query string and fragment are preserved.
+- `https://pgextwin.github.io/website/en/`: permanent English page.
+- `https://pgextwin.github.io/website/ja/`: permanent Japanese page.
+- Both pages have reciprocal, keyboard-accessible links, independent `html lang`/canonical tags, and `hreflang` metadata. A manual choice is never overridden while visiting its explicit URL.
+- `locale.js` localizes runtime Catalog/Landscape UI and current catalog/landscape metadata (including Test Contract scenarios, selection rationale, external binary-source notes). Runtime data, URL safety and release assets stay shared.
+- **When adding a new extension or changing descriptive metadata**, update its Japanese translation in `locale.js` at the same time. Unmapped new source text remains as supplied in English; it is not silently machine-translated.
+- `node --test tests/*.test.js` includes routing, translation and route structure tests. Published Pages/browser smoke verifies both URLs after merge.
+
 ## Data sources and responsibilities
 
 The browser combines two independent canonical sources at runtime:

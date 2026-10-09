@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PostgreSQL拡張機能の非公式Windows x64バイナリを検索・ダウンロードできます。">
+  <title>pgextwin — PostgreSQL拡張機能のWindowsバイナリ</title>
+  <link rel="canonical" href="https://pgextwin.github.io/website/ja/">
+  <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/">
+  <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/">
+  <link rel="alternate" hreflang="x-default" href="https://pgextwin.github.io/website/">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell">
+      <nav class="language-nav" aria-label="表示言語"><a href="../ja/" lang="ja" aria-current="page">日本語</a><a href="../en/" lang="en">English</a></nav>
+      <p class="eyebrow">pgextwin</p>
+      <h1>PostgreSQL拡張機能のWindowsバイナリ</h1>
+      <p class="lead">PostgreSQLのバージョンからWindows x64向け拡張機能を検索し、GitHub Releaseの正規バイナリを直接ダウンロードできます。導入要件、CIで検証した機能、チェックサム、サプライチェーンの検証情報を確認できます。</p>
+
+
+    </div>
+  </header>
+
+  <main class="shell">
+    <section aria-labelledby="extensions-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">配布カタログ</p>
+          <h2 id="extensions-heading">配布中の拡張機能</h2>
+        </div>
+        <button id="reload" type="button">カタログを再読み込み</button>
+      </div>
+
+      <div class="filters" aria-label="拡張機能の絞り込み">
+        <div class="filter-field filter-field--search">
+          <label for="search">拡張機能を検索</label>
+          <input id="search" name="search" type="search" autocomplete="off" placeholder="拡張機能名・説明・上流リポジトリ">
+        </div>
+        <div class="filter-field">
+          <label for="pg-filter">PostgreSQLのバージョン</label>
+          <select id="pg-filter" name="pg-filter">
+            <option value="">すべてのPostgreSQLバージョン</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="status" class="status" role="status" aria-live="polite">カタログを読み込んでいます…</div>
+      <p id="results-count" class="results-count" role="status" aria-live="polite"></p>
+      <div id="empty-state" class="empty-state" role="status" hidden>条件に一致する拡張機能はありません。</div>
+      <div id="extensions" class="extension-grid"></div>
+    </section>
+
+
+    <section class="landscape-section" aria-labelledby="landscape-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">独立した拡張機能一覧</p>
+          <h2 id="landscape-heading">Windows拡張機能の対応状況</h2>
+        </div>
+        <button id="landscape-reload" type="button">対応状況を再読み込み</button>
+      </div>
+      <p>pgextwinで配布中の拡張機能、今後の実装候補、他のWindowsバイナリ配布元を確認できます。<strong>「pgextwinで実装予定なし」は「Windowsで使用できない」という意味ではありません。</strong></p>
+
+
+      <p class="landscape-disclaimer">外部配布物は記載されたプロジェクトまたはベンダーが提供します。pgextwinはその正確性、安全性、更新状況、サポート、互換性を保証しません。導入前に提供元の利用条件と対象PostgreSQLバージョンの要件をご確認ください。</p>
+
+
+      <div class="filters landscape-filters" aria-label="対応状況の検索と絞り込み">
+        <div class="filter-field">
+          <label for="landscape-search">対応状況を検索</label>
+          <input id="landscape-search" type="search" autocomplete="off" placeholder="拡張機能名・提供元">
+        </div>
+        <div class="filter-field">
+          <label for="landscape-filter">配布区分</label>
+          <select id="landscape-filter">
+            <option value="">すべて</option>
+            <option value="implemented">pgextwinで配布中</option>
+            <option value="candidate">今後の実装候補</option>
+            <option value="not-planned">pgextwinでは実装予定なし</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label for="landscape-source-filter">外部取得元の種別</label>
+          <select id="landscape-source-filter">
+            <option value="">すべての取得元</option>
+            <option value="upstream-official">公式</option>
+            <option value="community">コミュニティ</option>
+            <option value="vendor">ベンダー</option>
+            <option value="package-manager">パッケージ管理ツール</option>
+          </select>
+        </div>
+      </div>
+      <div id="landscape-status" class="status" role="status" aria-live="polite">対応状況を読み込んでいます…</div>
+      <p id="landscape-count" class="results-count" role="status" aria-live="polite"></p>
+      <p id="landscape-empty" class="empty-state" hidden>条件に一致する拡張機能はありません。</p>
+      <div id="landscape-grid" class="extension-grid"></div>
+    </section>
+
+    <section class="info" aria-labelledby="lifecycle-heading">
+      <p class="eyebrow">PostgreSQLのサポート期間</p>
+      <h2 id="lifecycle-heading">配布の有無とメンテナンス状況は別です</h2>
+      <p><strong>配布中</strong>は、そのPostgreSQLメジャーバージョン向けの検証済みバイナリが公開されていることを意味します。<strong>サポート期間内</strong>は、pgextwin/buildのライフサイクル情報に基づきPostgreSQLコミュニティのサポート期間内であることを示します。サポート終了日当日まではサポート期間内とし、翌UTC日から過去バージョン扱いになります。</p>
+
+
+      <div id="lifecycle-notice" class="lifecycle-notice" aria-live="polite"></div>
+    </section>
+
+    <section class="info" aria-labelledby="integrity-heading">
+      <p class="eyebrow">整合性と検証情報</p>
+      <h2 id="integrity-heading">チェックサムはリリース固有の整合性情報です</h2>
+      <p>各ZIPのSHA-256を、公開された<code>SHA256SUMS.txt</code>と照合できる形式で表示します。サプライチェーンの検証情報はリリースの付随情報であり、安全性・信頼性を保証する判定ではありません。脆弱性レポートは生成時点のGrypeスキャン結果です。</p>
+    </section>
+
+    <section class="info" aria-labelledby="about-heading">
+      <p class="eyebrow">このプロジェクトについて</p>
+      <h2 id="about-heading">固定した上流ソースからビルド</h2>
+      <p>pgextwinは独立したコミュニティプロジェクトです。各パッケージには、上流プロジェクト、ソースのバージョン、対応PostgreSQLメジャーバージョン、アーキテクチャ、ライセンスを明記します。</p>
+
+
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell">
+      <a href="https://github.com/pgextwin">GitHub組織</a>
+      <a href="https://github.com/pgextwin/catalog">Catalog</a>
+      <a href="https://github.com/pgextwin/build">ビルド基盤</a>
+    </div>
+  </footer>
+
+  <script src="../lifecycle.js" defer></script>
+  <script src="../catalog-view.js" defer></script>
+  <script src="../locale.js" defer></script>
+  <script src="../app.js" defer></script>
+  <script src="../landscape-view.js" defer></script>
+  <script src="../landscape-app.js" defer></script>
+</body>
+</html>

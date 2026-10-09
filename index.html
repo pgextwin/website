@@ -3,127 +3,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Discover and directly download unofficial Windows x64 binaries for selected PostgreSQL extensions.">
-  <title>pgextwin — PostgreSQL Extensions for Windows</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="robots" content="noindex,follow">
+  <title>pgextwin — Choose language</title>
+  <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/">
+  <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/">
+  <link rel="alternate" hreflang="x-default" href="https://pgextwin.github.io/website/">
+  <script>
+    (function () {
+      var preferred = (navigator.languages && navigator.languages[0]) || navigator.language || "";
+      var language = /^ja(?:[-_]|$)/i.test(preferred) ? "ja" : "en";
+      var destination = new URL(language + "/", window.location.href);
+      destination.search = window.location.search;
+      destination.hash = window.location.hash;
+      window.location.replace(destination.href);
+    }());
+  </script>
 </head>
 <body>
-  <header class="site-header">
-    <div class="shell">
-      <p class="eyebrow">pgextwin</p>
-      <h1>PostgreSQL Extensions for Windows</h1>
-      <p class="lead">Find Windows x64 extension binaries by PostgreSQL version, download the canonical Release asset directly, and inspect runtime requirements, CI-tested capabilities, checksums, and supply-chain evidence.</p>
-      <p class="lead ja" lang="ja">PostgreSQLバージョンからWindows x64拡張機能を探し、正規Release assetを直接downloadできます。導入前提、CIで検証される機能、SHA-256、supply-chain evidenceも確認できます。</p>
-    </div>
-  </header>
-
-  <main class="shell">
-    <section aria-labelledby="extensions-heading">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Catalog</p>
-          <h2 id="extensions-heading">Available extensions</h2>
-        </div>
-        <button id="reload" type="button">Reload catalog</button>
-      </div>
-
-      <div class="filters" aria-label="Extension filters">
-        <div class="filter-field filter-field--search">
-          <label for="search">Search extensions</label>
-          <input id="search" name="search" type="search" autocomplete="off" placeholder="Name, description, or upstream repository">
-        </div>
-        <div class="filter-field">
-          <label for="pg-filter">PostgreSQL version</label>
-          <select id="pg-filter" name="pg-filter">
-            <option value="">All PostgreSQL versions</option>
-          </select>
-        </div>
-      </div>
-
-      <div id="status" class="status" role="status" aria-live="polite">Loading catalog…</div>
-      <p id="results-count" class="results-count" role="status" aria-live="polite"></p>
-      <div id="empty-state" class="empty-state" role="status" hidden>No extensions match the current filters.</div>
-      <div id="extensions" class="extension-grid"></div>
-    </section>
-
-
-    <section class="landscape-section" aria-labelledby="landscape-heading">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Independent Landscape Registry</p>
-          <h2 id="landscape-heading">Windows extension landscape</h2>
-        </div>
-        <button id="landscape-reload" type="button">Reload landscape</button>
-      </div>
-      <p>Find pgextwin downloads, future candidates, and alternative Windows binary sources. <strong>Not planned by pgextwin does not mean unavailable or incompatible with Windows.</strong></p>
-      <p lang="ja">pgextwin配布中・今後の候補・他のWindowsバイナリ配布元を区別します。<strong>「pgextwinで実装予定なし」は「Windowsで使用不可」の意味ではありません。</strong></p>
-      <p class="landscape-disclaimer">External distributions are provided by their listed projects or vendors. pgextwin does not guarantee their correctness, security, freshness, support, or compatibility. Check provider conditions and version-specific requirements before installation.</p>
-      <p lang="ja" class="landscape-disclaimer">外部配布物の正確性・安全性・更新状況・サポート・互換性をpgextwinが保証するものではありません。利用条件と対応するPostgreSQL環境を必ず確認してください。</p>
-      <div class="filters landscape-filters" aria-label="Landscape search and filters">
-        <div class="filter-field">
-          <label for="landscape-search">Search landscape / 検索</label>
-          <input id="landscape-search" type="search" autocomplete="off" placeholder="Extension or provider">
-        </div>
-        <div class="filter-field">
-          <label for="landscape-filter">Distribution status / 区分</label>
-          <select id="landscape-filter">
-            <option value="">All / すべて</option>
-            <option value="implemented">Available in pgextwin / 配布中</option>
-            <option value="candidate">Future candidate / 今後の候補</option>
-            <option value="not-planned">Not planned / 他の配布元</option>
-          </select>
-        </div>
-        <div class="filter-field">
-          <label for="landscape-source-filter">External source type / 取得元種別</label>
-          <select id="landscape-source-filter">
-            <option value="">All sources / すべて</option>
-            <option value="upstream-official">Official / 公式</option>
-            <option value="community">Community / コミュニティ</option>
-            <option value="vendor">Vendor / ベンダー</option>
-            <option value="package-manager">Package manager</option>
-          </select>
-        </div>
-      </div>
-      <div id="landscape-status" class="status" role="status" aria-live="polite">Loading landscape…</div>
-      <p id="landscape-count" class="results-count" role="status" aria-live="polite"></p>
-      <p id="landscape-empty" class="empty-state" hidden>No matching Landscape entries.</p>
-      <div id="landscape-grid" class="extension-grid"></div>
-    </section>
-
-    <section class="info" aria-labelledby="lifecycle-heading">
-      <p class="eyebrow">PostgreSQL lifecycle</p>
-      <h2 id="lifecycle-heading">Availability and maintenance are different</h2>
-      <p><strong>Available</strong> means pgextwin has a published and verified binary for that PostgreSQL major. <strong>Maintained</strong> means the PostgreSQL major is still within its community support period, derived from pgextwin/build lifecycle metadata. The EOL date itself remains maintained; historical status begins on the following UTC calendar day.</p>
-      <p lang="ja"><strong>Available</strong> は、そのPostgreSQL major向けの検証済み公開バイナリがpgextwinに存在することを示します。<strong>Maintained</strong> は、pgextwin/buildのLifecycle metadataから判定したPostgreSQLコミュニティのサポート期間内であることを示します。EOL当日まではmaintainedで、翌UTC日からhistorical扱いになります。</p>
-      <div id="lifecycle-notice" class="lifecycle-notice" aria-live="polite"></div>
-    </section>
-
-    <section class="info" aria-labelledby="integrity-heading">
-      <p class="eyebrow">Integrity and evidence</p>
-      <h2 id="integrity-heading">Checksums are release-specific integrity information</h2>
-      <p>Each binary shows the full ZIP SHA-256 synchronized with the published <code>SHA256SUMS.txt</code>. Supply-chain evidence is shown as release metadata, not as a safety or trust verdict. Vulnerability reports, when present, are point-in-time Grype scans.</p>
-    </section>
-
-    <section class="info" aria-labelledby="about-heading">
-      <p class="eyebrow">About</p>
-      <h2 id="about-heading">Built from pinned upstream source</h2>
-      <p>pgextwin is an independent community project. Each package identifies its upstream project, source version, PostgreSQL major version, architecture, and license.</p>
-      <p lang="ja">pgextwinは独立したコミュニティプロジェクトです。各配布物にはupstream、使用ソース、PostgreSQL major、アーキテクチャ、ライセンスを明記します。</p>
-    </section>
+  <main>
+    <h1>pgextwin</h1>
+    <p>Choose your language / 言語を選択してください。</p>
+    <p><a href="./en/" lang="en">English</a> | <a href="./ja/" lang="ja">日本語</a></p>
   </main>
-
-  <footer class="site-footer">
-    <div class="shell">
-      <a href="https://github.com/pgextwin">GitHub Organization</a>
-      <a href="https://github.com/pgextwin/catalog">Catalog</a>
-      <a href="https://github.com/pgextwin/build">Build infrastructure</a>
-    </div>
-  </footer>
-
-  <script src="lifecycle.js" defer></script>
-  <script src="catalog-view.js" defer></script>
-  <script src="app.js" defer></script>
-  <script src="landscape-view.js" defer></script>
-  <script src="landscape-app.js" defer></script>
 </body>
 </html>

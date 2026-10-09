@@ -4,6 +4,16 @@
 
 pgextwinのWindows x64 PostgreSQL Extension binaryを探すための静的Website v2です。Frontend frameworkやbuild stepは導入せず、vanilla HTML/CSS/JavaScript構成を維持します。
 
+## 日本語版と英語版のURL
+
+- `https://pgextwin.github.io/website/`：ブラウザーの最優先言語が日本語（`ja`、`ja-JP`など）の場合のみ`ja/`へ、それ以外は`en/`へ移動します。検索パラメーターとページ内リンクも引き継ぎます。
+- `https://pgextwin.github.io/website/ja/`：日本語版の固定URL。
+- `https://pgextwin.github.io/website/en/`：英語版の固定URL。
+- 両ページには相互切替リンクを設けています。明示的に選んだ言語のURLへアクセスした場合、端末言語による再判定は行いません。
+- `locale.js`でカタログ・対応状況の画面文言、既存データの説明、CIテスト内容、選定理由、外部配布物の補足情報を日本語化しています。ダウンロードURLや正規データの取得元は従来どおり共通です。
+- **新しい拡張機能の追加や説明文の変更時には、同時に`locale.js`の日本語訳を更新してください。** 新しい英語文面について翻訳が未登録の場合、原文の英語を表示し、自動翻訳はしません。
+- 単体テストは`node --test tests/*.test.js`で、公開後のページはPagesのスモークテストで日英両方を検証します。
+
 ## 情報源と責務分離
 
 Browserではruntimeに、役割の異なる2つの正規情報源を結合します。

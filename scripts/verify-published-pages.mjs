@@ -4,7 +4,8 @@
 import assert from "node:assert/strict";
 import { setTimeout as delay } from "node:timers/promises";
 
-const site = "https://pgextwin.github.io/website/";
+const root = "https://pgextwin.github.io/website/";
+const site = root + "en/";
 const registry = "https://raw.githubusercontent.com/pgextwin/catalog/main";
 async function get(url) {
   const response = await fetch(url, {headers:{"Cache-Control":"no-cache"},signal:AbortSignal.timeout(15000)});
@@ -12,16 +13,29 @@ async function get(url) {
   return response;
 }
 async function verify() {
-  const html = await (await get(site)).text();
+  const [html, japanese, entrypoint] = await Promise.all([
+    get(site).then(x=>x.text()), get(root+"ja/").then(x=>x.text()), get(root).then(x=>x.text())
+  ]);
+  assert.ok(entrypoint.includes("navigator.languages"));
+  assert.ok(entrypoint.includes('language + "/"'));
+  assert.match(html,/<html lang="en">/);
+  assert.match(japanese,/<html lang="ja">/);
+  assert.ok(japanese.includes("配布中の拡張機能"));
+  for (const page of [html,japanese]) {
+    assert.ok(page.includes('href="../ja/"') && page.includes('href="../en/"'));
+    assert.ok(page.includes('src="../locale.js"'));
+    assert.ok(page.includes('hreflang="x-default"'));
+  }
+  assert.equal((await get(root+"locale.js")).status,200);
   for (const phrase of ['id="extensions-heading"','id="landscape-heading"','id="landscape-filter"',
     'id="landscape-source-filter"','id="landscape-search"','landscape-view.js','landscape-app.js',
     'id="pg-filter"','id="extensions"']) {
     assert.ok(html.includes(phrase), `Missing public Pages HTML control: ${phrase}`);
   }
   const [js, app, css, rawIndex] = await Promise.all([
-    get(site+"landscape-view.js").then(x=>x.text()),
-    get(site+"landscape-app.js").then(x=>x.text()),
-    get(site+"styles.css").then(x=>x.text()),
+    get(root+"landscape-view.js").then(x=>x.text()),
+    get(root+"landscape-app.js").then(x=>x.text()),
+    get(root+"styles.css").then(x=>x.text()),
     get(registry+"/landscape/index.json").then(x=>x.json())
   ]);
   assert.ok(js.includes("partitionResults") && js.includes("filterRecords"),"Published Landscape logic missing");

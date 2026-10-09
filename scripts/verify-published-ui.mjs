@@ -8,7 +8,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 
-const site = "https://pgextwin.github.io/website/";
+const site = "https://pgextwin.github.io/website/en/";
 const chromeBin = process.env.CHROME_BIN || "google-chrome";
 execFileSync("which", [chromeBin]);
 const dir = await mkdtemp(join(tmpdir(), "pgextwin-browser-"));
@@ -132,7 +132,16 @@ try {
   assert.ok(mobile.singleColumn && mobile.catalogVisible && mobile.landscapeVisible &&
     mobile.inputVisible && mobile.focusCss);
   assert.ok(mobile.scrollWidth<=mobile.width+2,`Mobile horizontal overflow: ${JSON.stringify(mobile)}`);
-  console.log(JSON.stringify({result:"PASS",site,realBrowser:"Chrome headless",catalogCards:9,
+  await send("Page.navigate",{url:"https://pgextwin.github.io/website/ja/"});
+  await until('document.getElementById("landscape-count")?.textContent.includes("20件中20件") && document.getElementById("results-count")?.textContent.includes("9件中9件")',
+    "Japanese catalog and landscape data loaded");
+  assert.equal(await evaluate('document.documentElement.lang'),"ja");
+  assert.equal(await evaluate('document.querySelectorAll("#extensions article").length'),9);
+  assert.equal(await evaluate('document.querySelectorAll("#landscape-grid article").length'),20);
+  assert.ok((await evaluate('document.querySelector("#extensions article")?.textContent'))?.includes("ZIPをダウンロード"));
+  assert.equal(await evaluate('document.querySelector("nav.language-nav [aria-current=page]")?.getAttribute("lang")'),"ja");
+  assert.ok((await evaluate('document.querySelector("#landscape-grid")?.textContent'))?.includes("配布中"));
+  console.log(JSON.stringify({result:"PASS",site,realBrowser:"Chrome headless",japanesePage:true,catalogCards:9,
     landscapeCards:20,statusFilterCounts:counts,search:true,sourceFilter:true,
     externalHttpsLinks:linkSafety.count,vendorAndCondaLabels:true,mobile}));
 } finally {
