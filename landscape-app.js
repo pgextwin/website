@@ -140,7 +140,7 @@
       failures = result.failures.length;
       for (const f of result.failures) console.warn("Landscape record unavailable:",f.name,f.reason);
       render();
-      status.textContent = t(records.length + " Landscape entries loaded." + (failures ? " " + failures + " entry/entries failed); valid entries remain visible." : "") + " External source details are point-in-time research, not pgextwin guarantees.";
+      status.textContent = t(records.length + " Landscape entries loaded." + (failures ? " " + failures + " entry/entries failed; valid entries remain visible." : "") + " External source details are point-in-time research, not pgextwin guarantees.");
     } catch (error) {
       console.warn("Landscape unavailable (distribution catalog unaffected):",error);
       records = [];
