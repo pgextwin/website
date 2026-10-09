@@ -72,7 +72,7 @@
         field(meta,"Decision date / 選定日",record.roadmap.decisionDate);
         article.append(node("p","landscape-muted",(document.documentElement.lang === "ja" ? "当時の選定理由：" : "Original selection rationale: ") + t(record.roadmap.rationale)));
       }
-      article.append(node("p",null,"Published, verified binaries are in the distribution catalog. / 配布中のバイナリは上部のCatalogを参照してください。"));
+      article.append(node("p",null,"Published, verified binaries are in the distribution catalog. / 配布中のバイナリは上部の配布カタログをご確認ください。"));
       const actions = node("p");
       const a = node("a","download-link","Find pgextwin downloads / 配布一覧へ");
       a.href = "#extensions-heading";
