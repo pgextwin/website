@@ -16,8 +16,8 @@ async function verify() {
   const [html, japanese, entrypoint] = await Promise.all([
     get(site).then(x=>x.text()), get(root+"ja/").then(x=>x.text()), get(root).then(x=>x.text())
   ]);
-  assert.match(entrypoint,/navigator\\.languages/);
-  assert.match(entrypoint,/language \+ "\\/"/);
+  assert.ok(entrypoint.includes("navigator.languages"));
+  assert.ok(entrypoint.includes('language + "/"'));
   assert.match(html,/<html lang="en">/);
   assert.match(japanese,/<html lang="ja">/);
   assert.ok(japanese.includes("配布中の拡張機能"));
