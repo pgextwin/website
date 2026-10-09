@@ -52,6 +52,8 @@
       if (original === "Find pgextwin downloads") return "pgextwinのダウンロードを探す";
       if (original === "Formal decision pending") return "正式選定待ち";
       if ((match = /^Source (\d+)$/.exec(original))) return "根拠資料 " + match[1];
+      if ((match = /^(\d{4}-\d{2}-\d{2}) \(recheck before use\)$/.exec(original))) return match[1] + "（利用前に再確認）";
+      if (original === "0 extensions shown.") return "拡張機能は0件です。";
       if (original === "PostgreSQL 14") return original;
       return original;
     }
