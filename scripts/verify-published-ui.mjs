@@ -71,12 +71,12 @@ try {
   await send("Page.enable");
   await send("Runtime.enable");
   await send("Page.navigate",{url:site});
-  await until('document.getElementById("landscape-count")?.textContent.includes("20 of 20") && document.getElementById("results-count")?.textContent.includes("8 of 8")',
+  await until('document.getElementById("landscape-count")?.textContent.includes("20 of 20") && document.getElementById("results-count")?.textContent.includes("9 of 9")',
     "public catalog and landscape data loaded");
-  assert.equal(await evaluate('document.querySelectorAll("#extensions article").length'),8);
+  assert.equal(await evaluate('document.querySelectorAll("#extensions article").length'),9);
   assert.equal(await evaluate('document.querySelectorAll("#landscape-grid article").length'),20);
   const counts={};
-  for(const [status,expected] of [["implemented",8],["candidate",6],["not-planned",6]]) {
+  for(const [status,expected] of [["implemented",9],["candidate",5],["not-planned",6]]) {
     counts[status]=await evaluate(`(() => {
       const s=document.getElementById("landscape-filter");
       s.value="${status}";
@@ -93,7 +93,7 @@ try {
       label:x.querySelector(".landscape-roadmap-label")?.textContent
     }));
   })()`);
-  assert.deepEqual(waveLabels.slice(0,3).map(x=>x.label?.split(" / ")[0]),["Wave 2 #1","Wave 2 #2","Wave 2 #3"]);
+  assert.deepEqual(waveLabels.slice(0,2).map(x=>x.label?.split(" / ")[0]),["Wave 2 #2","Wave 2 #3"]);
   assert.ok(waveLabels.some(x=>x.label?.includes("Reserve candidate")));
   assert.ok(waveLabels.some(x=>x.label?.includes("Further research")));
   assert.equal(await evaluate(`(() => {
@@ -132,7 +132,7 @@ try {
   assert.ok(mobile.singleColumn && mobile.catalogVisible && mobile.landscapeVisible &&
     mobile.inputVisible && mobile.focusCss);
   assert.ok(mobile.scrollWidth<=mobile.width+2,`Mobile horizontal overflow: ${JSON.stringify(mobile)}`);
-  console.log(JSON.stringify({result:"PASS",site,realBrowser:"Chrome headless",catalogCards:8,
+  console.log(JSON.stringify({result:"PASS",site,realBrowser:"Chrome headless",catalogCards:9,
     landscapeCards:20,statusFilterCounts:counts,search:true,sourceFilter:true,
     externalHttpsLinks:linkSafety.count,vendorAndCondaLabels:true,mobile}));
 } finally {
