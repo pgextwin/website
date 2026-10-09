@@ -26,6 +26,7 @@ jobs:
         run: |
           node --check lifecycle.js
           node --check catalog-view.js
+          node --check locale.js
           node --check app.js
           node --check landscape-view.js
           node --check landscape-app.js

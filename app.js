@@ -1,3 +1,4 @@
+const t = (value) => globalThis.pgextwinI18n ? globalThis.pgextwinI18n.t(value) : String(value);
 const CATALOG_BASE = "https://raw.githubusercontent.com/pgextwin/catalog/main";
 const POSTGRESQL_LIFECYCLE_URL = "https://raw.githubusercontent.com/pgextwin/build/main/metadata/postgresql.json";
 
@@ -26,7 +27,7 @@ const state = {
 };
 
 function text(value) {
-  return document.createTextNode(String(value));
+  return document.createTextNode(t(value));
 }
 
 function element(name, className) {
@@ -157,12 +158,12 @@ function renderChecksum(sha256, record, major) {
     try {
       if (!navigator.clipboard || typeof navigator.clipboard.writeText !== "function") throw new Error("Clipboard API unavailable");
       await navigator.clipboard.writeText(sha256);
-      button.textContent = "Copied";
+      button.textContent = t("Copied");
     } catch (error) {
       console.warn(error);
-      button.textContent = "Copy unavailable";
+      button.textContent = t("Copy unavailable");
     } finally {
-      window.setTimeout(() => { button.textContent = "Copy SHA-256"; }, 1800);
+      window.setTimeout(() => { button.textContent = t("Copy SHA-256"); }, 1800);
     }
   });
   block.append(label, code, button);
@@ -386,7 +387,7 @@ function renderLifecycleNotice(lifecycleByMajor, effectiveDate) {
       "PostgreSQL Lifecycle metadataを取得できません。Catalogに基づく公開済みバイナリの表示は継続しますが、現在のmaintenance状態は判定できません。"
     ));
   }
-  lifecycleNoticeElement.append(english, japanese);
+  lifecycleNoticeElement.append(document.documentElement.lang === "ja" ? japanese : english);
 }
 
 function populateMajorFilter(records) {
@@ -407,11 +408,18 @@ function populateMajorFilter(records) {
 
 function renderFilteredCatalog() {
   const selectedMajor = pgFilter.value || null;
+  const query = searchInput.value.trim().toLocaleLowerCase();
   const records = catalogView.filterRecords(state.records, { query: searchInput.value, major: selectedMajor });
+  if (document.documentElement.lang === "ja" && query) {
+    for (const record of state.records) {
+      if (!records.includes(record) && t(record.description).toLocaleLowerCase().includes(query) &&
+          catalogView.isAvailableForMajor(record,selectedMajor)) records.push(record);
+    }
+  }
   gridElement.replaceChildren(
     ...records.map((record) => renderExtension(record, state.lifecycleByMajor, state.effectiveDate, selectedMajor))
   );
-  resultsCountElement.textContent = `${records.length} of ${state.records.length} extensions shown.`;
+  resultsCountElement.textContent = t(`${records.length} of ${state.records.length} extensions shown.`);
   emptyStateElement.hidden = records.length !== 0;
   if (records.length === 0) {
     emptyStateElement.textContent = state.records.length === 0
@@ -447,8 +455,8 @@ async function loadLifecycleMetadata() {
 
 async function loadCatalog() {
   reloadButton.disabled = true;
-  statusElement.textContent = "Loading catalog…";
-  resultsCountElement.textContent = "";
+  statusElement.textContent = t("Loading catalog…");
+  resultsCountElement.textContent = t("");
   emptyStateElement.hidden = true;
   gridElement.replaceChildren();
 
@@ -482,16 +490,16 @@ async function loadCatalog() {
     const lifecycleSuffix = state.lifecycleAvailable
       ? ` Lifecycle status uses the ${state.effectiveDate} UTC calendar date.`
       : " Lifecycle data unavailable; binary availability and downloads are still shown.";
-    statusElement.textContent = `${state.records.length} extension records loaded.${partial}${lifecycleSuffix}`;
+    statusElement.textContent = t(`${state.records.length} extension records loaded.${partial}${lifecycleSuffix}`);
   } catch (error) {
     console.error(error);
     state.records = [];
     state.recordFailureCount = 0;
-    statusElement.textContent = "The catalog index could not be loaded or does not use supported schema v2. Please use the GitHub catalog link below.";
-    resultsCountElement.textContent = "0 extensions shown.";
+    statusElement.textContent = t("The catalog index could not be loaded or does not use supported schema v2. Please use the GitHub catalog link below.");
+    resultsCountElement.textContent = t("0 extensions shown.");
     gridElement.replaceChildren();
     emptyStateElement.hidden = false;
-    emptyStateElement.textContent = "Catalog unavailable.";
+    emptyStateElement.textContent = t("Catalog unavailable.");
     lifecycleNoticeElement.textContent = "";
   } finally {
     reloadButton.disabled = false;

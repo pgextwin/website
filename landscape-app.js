@@ -1,6 +1,7 @@
 (function () {
   "use strict";
   const view = globalThis.pgextwinLandscapeView;
+  const t = (value) => globalThis.pgextwinI18n ? globalThis.pgextwinI18n.t(value) : String(value);
   const BASE = "https://raw.githubusercontent.com/pgextwin/catalog/main";
   const status = document.getElementById("landscape-status");
   const count = document.getElementById("landscape-count");
@@ -15,7 +16,7 @@
   function node(tag,className,value) {
     const el = document.createElement(tag);
     if (className) el.className = className;
-    if (value !== undefined) el.textContent = String(value);
+    if (value !== undefined) el.textContent = t(value);
     return el;
   }
   function link(parent,url,label,cls) {
@@ -93,8 +94,8 @@
     }
     if (record.status === "not-planned") {
       article.append(node("h4",null,"Why not planned / 見送り理由"));
-      article.append(node("p",null,record.notPlannedReasonJa || record.notPlannedReason));
-      if (record.notPlannedReasonJa) article.append(node("p","landscape-muted",record.notPlannedReason));
+      article.append(node("p",null,(document.documentElement.lang === "ja" && record.notPlannedReasonJa) || record.notPlannedReason));
+      
     }
     if (record.windowsBinarySources.length) {
       article.append(node("h4",null,"External Windows binary sources / 外部取得先"));
@@ -116,27 +117,36 @@
   }
   function render() {
     const selected = view.filterRecords(records,{query:search.value,status:filter.value,sourceType:sourceFilter.value});
+    const query=search.value.trim().toLocaleLowerCase();
+    if (document.documentElement.lang === "ja" && query) {
+      for (const record of records) {
+        if (!selected.includes(record) && (!filter.value || record.status === filter.value) &&
+            (!sourceFilter.value || record.windowsBinarySources.some(s=>s.type === sourceFilter.value)) &&
+            [record.description,record.candidateRationale,record.notPlannedReason,record.roadmap?.rationale,
+              ...record.windowsBinarySources.map(s=>s.notes)].some(v=>v && t(v).toLocaleLowerCase().includes(query))) selected.push(record);
+      }
+    }
     grid.replaceChildren(...selected.map(card));
     empty.hidden = selected.length !== 0;
-    count.textContent = selected.length + " of " + records.length + " Landscape entries shown.";
-    empty.textContent = records.length ? "No Landscape entries match the selected filters." : "No valid Landscape entries loaded.";
+    count.textContent = t(selected.length + " of " + records.length + " Landscape entries shown.");
+    empty.textContent = t(records.length ? "No Landscape entries match the selected filters." : "No valid Landscape entries loaded.");
   }
   async function load() {
     reload.disabled = true;
-    status.textContent = "Loading independent Landscape registry…";
+    status.textContent = t("Loading independent Landscape registry…");
     try {
       const result = await view.load(fetch,BASE);
       records = view.sortRecords(result.records);
       failures = result.failures.length;
       for (const f of result.failures) console.warn("Landscape record unavailable:",f.name,f.reason);
       render();
-      status.textContent = records.length + " Landscape entries loaded." + (failures ? " " + failures + " entry/entries failed; valid entries remain visible." : "") + " External source details are point-in-time research, not pgextwin guarantees.";
+      status.textContent = t(records.length + " Landscape entries loaded." + (failures ? " " + failures + " entry/entries failed); valid entries remain visible." : "") + " External source details are point-in-time research, not pgextwin guarantees.";
     } catch (error) {
       console.warn("Landscape unavailable (distribution catalog unaffected):",error);
       records = [];
       failures = 0;
       render();
-      status.textContent = "Landscape registry unavailable. Existing pgextwin catalog and downloads remain independent.";
+      status.textContent = t("Landscape registry unavailable. Existing pgextwin catalog and downloads remain independent.");
     } finally { reload.disabled = false; }
   }
   for (const input of [search,filter,sourceFilter]) input.addEventListener(input === search ? "input":"change",render);

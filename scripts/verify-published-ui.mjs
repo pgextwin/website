@@ -8,7 +8,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 
-const site = "https://pgextwin.github.io/website/";
+const site = "https://pgextwin.github.io/website/en/";
 const chromeBin = process.env.CHROME_BIN || "google-chrome";
 execFileSync("which", [chromeBin]);
 const dir = await mkdtemp(join(tmpdir(), "pgextwin-browser-"));
