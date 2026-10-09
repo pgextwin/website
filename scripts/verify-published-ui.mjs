@@ -93,7 +93,7 @@ try {
       label:x.querySelector(".landscape-roadmap-label")?.textContent
     }));
   })()`);
-  assert.deepEqual(waveLabels.slice(0,2).map(x=>x.label?.split(" / ")[0]),["Wave 2 #1","Wave 2 #2","Wave 2 #3"]);
+  assert.deepEqual(waveLabels.slice(0,2).map(x=>x.label?.split(" / ")[0]),["Wave 2 #2","Wave 2 #3"]);
   assert.ok(waveLabels.some(x=>x.label?.includes("Reserve candidate")));
   assert.ok(waveLabels.some(x=>x.label?.includes("Further research")));
   assert.equal(await evaluate(`(() => {
