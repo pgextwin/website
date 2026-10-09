@@ -422,9 +422,9 @@ function renderFilteredCatalog() {
   resultsCountElement.textContent = t(`${records.length} of ${state.records.length} extensions shown.`);
   emptyStateElement.hidden = records.length !== 0;
   if (records.length === 0) {
-    emptyStateElement.textContent = state.records.length === 0
+    emptyStateElement.textContent = t(state.records.length === 0
       ? "No valid extension records are currently available."
-      : "No extensions match the current search and PostgreSQL filters.";
+      : "No extensions match the current search and PostgreSQL filters.");
   }
 }
 
