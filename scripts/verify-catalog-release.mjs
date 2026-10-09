@@ -49,7 +49,7 @@ async function audit() {
     "https://github.com/pgextwin/plpgsql_check/releases/download/"
       +encodeURIComponent(rec.latest.releaseTag)+"/SHA256SUMS.txt")).text();
   const listed=new Map(checksums.trim().split("\n").map(line=>{
-    const match=/^([a-f0-9]{64})  ([A-Za-z0-9_.-]+)$/.exec(line.trim());
+    const match=/^([a-f0-9]{64})  (?:\.\/)?([A-Za-z0-9_.-]+)$/.exec(line.trim());
     assert.ok(match,"invalid SHA256SUMS entry");
     return [match[2],match[1]];
   }));
