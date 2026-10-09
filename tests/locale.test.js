@@ -15,6 +15,7 @@ test("localized runtime and content are genuinely separate",()=>{
  assert.equal(en.t("Not planned in pgextwin / 他の配布元を案内"),"Not planned in pgextwin");
  assert.match(ja.t("10 of 20 Landscape entries shown."),/20件中10件/);
  assert.match(ja.t("PostgreSQL 15–18 only"),/のみ/);
+ assert.match(ja.t("2026-10-09 (recheck before use)"),/再確認/);
  assert.match(ja.t("Static analysis and diagnostic checks for PL/pgSQL functions."),/静的解析/);
 });
 test("each route has a language switch and shared data scripts",()=>{
@@ -28,5 +29,7 @@ test("each route has a language switch and shared data scripts",()=>{
   assert.ok(html.includes('href="../en/"'));
   for(const src of ["../locale.js","../app.js","../landscape-app.js","../catalog-view.js","../landscape-view.js"]) assert.ok(html.includes('src="'+src+'"'));
   assert.ok(html.includes('href="../styles.css"'));
+  assert.ok(!html.includes('src="../../'));
+  assert.ok(html.includes('href="https://pgextwin.github.io/website/'+language+'/"'));
  }
 });
