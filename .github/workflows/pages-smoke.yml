@@ -26,6 +26,8 @@ jobs:
       - name: Verify published release assets, SHA-256 and Test Contract source
         run: node scripts/verify-catalog-release.mjs
       - name: Cross-check nine Catalog records against GitHub Release asset digests
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/verify-fleet-releases.mjs
       - name: Verify rendered catalog, filters and mobile layout in headless Chrome
         run: |
