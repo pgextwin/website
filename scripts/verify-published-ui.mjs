@@ -75,6 +75,25 @@ try {
     "public catalog and landscape data loaded");
   assert.equal(await evaluate('document.querySelectorAll("#extensions article").length'),9);
   assert.equal(await evaluate('document.querySelectorAll("#landscape-grid article").length'),20);
+  assert.equal(await evaluate('document.querySelectorAll("#extensions details.extension-collapse:not([open])").length'),9);
+  assert.equal(await evaluate('document.querySelectorAll("#landscape-grid details.landscape-collapse:not([open])").length'),20);
+  const catalogDisclosure = await evaluate(`(() => {
+    const rows=[...document.querySelectorAll("#extensions .extension-collapse")];
+    rows[0].querySelector("summary").click();
+    const hasTable=rows[0].querySelectorAll(".binary-table tbody tr").length>=1;
+    const zip=rows[0].querySelector(".binary-table .download-link");
+    const validZip=zip && zip.href.startsWith("https://") && zip.href.includes(".zip");
+    rows[1].querySelector("summary").click();
+    return {hasTable,validZip,exclusive:!rows[0].open && rows[1].open};
+  })()`);
+  assert.ok(catalogDisclosure.hasTable && catalogDisclosure.validZip && catalogDisclosure.exclusive,
+    "Original ZIP table and single-open catalog disclosure");
+  const landscapeDisclosure = await evaluate(`(() => {
+    const row=document.querySelector("#landscape-grid .landscape-collapse");
+    row.querySelector("summary").click();
+    return row.open && !!row.querySelector(".landscape-detail-body");
+  })()`);
+  assert.ok(landscapeDisclosure,"Landscape details expand on click");
   const counts={};
   for(const [status,expected] of [["implemented",9],["candidate",5],["not-planned",6]]) {
     counts[status]=await evaluate(`(() => {

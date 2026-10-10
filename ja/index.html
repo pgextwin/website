@@ -12,12 +12,18 @@
   <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
+  <a class="skip-link" href="#extensions-heading">ダウンロード一覧へ移動</a>
   <header class="site-header">
     <div class="shell">
       <nav class="language-nav" aria-label="表示言語"><a href="../ja/" lang="ja" aria-current="page">日本語</a><a href="../en/" lang="en">English</a></nav>
       <p class="eyebrow">pgextwin</p>
       <h1>PostgreSQL拡張機能のWindowsバイナリ</h1>
       <p class="lead">PostgreSQLのバージョンからWindows x64向け拡張機能を検索し、GitHub Releaseの正規バイナリを直接ダウンロードできます。導入要件、CIで検証した機能、チェックサム、サプライチェーンの検証情報を確認できます。</p>
+      <nav class="jump-nav" aria-label="ページ内ナビゲーション">
+        <a class="jump-nav-primary" href="#extensions-heading">バイナリを探す</a>
+        <a href="#landscape-heading">他のWindows配布元</a>
+        <a href="#about-heading">pgextwinについて</a>
+      </nav>
 
 
     </div>
@@ -33,6 +39,7 @@
         <button id="reload" type="button">カタログを再読み込み</button>
       </div>
 
+      <div class="catalog-hint" role="note"><strong>pgextwinが作成したオリジナルのWindowsバイナリ</strong><p>拡張機能を選択するとPostgreSQLバージョン別のZIPダウンロード表を表示します。ZIPがインストール用成果物です。SBOM・Grype・証明情報は補助的な検証成果物です。</p></div>
       <div class="filters" aria-label="拡張機能の絞り込み">
         <div class="filter-field filter-field--search">
           <label for="search">拡張機能を検索</label>
