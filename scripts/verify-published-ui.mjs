@@ -9,6 +9,12 @@ import { join } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 
 const site = "https://pgextwin.github.io/website/en/";
+const catalogResponse = await fetch("https://raw.githubusercontent.com/pgextwin/catalog/main/index.json", {signal: AbortSignal.timeout(40000)});
+assert.equal(catalogResponse.status, 200, "Public Catalog unavailable");
+const catalogIndex = await catalogResponse.json();
+assert.equal(catalogIndex.schemaVersion, 2);
+const catalogCount = catalogIndex.extensions.length;
+assert.ok(catalogCount >= 9 && catalogCount <= 14, "Unexpected distribution Catalog size");
 const chromeBin = process.env.CHROME_BIN || "google-chrome";
 execFileSync("which", [chromeBin]);
 const dir = await mkdtemp(join(tmpdir(), "pgextwin-browser-"));
@@ -71,11 +77,11 @@ try {
   await send("Page.enable");
   await send("Runtime.enable");
   await send("Page.navigate",{url:site});
-  await until('document.getElementById("landscape-count")?.textContent.includes("20 of 20") && document.getElementById("results-count")?.textContent.includes("9 of 9")',
+  await until(`document.getElementById("landscape-count")?.textContent.includes("20 of 20") && document.getElementById("results-count")?.textContent.includes("${catalogCount} of ${catalogCount}")`,
     "public catalog and landscape data loaded");
-  assert.equal(await evaluate('document.querySelectorAll("#extensions article").length'),9);
+  assert.equal(await evaluate('document.querySelectorAll("#extensions article").length'),catalogCount);
   assert.equal(await evaluate('document.querySelectorAll("#landscape-grid article").length'),20);
-  assert.equal(await evaluate('document.querySelectorAll("#extensions details.extension-collapse:not([open])").length'),9);
+  assert.equal(await evaluate('document.querySelectorAll("#extensions details.extension-collapse:not([open])").length'),catalogCount);
   assert.equal(await evaluate('document.querySelectorAll("#landscape-grid details.landscape-collapse:not([open])").length'),20);
   const catalogDisclosure = await evaluate(`(() => {
     const rows=[...document.querySelectorAll("#extensions .extension-collapse")];
@@ -95,7 +101,7 @@ try {
   })()`);
   assert.ok(landscapeDisclosure,"Landscape details expand on click");
   const counts={};
-  for(const [status,expected] of [["implemented",9],["candidate",5],["not-planned",6]]) {
+  for(const [status,expected] of [["implemented",catalogCount],["candidate",14-catalogCount],["not-planned",6]]) {
     counts[status]=await evaluate(`(() => {
       const s=document.getElementById("landscape-filter");
       s.value="${status}";
@@ -112,7 +118,14 @@ try {
       label:x.querySelector(".landscape-roadmap-label")?.textContent
     }));
   })()`);
-  assert.deepEqual(waveLabels.slice(0,2).map(x=>x.label?.split(" / ")[0]),["Wave 2 #2","Wave 2 #3"]);
+  assert.ok(waveLabels.every(x=>!x.label?.startsWith("Wave 2 #")), "Completed Wave 2 must no longer be a candidate");
+  const distributedWaveLabels = await evaluate(`(() => {
+    const s=document.getElementById("landscape-filter");
+    s.value="implemented"; s.dispatchEvent(new Event("change",{bubbles:true}));
+    return [...document.querySelectorAll("#landscape-grid .landscape-roadmap-label")].map(x=>x.textContent);
+  })()`);
+  assert.equal(distributedWaveLabels.filter(x=>x?.startsWith("Wave 2 #")).length,3,
+    "All three Wave 2 selection history labels must remain visible");
   assert.ok(waveLabels.some(x=>x.label?.includes("Reserve candidate")));
   assert.ok(waveLabels.some(x=>x.label?.includes("Further research")));
   assert.equal(await evaluate(`(() => {
@@ -152,7 +165,7 @@ try {
     mobile.inputVisible && mobile.focusCss);
   assert.ok(mobile.scrollWidth<=mobile.width+2,`Mobile horizontal overflow: ${JSON.stringify(mobile)}`);
   await send("Page.navigate",{url:"https://pgextwin.github.io/website/ja/"});
-  await until('document.getElementById("landscape-count")?.textContent.includes("20件中20件") && document.getElementById("results-count")?.textContent.includes("9件中9件")',
+  await until(`document.getElementById("landscape-count")?.textContent.includes("20件中20件") && document.getElementById("results-count")?.textContent.includes("${catalogCount}件中${catalogCount}件")`,
     "Japanese catalog and landscape data loaded");
   assert.equal(await evaluate('document.documentElement.lang'),"ja");
   assert.equal(await evaluate('document.querySelectorAll("#extensions article").length'),9);
@@ -160,7 +173,7 @@ try {
   assert.ok((await evaluate('document.querySelector("#extensions article")?.textContent'))?.includes("ZIPをダウンロード"));
   assert.equal(await evaluate('document.querySelector("nav.language-nav [aria-current=page]")?.getAttribute("lang")'),"ja");
   assert.ok((await evaluate('document.querySelector("#landscape-grid")?.textContent'))?.includes("配布中"));
-  console.log(JSON.stringify({result:"PASS",site,realBrowser:"Chrome headless",japanesePage:true,catalogCards:9,
+  console.log(JSON.stringify({result:"PASS",site,realBrowser:"Chrome headless",japanesePage:true,catalogCards:catalogCount,
     landscapeCards:20,statusFilterCounts:counts,search:true,sourceFilter:true,
     externalHttpsLinks:linkSafety.count,vendorAndCondaLabels:true,mobile}));
 } finally {
