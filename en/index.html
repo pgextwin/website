@@ -12,12 +12,18 @@
   <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
+  <a class="skip-link" href="#extensions-heading">Skip to downloads</a>
   <header class="site-header">
     <div class="shell">
       <nav class="language-nav" aria-label="Language"><a href="../en/" lang="en" aria-current="page">English</a><a href="../ja/" lang="ja">日本語</a></nav>
       <p class="eyebrow">pgextwin</p>
       <h1>PostgreSQL Extensions for Windows</h1>
       <p class="lead">Find Windows x64 extension binaries by PostgreSQL version, download the canonical Release asset directly, and inspect runtime requirements, CI-tested capabilities, checksums, and supply-chain evidence.</p>
+      <nav class="jump-nav" aria-label="Page sections">
+        <a class="jump-nav-primary" href="#extensions-heading">Browse downloads</a>
+        <a href="#landscape-heading">Other Windows sources</a>
+        <a href="#about-heading">About pgextwin</a>
+      </nav>
 
 
     </div>
@@ -33,6 +39,7 @@
         <button id="reload" type="button">Reload catalog</button>
       </div>
 
+      <div class="catalog-hint" role="note"><strong>Original pgextwin Windows binaries</strong><p>Select an extension to display its PostgreSQL-version ZIP download table. ZIP files are installable packages; SBOM, Grype and attestations are supporting evidence.</p></div>
       <div class="filters" aria-label="Extension filters">
         <div class="filter-field filter-field--search">
           <label for="search">Search extensions</label>

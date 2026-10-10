@@ -113,6 +113,33 @@
     });
     evidence.append(list);
     article.append(evidence);
+    const content = node("div", "landscape-detail-body");
+    while (article.firstChild) content.append(article.firstChild);
+    const details = node("details", "landscape-collapse");
+    details.name = "pgextwin-landscape";
+    details.id = "landscape-" + record.name;
+    const summary = node("summary", "landscape-summary");
+    const identity = node("span", "extension-identity");
+    identity.append(node("span", "extension-title", record.displayName),
+      node("span", "extension-description", record.description));
+    const badges = node("span", "extension-summary-badges");
+    badges.append(node("span", "landscape-status-label", view.statusLabels[record.status]));
+    if (record.roadmap) badges.append(node("span", "summary-roadmap", view.roadmapLabel(record)));
+    summary.append(identity, badges, node("span", "summary-affordance", "View details"));
+    details.append(summary, content);
+    details.addEventListener("toggle", () => {
+      const url = new URL(window.location.href);
+      if (details.open) {
+        for (const other of grid.querySelectorAll(".landscape-collapse"))
+          if (other !== details && other.open) other.open = false;
+        url.searchParams.set("landscape", record.name);
+        window.history.replaceState(null, "", url);
+      } else if (url.searchParams.get("landscape") === record.name) {
+        url.searchParams.delete("landscape");
+        window.history.replaceState(null, "", url);
+      }
+    });
+    article.append(details);
     return article;
   }
   function render() {
@@ -127,6 +154,12 @@
       }
     }
     grid.replaceChildren(...selected.map(card));
+    const requested = new URL(window.location.href).searchParams.get("landscape");
+    if (requested) {
+      const found = [...grid.querySelectorAll(".landscape-collapse")]
+        .find((item) => item.id === "landscape-" + requested);
+      if (found) found.open = true;
+    }
     empty.hidden = selected.length !== 0;
     count.textContent = t(selected.length + " of " + records.length + " Landscape entries shown.");
     empty.textContent = t(records.length ? "No Landscape entries match the selected filters." : "No valid Landscape entries loaded.");

@@ -295,6 +295,63 @@ function renderCapabilities(record, selectedMajor) {
   return details;
 }
 
+
+function renderBinaryTable(record, selectedMajor) {
+  const section = element("section", "binary-section");
+  const heading = element("h4");
+  heading.append(text("Original Windows binaries"));
+  const explanation = element("p", "binary-intro");
+  explanation.append(text("These ZIP files are pgextwin-built Windows x64 packages. SPDX SBOM and Grype reports are supporting evidence, not installation packages."));
+  section.append(heading, explanation);
+  const scroll = element("div", "binary-table-scroll");
+  const table = element("table", "binary-table");
+  const thead = element("thead");
+  const header = element("tr");
+  for (const label of ["PostgreSQL", "Original ZIP package", "Supporting artifacts"]) {
+    const th = element("th");
+    th.scope = "col";
+    th.append(text(label));
+    header.append(th);
+  }
+  thead.append(header);
+  const tbody = element("tbody");
+  const majors = Object.entries(record.postgresql).filter(([, entry]) => entry.available)
+    .map(([major]) => Number(major))
+    .filter((major) => !selectedMajor || major === Number(selectedMajor))
+    .sort((a, b) => b - a);
+  for (const major of majors) {
+    const info = record.postgresql[String(major)];
+    const row = element("tr");
+    const pg = element("th");
+    pg.scope = "row";
+    pg.append(text("PG " + major));
+    const zip = element("td");
+    appendHttpsLink(zip, info.downloadUrl, "Download ZIP", "download-link download-link--compact");
+    const filename = element("code", "asset-name");
+    filename.append(text(info.asset));
+    zip.append(filename);
+    const auxiliary = element("td");
+    const supporting = element("div", "supporting-links");
+    const evidence = catalogView.normalizeEvidence(info.evidence);
+    let hasEvidence = false;
+    if (evidence.sbom.available && evidence.sbom.downloadUrl)
+      hasEvidence = appendHttpsLink(supporting, evidence.sbom.downloadUrl, "SPDX SBOM", "inline-link") || hasEvidence;
+    if (evidence.vulnerabilityReport.available && evidence.vulnerabilityReport.downloadUrl)
+      hasEvidence = appendHttpsLink(supporting, evidence.vulnerabilityReport.downloadUrl, "Grype report", "inline-link") || hasEvidence;
+    if (!hasEvidence) supporting.append(text("Not published for this release"));
+    auxiliary.append(supporting);
+    row.append(pg, zip, auxiliary);
+    tbody.append(row);
+  }
+  table.append(thead, tbody);
+  scroll.append(table);
+  section.append(scroll);
+  const note = element("p", "binary-hint");
+  note.append(text("For the full ZIP SHA-256 checksum, attestations and CI verification, expand the corresponding PostgreSQL version below."));
+  section.append(note);
+  return section;
+}
+
 function renderExtension(record, lifecycleByMajor, effectiveDate, selectedMajor) {
   const card = element("article", "extension-card");
 
@@ -349,6 +406,45 @@ function renderExtension(record, lifecycleByMajor, effectiveDate, selectedMajor)
   appendHttpsLink(actions, githubRepositoryUrl(record.repository), "Repository", "inline-link");
   appendHttpsLink(actions, githubRepositoryUrl(record.upstream.repository), "Upstream", "inline-link");
   card.append(actions);
+  const content = element("div", "extension-details-body");
+  content.append(renderBinaryTable(record, selectedMajor));
+  while (card.firstChild) content.append(card.firstChild);
+
+  const details = element("details", "extension-collapse");
+  details.name = "pgextwin-extension";
+  details.id = "extension-" + record.name;
+  const summary = element("summary", "extension-summary");
+  const identity = element("span", "extension-identity");
+  identity.append(element("span", "extension-title"), element("span", "extension-description"));
+  identity.children[0].append(text(record.displayName));
+  identity.children[1].append(text(record.description));
+  const badges = element("span", "extension-summary-badges");
+  const release = element("span", "summary-release");
+  release.append(text(record.latest.releaseTag));
+  badges.append(release);
+  for (const [major, info] of Object.entries(record.postgresql).sort((a, b) => Number(b[0])-Number(a[0]))) {
+    if (!info.available || (selectedMajor && Number(major) !== Number(selectedMajor))) continue;
+    const badge = element("span", "summary-pg");
+    badge.append(text("PG " + major));
+    badges.append(badge);
+  }
+  const affordance = element("span", "summary-affordance");
+  affordance.append(text("View downloads"));
+  summary.append(identity, badges, affordance);
+  details.append(summary, content);
+  details.addEventListener("toggle", () => {
+    const url = new URL(window.location.href);
+    if (details.open) {
+      for (const other of gridElement.querySelectorAll(".extension-collapse"))
+        if (other !== details && other.open) other.open = false;
+      url.searchParams.set("extension", record.name);
+      window.history.replaceState(null, "", url);
+    } else if (url.searchParams.get("extension") === record.name) {
+      url.searchParams.delete("extension");
+      window.history.replaceState(null, "", url);
+    }
+  });
+  card.append(details);
   return card;
 }
 
@@ -419,6 +515,12 @@ function renderFilteredCatalog() {
   gridElement.replaceChildren(
     ...records.map((record) => renderExtension(record, state.lifecycleByMajor, state.effectiveDate, selectedMajor))
   );
+  const requested = new URL(window.location.href).searchParams.get("extension");
+  if (requested) {
+    const found = [...gridElement.querySelectorAll(".extension-collapse")]
+      .find((item) => item.id === "extension-" + requested);
+    if (found) found.open = true;
+  }
   resultsCountElement.textContent = t(`${records.length} of ${state.records.length} extensions shown.`);
   emptyStateElement.hidden = records.length !== 0;
   if (records.length === 0) {
