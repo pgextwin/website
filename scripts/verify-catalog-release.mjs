@@ -4,7 +4,8 @@ import assert from "node:assert/strict";
 import {createHash} from "node:crypto";
 
 const base="https://raw.githubusercontent.com/pgextwin/catalog/main";
-const site="https://pgextwin.github.io/website/";
+const root="https://pgextwin.github.io/website/";
+const site=root+"en/";
 const extension="plpgsql_check";
 
 async function get(url) {
@@ -24,7 +25,7 @@ async function audit() {
     json(base+"/extensions/"+extension+".json"),
     json(base+"/landscape/extensions/"+extension+".json"),
     get(site).then(r=>r.text()),
-    get(site+"app.js").then(r=>r.text())
+    get(root+"app.js").then(r=>r.text())
   ]);
   assert.equal(index.schemaVersion,2);
   assert.equal(index.extensions.length,9,"unexpected current Catalog count");
