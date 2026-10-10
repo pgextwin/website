@@ -168,7 +168,7 @@ try {
   await until(`document.getElementById("landscape-count")?.textContent.includes("20件中20件") && document.getElementById("results-count")?.textContent.includes("${catalogCount}件中${catalogCount}件")`,
     "Japanese catalog and landscape data loaded");
   assert.equal(await evaluate('document.documentElement.lang'),"ja");
-  assert.equal(await evaluate('document.querySelectorAll("#extensions article").length'),9);
+  assert.equal(await evaluate('document.querySelectorAll("#extensions article").length'),catalogCount);
   assert.equal(await evaluate('document.querySelectorAll("#landscape-grid article").length'),20);
   assert.ok((await evaluate('document.querySelector("#extensions article")?.textContent'))?.includes("ZIPをダウンロード"));
   assert.equal(await evaluate('document.querySelector("nav.language-nav [aria-current=page]")?.getAttribute("lang")'),"ja");
