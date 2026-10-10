@@ -64,8 +64,34 @@ async function verify() {
   assert.equal(counts.implemented + counts.candidate, 14, "Unexpected Landscape eligible count");
   const wave=records.filter(x=>x.roadmap?.decision==="wave-2").sort((a,b)=>a.roadmap.order-b.roadmap.order);
   assert.deepEqual(wave.map(x=>[x.name,x.roadmap.order]),[["plpgsql_check",1],["hypopg",2],["wal2json",3]]);
-  assert.equal(records.filter(x=>x.roadmap?.decision==="reserve").length,2);
-  assert.equal(records.filter(x=>x.roadmap?.decision==="research").length,1);
+  // Reserve/research are historical choices, not immutable live counts.
+  // Each named candidate keeps its reviewed rationale; promoted records must
+  // be listed as implemented with a Catalog identity and no stale roadmap.
+  const byName = new Map(records.map(x=>[x.name,x]));
+  const reviewedCandidates = [
+    ["pg_partman","reserve"],
+    ["pg_stat_monitor","reserve"],
+    ["orafce","research"]
+  ];
+  for (const [name, decision] of reviewedCandidates) {
+    const record=byName.get(name);
+    assert.ok(record, "Missing reviewed candidate: "+name);
+    if (record.status === "candidate") {
+      assert.equal(record.roadmap?.decision,decision,
+        name+": candidate roadmap unexpectedly changed");
+    } else {
+      assert.equal(record.status,"implemented",
+        name+": neither candidate nor implemented");
+      assert.equal(record.pgextwinCatalogName,name,
+        name+": promoted item missing Catalog link");
+      assert.equal(record.roadmap,undefined,
+        name+": stale candidate roadmap after promotion");
+    }
+  }
+  assert.equal(records.filter(x=>x.roadmap?.decision==="reserve").length,
+    reviewedCandidates.filter(([name,decision])=>decision==="reserve" && byName.get(name).status==="candidate").length);
+  assert.equal(records.filter(x=>x.roadmap?.decision==="research").length,
+    reviewedCandidates.filter(([name,decision])=>decision==="research" && byName.get(name).status==="candidate").length);
   assert.ok(js.includes("roadmapLabel") && js.includes("sortRecords"));
   assert.ok(app.includes("Selection rationale") && app.includes("landscape-roadmap-label"));
   const dist = await (await get(registry+"/index.json")).json();
