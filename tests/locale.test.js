@@ -17,6 +17,8 @@ test("localized runtime and content are genuinely separate",()=>{
  assert.match(ja.t("PostgreSQL 15–18 only"),/のみ/);
  assert.match(ja.t("2026-10-09 (recheck before use)"),/再確認/);
  assert.match(ja.t("Static analysis and diagnostic checks for PL/pgSQL functions."),/静的解析/);
+ assert.match(ja.t("Create a hypothetical index in the same backend, verify EXPLAIN changes from Seq Scan to Index Scan with no physical index, and verify reset restores the baseline."),/仮想インデックス/);
+ assert.match(ja.t("Start a logical slot with wal2json format-version 1, commit INSERT, UPDATE and DELETE, decode JSON, assert all three change kinds, and clean up the slot."),/論理レプリケーションスロット/);
 });
 test("each route has a language switch and shared data scripts",()=>{
  const root=readFileSync(join(__dirname,"..","index.html"),"utf8");
