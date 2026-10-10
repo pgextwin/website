@@ -1,5 +1,6 @@
 name: Verify published Pages / Step 14
 on:
+  workflow_call:
   push:
     branches:
       - main
@@ -17,8 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
-      - name: Check out pinned website revision
+      - name: Check out trusted pgextwin/website main for native and cross-repository calls
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: pgextwin/website
+          ref: main
+          persist-credentials: false
       - name: Check live GitHub Pages and independent Landscape Registry
         run: |
           node --version
