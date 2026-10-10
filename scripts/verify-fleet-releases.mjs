@@ -66,9 +66,14 @@ async function verify(name) {
         assert.equal(assets.has(assetName), false, "Published evidence absent from Catalog");
       }
     }
-    assert.equal(typeof evidence.buildProvenanceAttestation?.available, "boolean");
-    assert.equal(typeof evidence.sbomAttestation?.available, "boolean");
-    // Build job verifies actual signatures; do not infer provenance from an asset name.
+    assert.equal(evidence.buildProvenanceAttestation?.available, true,
+      "Latest Release lacks required Build Provenance Attestation");
+    assert.equal(evidence.sbomAttestation?.available, true,
+      "Latest Release lacks required SBOM Attestation");
+    assert.equal(evidence.sbom?.available, true, "Latest Release lacks SPDX SBOM");
+    assert.equal(evidence.vulnerabilityReport?.available, true,
+      "Latest Release lacks Grype vulnerability report");
+    // Release job verifies actual signatures; do not infer cryptographic validity from names.
   }
   assert.deepEqual([...assets.keys()].sort(), [...expected].sort(),
     "Release asset set differs from Catalog (missing or unexpected files)");
