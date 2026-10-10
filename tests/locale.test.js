@@ -36,6 +36,18 @@ test("Wave 3 release descriptions, functional scenarios and BGW limitation are l
     assert.equal(en.t(original),original);
   }
 });
+test("optional pg_partman BGW capability is accurately translated",()=>{
+ const ja=createLocale("ja"),en=createLocale("en");
+ const cases=[
+   ["Verify SQL partition routing remains functional without loading the optional BGW DLL.","BGW"],
+   ["Preload optional Windows background worker and verify an unprivileged maintenance role automatically replenishes a deliberately removed partition on PostgreSQL 14–18.","自動補充"],
+   ["BGW is optional and requires explicit shared_preload_libraries configuration.","任意機能"]
+ ];
+ for(const [original,phrase] of cases){
+    assert.ok(ja.t(original).includes(phrase));
+    assert.equal(en.t(original),original);
+ }
+});
 test("each route has a language switch and shared data scripts",()=>{
  const root=readFileSync(join(__dirname,"..","index.html"),"utf8");
  assert.match(root,/navigator\.languages/);
