@@ -5,8 +5,12 @@ import assert from "node:assert/strict";
 
 const base = "https://raw.githubusercontent.com/pgextwin/catalog/main";
 async function json(url) {
+  const headers = {"Cache-Control": "no-cache", "User-Agent": "pgextwin-website-fleet-audit"};
+  if (new URL(url).hostname === "api.github.com" && process.env.GITHUB_TOKEN) {
+    headers.Authorization = "Bearer " + process.env.GITHUB_TOKEN;
+  }
   const response = await fetch(url, {
-    headers: {"Cache-Control": "no-cache", "User-Agent": "pgextwin-website-fleet-audit"},
+    headers,
     signal: AbortSignal.timeout(40000)
   });
   assert.equal(response.status, 200, "HTTP audit failed: " + url + " (" + response.status + ")");
