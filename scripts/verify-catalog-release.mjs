@@ -54,8 +54,15 @@ async function audit() {
     assert.ok(match,"invalid SHA256SUMS entry");
     return [match[2],match[1]];
   }));
-  const expectedMajors=["15","16","17","18"];
-  assert.deepEqual(Object.keys(rec.postgresql).sort(),expectedMajors);
+  const expectedMajors=Object.keys(rec.postgresql).sort();
+  assert.deepEqual(expectedMajors.filter(major=>major!=="14"),["15","16","17","18"],
+    "PostgreSQL 15–18 maintained binary matrix incomplete");
+  assert.ok(expectedMajors.length===4 || expectedMajors.length===5,
+    "Unexpected major version in Catalog");
+  if(rec.latest.releaseTag==="v2.10.13-windows.2") {
+    assert.deepEqual(expectedMajors,["14","15","16","17","18"],
+      "PG14 compatibility backfill must include all five verified majors");
+  }
   const names=[];
   for (const major of expectedMajors) {
     const pkg=rec.postgresql[major];
