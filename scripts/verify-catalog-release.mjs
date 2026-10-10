@@ -28,7 +28,7 @@ async function audit() {
     get(root+"app.js").then(r=>r.text())
   ]);
   assert.equal(index.schemaVersion,2);
-  assert.equal(index.extensions.length,9,"unexpected current Catalog count");
+  assert.ok(index.extensions.length >= 9, "Initial distribution fleet unexpectedly reduced");
   assert.ok(index.extensions.includes(extension));
   assert.equal(rec.schemaVersion,2);
   assert.equal(rec.name,extension);

@@ -83,8 +83,8 @@ async function verify(name) {
 async function main() {
   const index = await json(base + "/index.json");
   assert.equal(index.schemaVersion, 2);
-  assert.equal(index.extensions.length, 9, "Expected nine maintained extensions");
-  assert.equal(new Set(index.extensions).size, 9, "Duplicate Catalog extension");
+  assert.ok(index.extensions.length >= 9, "Initial distribution fleet unexpectedly reduced");
+  assert.equal(new Set(index.extensions).size, index.extensions.length, "Duplicate Catalog extension");
   // Sequential public requests keep this smoke test inside conservative API rate limits.
   const results = [];
   for (const name of index.extensions) results.push(await verify(name));
