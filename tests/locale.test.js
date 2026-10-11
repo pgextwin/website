@@ -20,19 +20,20 @@ test("localized runtime and content are genuinely separate",()=>{
  assert.match(ja.t("Create a hypothetical index in the same backend, verify EXPLAIN changes from Seq Scan to Index Scan with no physical index, and verify reset restores the baseline."),/仮想インデックス/);
  assert.match(ja.t("Start a logical slot with wal2json format-version 1, commit INSERT, UPDATE and DELETE, decode JSON, assert all three change kinds, and clean up the slot."),/論理レプリケーションスロット/);
 });
-test("Wave 3 release descriptions, functional scenarios and BGW limitation are localized",()=>{
+test("Wave 3 release descriptions, functional scenarios and optional BGW inclusion are localized",()=>{
   const ja=createLocale("ja"), en=createLocale("en");
   const cases=[
-    ["Time-based and ID-based partition maintenance; SQL-only (BGW excluded).","BGW"],
+    ["Time-based and ID-based partition maintenance; optional BGW DLL included. SQL features work without preload.","BGW DLLを同梱"],
     ["Oracle-compatible functions and packages for community PostgreSQL.","Oracle"],
     ["Time-bucketed query statistics for PostgreSQL.","クエリ統計"],
     ["Validate Oracle last_day leap-year date handling","うるう年"],
     ["Confirm preloaded monitor records a real query in query-time buckets","時間区間"],
-    ["Independently verified signed Windows x64 PG14-18 release. SQL-only: optional BGW is not included.","BGW"]
+    ["Independently verified signed Windows x64 PG14-18 release. BGW is optional and requires explicit shared_preload_libraries configuration.","BGW DLLを同梱"]
   ];
   for(const [original,word] of cases){
     assert.notEqual(ja.t(original),original);
     assert.ok(ja.t(original).includes(word));
+    assert.ok(!/BGWは含まれません|BGWの同梱なし/.test(ja.t(original)));
     assert.equal(en.t(original),original);
   }
 });
