@@ -27,13 +27,16 @@ const chrome = spawn(chromeBin, [
 let ws;
 try {
   let port = null;
-  for (let i=0;i<100;i++) {
+  // Cold GitHub runners may need longer than 10s to bring up Chrome/CDP.
+  // This is only bounded startup tolerance; every page assertion is unchanged.
+  for (let i=0;i<300;i++) {
     try {
       const file = await readFile(join(dir,"DevToolsActivePort"),"utf8");
       port = Number(file.split("\n")[0]);
       if (port > 0) break;
     } catch {}
-    if (chrome.exitCode !== null) throw new Error("Chrome terminated before opening DevTools");
+    if (chrome.exitCode !== null || chrome.signalCode !== null)
+      throw new Error("Chrome terminated before opening DevTools (exit=" + chrome.exitCode + ", signal=" + chrome.signalCode + ")");
     await delay(100);
   }
   assert.ok(port,"Chrome DevTools port unavailable");
