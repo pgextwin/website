@@ -9,8 +9,16 @@ const site=root+"en/";
 const extension="plpgsql_check";
 
 async function get(url) {
-  const response=await fetch(url,{headers:{"Cache-Control":"no-cache"},
-    signal:AbortSignal.timeout(40000)});
+  const target=new URL(url);
+  const headers={"Cache-Control":"no-cache"};
+  // GitHub API's shared-runner anonymous quota is often exhausted. The
+  // existing read-only Actions token is sent to api.github.com alone.
+  // Never forward credentials to GitHub Pages, raw content or Release URLs.
+  if(target.hostname==="api.github.com" && process.env.GITHUB_TOKEN) {
+    headers.Authorization="Bearer "+process.env.GITHUB_TOKEN;
+    headers.Accept="application/vnd.github+json";
+  }
+  const response=await fetch(url,{headers,signal:AbortSignal.timeout(40000)});
   assert.equal(response.status,200,"Public HTTP check failed: "+url+" status="+response.status);
   return response;
 }
