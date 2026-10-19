@@ -33,6 +33,5 @@ for (const lang of ['en','ja']) {
     assert.ok(page.indexOf('<article lang="en" class="cli-note-block"') <
               page.indexOf('<article lang="ja" class="cli-note-block"'),
               'GitHub Release notes should display English before Japanese on both pages');
-    assert.ok(page.includes('Publication') === false || page.includes('Publication') === true);
   });
 }
