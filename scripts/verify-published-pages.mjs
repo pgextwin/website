@@ -45,9 +45,9 @@ async function verify() {
       page.includes('download-all --pg all --fixed') &&
       page.includes('83.83%'),
       "Published CLI v0.3.1 incomplete ("+locale+")");
-    assert.ok(page.indexOf('<article lang="en" class="cli-note-block"') <
-              page.indexOf('<article lang="ja" class="cli-note-block"'),
-      "Published bilingual release note order changed ("+locale+")");
+    assert.ok(page.includes('<article lang="'+locale+'" class="cli-note-block"') &&
+              !page.includes('<article lang="'+(locale==="en"?"ja":"en")+'" class="cli-note-block"'),
+      "Published Website must show only the page's own locale release notes ("+locale+")");
     assert.ok(home.includes('CLI v0.3.1') && home.includes('cli-home-teaser') &&
       !home.includes('CLI v0.2.2'),"Homepage still advertises obsolete CLI ("+locale+")");
   }

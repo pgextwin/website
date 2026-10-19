@@ -30,8 +30,10 @@ for (const lang of ['en','ja']) {
     assert.ok(!home.includes('CLI v0.2.2'));
     assert.ok(!page.includes('install --apply'));
     assert.ok(!page.includes('signatureVerified=true'));
-    assert.ok(page.indexOf('<article lang="en" class="cli-note-block"') <
-              page.indexOf('<article lang="ja" class="cli-note-block"'),
-              'GitHub Release notes should display English before Japanese on both pages');
+    assert.ok(page.includes('<article lang="' + lang + '" class="cli-note-block"'),
+              'Website release details must match its page language');
+    assert.ok(!page.includes('<article lang="' + (lang === 'en' ? 'ja' : 'en') + '" class="cli-note-block"'),
+              'Website must not duplicate the other locale release details');
+    assert.ok(page.includes(lang === 'en' ? 'Release notes' : 'リリースノート'));
   });
 }

@@ -16,7 +16,7 @@
     <nav class="language-nav" aria-label="Language / 言語"><a href="../ja/cli.html" lang="ja">日本語</a><a href="./">Extension catalog</a></nav>
     <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.3.1</h1>
     <p class="lead">A safer one-line download, now 83.83% smaller.</p><p class="cli-hero-description">Download current Catalog-registered PostgreSQL extension ZIPs for Windows x64. Signed Catalog selection, strict original ZIP SHA256, and an explicit frozen-snapshot mode. This read-only CLI does not install extensions.</p>
-    <nav class="jump-nav" aria-label="CLI navigation"><a class="jump-nav-primary" href="#download-heading">Get the Windows executable</a><a href="#flow-heading">How it works</a><a href="#release-notes-heading">Release notes · English → 日本語</a></nav>
+    <nav class="jump-nav" aria-label="CLI navigation"><a class="jump-nav-primary" href="#download-heading">Get the Windows executable</a><a href="#flow-heading">How it works</a><a href="#release-notes-heading">Release notes</a></nav>
   </div></header>
   <main class="shell cli-page">
     <section class="cli-download" aria-labelledby="download-heading">
@@ -82,19 +82,13 @@ gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow p
       <p><code>UNVERIFIED</code> · <code>INTEGRITY_ONLY</code></p>
     </section>
     <section aria-labelledby="release-notes-heading">
-      <p class="eyebrow">v0.3.1</p><h2 id="release-notes-heading">Release notes · English → 日本語</h2>
+      <p class="eyebrow">v0.3.1</p><h2 id="release-notes-heading">Release notes</h2>
       <div class="cli-release-notes"><article lang="en" class="cli-note-block" aria-labelledby="notes-en-title">
   <h3 id="notes-en-title">English</h3>
   <p><strong>CLI v0.3.1 — smaller executable, same safety checks.</strong> The self-contained Windows x64 executable was reduced from 79,338,604 to 12,827,362 bytes (83.83%) using full trimming and single-file compression. JSON responses are generated with trim-compatible System.Text.Json metadata rather than suppressed IL2026 warnings.</p>
   <p>By default, <code>download-all --pg all</code> authenticates the publicly signed Catalog selection feed and downloads the current Catalog-registered set of 14 extensions × PG14–18 (70 original ZIP files). Use <code>--pg 18</code> to select one major or <code>--fixed</code> to use the historical immutable snapshot. Each downloaded ZIP is rehashed, and a failed batch is removed without overwriting existing downloads.</p>
   <p><strong>Security boundary:</strong> Sigstore verification authenticates the Catalog feed and independently attested CLI executable. Extension ZIP bytes are checked against Catalog-pinned SHA256 values (<code>INTEGRITY_ONLY</code>); their own Sigstore signatures, provenance and installation/publication authorizations are <strong>not verified or granted</strong>. CLI v0.3.1 is a published prerelease, not a Windows Authenticode-signed installer.</p>
   <p><a href="https://github.com/pgextwin/catalog/actions/runs/39254657650">Independent public EXE and 70/70 ZIP Windows verification</a> · <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.1">Full GitHub Release</a></p>
-</article><article lang="ja" class="cli-note-block" aria-labelledby="notes-ja-title">
-  <h3 id="notes-ja-title">日本語</h3>
-  <p><strong>CLI v0.3.1 — 安全性を維持しながら軽量化。</strong> Windows x64用の自己完結型EXEを、79,338,604バイトから12,827,362バイトへ83.83%削減しました。完全トリミングと単一ファイル圧縮を使用し、JSON出力はトリミング対応のSystem.Text.Jsonソース生成方式に変更。IL2026警告を無視・抑制することなく対応しました。</p>
-  <p>標準の <code>download-all --pg all</code> は、公開されたSigstore署名付きCatalog選択情報を検証し、現在Catalogに登録されている14拡張×PG14～18の元ZIPを70件取得します。<code>--pg 18</code> で1バージョンだけ、<code>--fixed</code> で過去の不変スナップショットに切替可能です。ZIPごとのSHA256を再計算し、途中失敗時には一時出力を破棄して既存のダウンロードを上書きしません。</p>
-  <p><strong>安全性の区別：</strong> Sigstoreによる真正性検証の対象はCatalogフィードとCLI本体です。拡張ZIPはCatalogのSHA256とのバイト整合性のみ（<code>INTEGRITY_ONLY</code>）です。個々の拡張ZIPのSigstore署名・来歴・インストール／配布認可が成立したことにはなりません。CLI v0.3.1は公開済みのプレリリースであり、Windows Authenticode署名付きインストーラーではありません。</p>
-  <p><a href="https://github.com/pgextwin/catalog/actions/runs/39254657650">公開EXEとZIP 70/70の独立Windows検証</a> · <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.1">GitHub Release全文</a></p>
 </article></div>
     </section>
   </main>
