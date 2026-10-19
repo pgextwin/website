@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Windows x64用の読み取り専用pgextwin.exeです。ローカルのCatalog情報から14拡張を検索できます。拡張機能のインストーラーや拡張バイナリの真正署名検証器ではありません。">
-  <title>pgextwin — Windows CLI v0.2.1</title>
+  <title>pgextwin — Windows CLI v0.2.2</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/ja/cli.html">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/cli.html">
@@ -13,21 +13,21 @@
 <body>
   <header class="site-header"><div class="shell">
     <nav class="language-nav" aria-label="Language / 言語"><a href="../en/cli.html" lang="en">English</a><a href="./">拡張機能一覧</a></nav>
-    <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.2.1</h1><p class="lead">Windows x64用の読み取り専用pgextwin.exeです。ローカルのCatalog情報から14拡張を検索できます。拡張機能のインストーラーや拡張バイナリの真正署名検証器ではありません。</p>
+    <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.2.2</h1><p class="lead">Windows x64用の読み取り専用pgextwin.exeです。ローカルのCatalog情報から14拡張を検索できます。拡張機能のインストーラーや拡張バイナリの真正署名検証器ではありません。</p>
   </div></header>
   <main class="shell">
     <section aria-labelledby="download-heading"><h2 id="download-heading">ダウンロードと検証</h2>
-      <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.2.1">CLI v0.2.1 GitHub Release</a></p>
+      <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.2.2">CLI v0.2.2 GitHub Release</a></p>
       <p>Releaseからpgextwin.exeとSHA256SUMS.txtを入手し、ファイルのSHA256とGitHubの署名付きビルド来歴を照合してください。</p>
       <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256
-gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest 79db0018cd930847330c024770328892eb46cf3c</code></pre>
-      <p>SHA256 (pgextwin.exe): <code>78de25e4ac3b8d40ba173f3369a12cf92e97ee0e2a65695820390231e3d08aca</code></p>
+gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest 594df3d703d983d5978b640a03c64d498765035a</code></pre>
+      <p>SHA256 (pgextwin.exe): <code>3567e34cf9f7347cfab7a1292f58965b7bd15e2d8a2bb5b1f0479685633862a0</code></p>
     </section>
     <section aria-labelledby="bulk-heading">
       <h2 id="bulk-heading">1行で全70 ZIPをダウンロード</h2>
       <pre><code>.\pgextwin.exe download-all --pg all</code></pre>
       <p>PG14〜18の14拡張、合計70個の公開済み元ZIPを、実行フォルダーに新しいpgextwin-pg14-18フォルダーを作って保存します。PG18だけなら <code>--pg 18</code> と指定します。</p>
-      <p>CLI内に固定した過去のP1候補ポリシーのSHA256を使用し、GitHub上の変更されないコミットからポリシーとCatalogの原本を取得・照合します。別途ファイルやSHA256を入力する必要はありません。これは固定された2026年10月時点のカタログで、最新版の自動追従ではありません。</p>
+      <p>CLI内に固定した過去のP1候補ポリシーのSHA256を使用し、GitHub上の変更されないコミットからポリシーとCatalogの原本を取得・照合します。別途ファイルやSHA256を入力する必要はありません。ZIP本体は固定されたGitHub Release公開URLから取得しSHA256で照合するため、匿名REST APIの回数制限を回避します。数値IDはポリシー固定値であり、その都度RESTで検証するわけではありません。これは固定された2026年10月時点のカタログで、最新版の自動追従ではありません。</p>
       <p>途中失敗時は一時ファイルを破棄し、既存ファイルは上書きしません。個別ZIPはINTEGRITY_ONLYで、正式な全70行のP1署名受入、統合署名ZIPの作成、インストールや拡張ZIPの真正署名検証を意味しません。</p>
     </section>
     <section aria-labelledby="usage-heading"><h2 id="usage-heading">使い方</h2><p>index.jsonとextensions/を含むCatalogリポジトリのローカル展開先を指定して実行します。Catalogの一覧情報は明示的にUNVERIFIEDです。</p>
