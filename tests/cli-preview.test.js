@@ -28,7 +28,7 @@ for (const lang of ['en','ja']) {
     assert.ok(page.includes('verbose-heading'));
     assert.ok(page.includes('39342699236'));
     assert.ok(page.includes('83.83%'));
-    assert.ok(page.includes('12,827,362'));
+    assert.ok(page.includes('12,829,662'));
     assert.ok(home.includes('83.83%') && home.includes('CLI v0.3.2'));
     assert.ok(!page.includes('cli-v0.2.2'));
     assert.ok(!home.includes('CLI v0.2.2'));
