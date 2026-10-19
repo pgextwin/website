@@ -1,27 +1,38 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import {readFileSync} from 'node:fs';
 
-const sha = '3567e34cf9f7347cfab7a1292f58965b7bd15e2d8a2bb5b1f0479685633862a0';
-const source = '594df3d703d983d5978b640a03c64d498765035a';
+const exeSha = 'baee38b3aafdd1bbb7f61857747358dbd40ab056d989aa0f753c93b2025a7580';
+const originalSource = 'a7a1d93d38d7338d80404c402eb5faaaa96b272e';
+const directExe = 'https://github.com/pgextwin/catalog/releases/download/cli-v0.3.1/pgextwin.exe';
 
-for (const locale of ['en', 'ja']) {
-  test('CLI preview ' + locale + ' guide and independent provenance', () => {
-    const page = readFileSync(new URL('../' + locale + '/cli.html', import.meta.url), 'utf8');
-    const home = readFileSync(new URL('../' + locale + '/index.html', import.meta.url), 'utf8');
-    assert.match(page, new RegExp('<html lang="' + locale + '"'));
-    assert.ok(page.includes('cli-v0.2.2'));
-    assert.ok(page.includes(sha));
-    assert.ok(page.includes(source));
+for (const lang of ['en','ja']) {
+  test('CLI v0.3.1 ' + lang + ' feature diagram and signed release identity', () => {
+    const page = readFileSync(new URL('../' + lang + '/cli.html', import.meta.url), 'utf8');
+    const home = readFileSync(new URL('../' + lang + '/index.html', import.meta.url), 'utf8');
+    assert.ok(page.includes('<html lang="' + lang + '">'));
+    assert.ok(page.includes(directExe));
+    assert.ok(home.includes(directExe) && home.includes('href="./cli.html"'));
+    assert.ok(page.includes(exeSha) && page.includes(originalSource));
     assert.ok(page.includes('--signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml'));
     assert.ok(page.includes('--source-ref refs/heads/main'));
+    assert.ok(page.includes('cli-flow-steps') && page.includes('cli-paths'));
+    assert.ok(page.includes('SIGSTORE VERIFIED') && page.includes('INTEGRITY_ONLY'));
     assert.ok(page.includes('UNVERIFIED'));
-    assert.ok(page.includes('INTEGRITY_ONLY'));
-    assert.ok(page.includes('download-all'));
-    assert.ok(page.includes('\\pgextwin.exe download-all --pg all'));
-    assert.ok(page.includes('INTEGRITY_ONLY'));
-    assert.ok(page.includes('--pg all'));
+    assert.ok(page.includes('DOWNLOAD-INFO.json'));
+    assert.ok(page.includes('download-all --pg all --fixed'));
+    assert.ok(page.includes('download-all --pg all'));
+    assert.ok(page.includes('download-all --pg 18'));
+    assert.ok(page.includes('83.83%'));
+    assert.ok(page.includes('12,827,362'));
+    assert.ok(home.includes('83.83%') && home.includes('CLI v0.3.1'));
+    assert.ok(!page.includes('cli-v0.2.2'));
+    assert.ok(!home.includes('CLI v0.2.2'));
     assert.ok(!page.includes('install --apply'));
-    assert.ok(home.includes('href="./cli.html"'));
+    assert.ok(!page.includes('signatureVerified=true'));
+    assert.ok(page.indexOf('<article lang="en" class="cli-note-block"') <
+              page.indexOf('<article lang="ja" class="cli-note-block"'),
+              'GitHub Release notes should display English before Japanese on both pages');
+    assert.ok(page.includes('Publication') === false || page.includes('Publication') === true);
   });
 }
