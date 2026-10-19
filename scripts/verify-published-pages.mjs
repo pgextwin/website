@@ -26,6 +26,32 @@ async function verify() {
     assert.ok(page.includes('src="../locale.js"'));
     assert.ok(page.includes('hreflang="x-default"'));
   }
+  // CLI v0.3.1 public website launch smoke; verify BOTH languages and
+  // English-then-Japanese release notes, never stale v0.2.2 labels.
+  const [cliEnglish,cliJapanese] = await Promise.all([
+    get(root+"en/cli.html").then(x=>x.text()),
+    get(root+"ja/cli.html").then(x=>x.text())
+  ]);
+  const expectedSha="baee38b3aafdd1bbb7f61857747358dbd40ab056d989aa0f753c93b2025a7580";
+  for (const [page,home,locale] of [
+    [cliEnglish,html,"en"],[cliJapanese,japanese,"ja"]
+  ]) {
+    assert.ok(page.includes('<html lang="'+locale+'">') &&
+      page.includes('cli-v0.3.1') &&
+      page.includes(expectedSha) &&
+      page.includes('cli-flow-steps') &&
+      page.includes('SIGSTORE VERIFIED') &&
+      page.includes('INTEGRITY_ONLY') &&
+      page.includes('download-all --pg all --fixed') &&
+      page.includes('83.83%'),
+      "Published CLI v0.3.1 incomplete ("+locale+")");
+    assert.ok(page.indexOf('<article lang="en" class="cli-note-block"') <
+              page.indexOf('<article lang="ja" class="cli-note-block"'),
+      "Published bilingual release note order changed ("+locale+")");
+    assert.ok(home.includes('CLI v0.3.1') && home.includes('cli-home-teaser') &&
+      !home.includes('CLI v0.2.2'),"Homepage still advertises obsolete CLI ("+locale+")");
+  }
+
   assert.equal((await get(root+"locale.js")).status,200);
   for (const phrase of ['id="extensions-heading"','id="landscape-heading"','id="landscape-filter"',
     'id="landscape-source-filter"','id="landscape-search"','landscape-view.js','landscape-app.js',
