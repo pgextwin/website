@@ -37,6 +37,25 @@ test("Wave 3 release descriptions, functional scenarios and optional BGW inclusi
     assert.equal(en.t(original),original);
   }
 });
+test("third-wave descriptions and functional scenarios stay bilingual before signed Catalog publication",()=>{
+  const ja=createLocale("ja"), en=createLocale("en");
+  const cases=[
+    ["TAP-compatible PostgreSQL unit testing","単体テスト"],
+    ["Session variables for PostgreSQL","セッション変数"],
+    ["SQL execution plan statistics","実行計画"],
+    ["Verify successful TAP and deliberately failed TAP assertion.","アサーション"],
+    ["Check set/get, transaction rollback and separated backend sessions.","ロールバック"],
+    ["Check recorded plan and calls for a real statement after shared preload.","実行回数"]
+  ];
+  for(const [original,japaneseWord] of cases){
+    assert.notEqual(ja.t(original),original);
+    assert.ok(ja.t(original).includes(japaneseWord));
+    assert.equal(en.t(original),original);
+  }
+  const catalogView=readFileSync(join(__dirname,"..","catalog-view.js"),"utf8");
+  assert.ok(!catalogView.includes("pgextwin/pgtap/releases/download"),
+            "Translation readiness must not invent published downloads");
+});
 test("optional pg_partman BGW capability is accurately translated",()=>{
  const ja=createLocale("ja"),en=createLocale("en");
  const cases=[
