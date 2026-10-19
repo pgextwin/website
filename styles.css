@@ -218,6 +218,10 @@ main{padding:3.7rem 0 6rem}main>section+section{margin-top:5rem}
 .landscape-status-label{margin:0;max-width:100%;font-size:.77rem}
 .landscape-section{padding-top:3rem}.info{max-width:100%;padding-top:2.5rem}.info p{max-width:85ch}
 .site-footer{background:#e7eef6;padding:2.4rem 0}
+.release-limitations{max-width:90ch;margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border);line-height:1.6}
+.release-limitations h2{font-size:1.05rem;margin:0 0 .4rem}
+.release-limitations p{margin:0;font-size:.94rem}
+.release-limitations a{overflow-wrap:anywhere}
 @media(prefers-color-scheme:dark){
 :root{color-scheme:dark;--bg:#101d2b;--surface:#192c3e;--surface-2:#243d51;--surface-3:#305269;--text:#f1f7fb;--muted:#c8d9e7;--border:#607f98;--accent:#b0ddfa;--accent-text:#102c43;--focus:#facc15;--maintained:#a2ecbd;--historical:#f8cf8b;--unknown:#d4e0eb}
 .catalog-hint{background:#1a3a50;color:#e7f5fd;border-color:#678aa6}
