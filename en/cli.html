@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Read-only pgextwin.exe for Windows x64. Discover 14 extension packages from a local Catalog snapshot. This preview is not an installer or a verified extension-package signature engine.">
-  <title>pgextwin — Windows CLI v0.1 preview</title>
+  <title>pgextwin — Windows CLI v0.2</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/cli.html">
@@ -13,16 +13,18 @@
 <body>
   <header class="site-header"><div class="shell">
     <nav class="language-nav" aria-label="Language / 言語"><a href="../ja/cli.html" lang="ja">日本語</a><a href="./">Extension catalog</a></nav>
-    <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.1 preview</h1><p class="lead">Read-only pgextwin.exe for Windows x64. Discover 14 extension packages from a local Catalog snapshot. This preview is not an installer or a verified extension-package signature engine.</p>
+    <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.2</h1><p class="lead">Read-only pgextwin.exe for Windows x64. Discover 14 extension packages from a local Catalog snapshot. This preview is not an installer or a verified extension-package signature engine.</p>
   </div></header>
   <main class="shell">
     <section aria-labelledby="download-heading"><h2 id="download-heading">Download and verify</h2>
-      <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.1.0-preview.1">CLI v0.1.0-preview.1 on GitHub Releases</a></p>
+      <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.2.0">CLI v0.2.0 on GitHub Releases</a></p>
       <p>Download pgextwin.exe and SHA256SUMS.txt from the release; verify the SHA256 locally and the cryptographically signed GitHub build provenance.</p>
       <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256
-gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest d0056b688dc27095d2d7ffd6f8b77aff965def79</code></pre>
-      <p>SHA256 (pgextwin.exe): <code>c2782f46539bd932c9c19105055e45dcf8796d573a8c30ad9844e6ba510ddfb1</code></p>
+gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest 529718ac8ff829c8a98b57d26adb1d74971588c1</code></pre>
+      <p>SHA256 (pgextwin.exe): <code>1764d2f5a54b9fa715a2bba1d068493ef1d5dcb159b895e3f24becf2dee6fdc0</code></p>
     </section>
+    <section aria-labelledby="bulk-heading"><h2 id="bulk-heading">Bulk original ZIP downloads</h2><p>Download all 14 original ZIP assets for one PostgreSQL major, or 70 across PG14–18. An independently authenticated P1 policy and SHA256 are required.</p><pre><code>.\pgextwin.exe download-all --pg 18 --catalog-dir C:\approved\catalog --policy C:\approved\policy.json --policy-sha256 APPROVED_SHA256 --output C:\pgextwin-downloads
+# --pg all selects 70 ZIP assets</code></pre><p>Original ZIPs are kept separate; incomplete batches are rolled back. The result is INTEGRITY_ONLY, not a signed combined offline ZIP, an installer, or verified extension provenance.</p></section>
     <section aria-labelledby="usage-heading"><h2 id="usage-heading">Usage</h2><p>Run the CLI with a locally extracted Catalog repository snapshot (including index.json and extensions/). Catalog results explicitly remain UNVERIFIED.</p>
       <pre><code>.\pgextwin.exe --version
 .\pgextwin.exe list --catalog-dir C:\path\to\catalog --pg 18
