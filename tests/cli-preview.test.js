@@ -2,12 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 
-const exeSha = 'baee38b3aafdd1bbb7f61857747358dbd40ab056d989aa0f753c93b2025a7580';
-const originalSource = 'a7a1d93d38d7338d80404c402eb5faaaa96b272e';
-const directExe = 'https://github.com/pgextwin/catalog/releases/download/cli-v0.3.1/pgextwin.exe';
+const exeSha = 'd4e8f63d402066b21db9d537f7679b51137ec47d9834fa4fd75b5889ad34e6f4';
+const originalSource = 'a537f14f39be4b4ffc366cd0fef83f87aa4b9c39';
+const directExe = 'https://github.com/pgextwin/catalog/releases/download/cli-v0.3.2/pgextwin.exe';
 
 for (const lang of ['en','ja']) {
-  test('CLI v0.3.1 ' + lang + ' feature diagram and signed release identity', () => {
+  test('CLI v0.3.2 ' + lang + ' feature diagram and signed release identity', () => {
     const page = readFileSync(new URL('../' + lang + '/cli.html', import.meta.url), 'utf8');
     const home = readFileSync(new URL('../' + lang + '/index.html', import.meta.url), 'utf8');
     assert.ok(page.includes('<html lang="' + lang + '">'));
@@ -23,9 +23,13 @@ for (const lang of ['en','ja']) {
     assert.ok(page.includes('download-all --pg all --fixed'));
     assert.ok(page.includes('download-all --pg all'));
     assert.ok(page.includes('download-all --pg 18'));
+    assert.ok(page.includes('download-all --pg all --verbose'));
+    assert.ok(page.includes('download-verbose.log'));
+    assert.ok(page.includes('verbose-heading'));
+    assert.ok(page.includes('39342699236'));
     assert.ok(page.includes('83.83%'));
-    assert.ok(page.includes('12,827,362'));
-    assert.ok(home.includes('83.83%') && home.includes('CLI v0.3.1'));
+    assert.ok(page.includes('12,829,662'));
+    assert.ok(home.includes('83.83%') && home.includes('CLI v0.3.2'));
     assert.ok(!page.includes('cli-v0.2.2'));
     assert.ok(!home.includes('CLI v0.2.2'));
     assert.ok(!page.includes('install --apply'));
