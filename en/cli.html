@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Read-only pgextwin.exe for Windows x64. Discover 14 extension packages from a local Catalog snapshot. This preview is not an installer or a verified extension-package signature engine.">
-  <title>pgextwin — Windows CLI v0.2.1</title>
+  <title>pgextwin — Windows CLI v0.2.2</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/cli.html">
@@ -13,21 +13,21 @@
 <body>
   <header class="site-header"><div class="shell">
     <nav class="language-nav" aria-label="Language / 言語"><a href="../ja/cli.html" lang="ja">日本語</a><a href="./">Extension catalog</a></nav>
-    <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.2.1</h1><p class="lead">Read-only pgextwin.exe for Windows x64. Discover 14 extension packages from a local Catalog snapshot. This preview is not an installer or a verified extension-package signature engine.</p>
+    <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.2.2</h1><p class="lead">Read-only pgextwin.exe for Windows x64. Discover 14 extension packages from a local Catalog snapshot. This preview is not an installer or a verified extension-package signature engine.</p>
   </div></header>
   <main class="shell">
     <section aria-labelledby="download-heading"><h2 id="download-heading">Download and verify</h2>
-      <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.2.1">CLI v0.2.1 on GitHub Releases</a></p>
+      <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.2.2">CLI v0.2.2 on GitHub Releases</a></p>
       <p>Download pgextwin.exe and SHA256SUMS.txt from the release; verify the SHA256 locally and the cryptographically signed GitHub build provenance.</p>
       <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256
-gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest 79db0018cd930847330c024770328892eb46cf3c</code></pre>
-      <p>SHA256 (pgextwin.exe): <code>78de25e4ac3b8d40ba173f3369a12cf92e97ee0e2a65695820390231e3d08aca</code></p>
+gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest 594df3d703d983d5978b640a03c64d498765035a</code></pre>
+      <p>SHA256 (pgextwin.exe): <code>3567e34cf9f7347cfab7a1292f58965b7bd15e2d8a2bb5b1f0479685633862a0</code></p>
     </section>
     <section aria-labelledby="bulk-heading">
       <h2 id="bulk-heading">Download all 70 ZIPs with one command</h2>
       <pre><code>.\pgextwin.exe download-all --pg all</code></pre>
       <p>Downloads 14 original extension ZIPs for each PostgreSQL major PG14–18 into a new pgextwin-pg14-18 folder under the current directory. Use <code>--pg 18</code> for 14 ZIPs only.</p>
-      <p>The CLI embeds an independently source-pinned SHA256 of a historical candidate P1 policy. It fetches and hashes this policy and each Catalog original at immutable GitHub commits, without asking for a file or SHA256 input. This is a frozen October 2026 snapshot, not a latest-version update feed.</p>
+      <p>The CLI embeds an independently source-pinned SHA256 of a historical candidate P1 policy. It fetches and hashes this policy and each Catalog original at immutable GitHub commits, without asking for a file or SHA256 input. Public original ZIP bytes are downloaded from the pinned GitHub Release browser URL with strict SHA256 checks, avoiding anonymous REST rate limits; original numeric IDs are policy-pinned, not live REST verified. This is a frozen October 2026 snapshot, not a latest-version update feed.</p>
       <p>Incomplete batches are discarded; existing output is never overwritten. Result: INTEGRITY_ONLY, not formal historical P1 acceptance of all 70 signatures, a signed combined ZIP, an installer, or verified extension Sigstore provenance.</p>
     </section>
     <section aria-labelledby="usage-heading"><h2 id="usage-heading">Usage</h2><p>Run the CLI with a locally extracted Catalog repository snapshot (including index.json and extensions/). Catalog results explicitly remain UNVERIFIED.</p>
