@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Windows x64用の読み取り専用pgextwin.exeです。ローカルのCatalog情報から14拡張を検索できます。拡張機能のインストーラーや拡張バイナリの真正署名検証器ではありません。">
+  <title>pgextwin — Windows CLI v0.1 プレビュー</title>
+  <link rel="canonical" href="https://pgextwin.github.io/website/ja/cli.html">
+  <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/cli.html">
+  <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/cli.html">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <header class="site-header"><div class="shell">
+    <nav class="language-nav" aria-label="Language / 言語"><a href="../en/cli.html" lang="en">English</a><a href="./">拡張機能一覧</a></nav>
+    <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.1 プレビュー</h1><p class="lead">Windows x64用の読み取り専用pgextwin.exeです。ローカルのCatalog情報から14拡張を検索できます。拡張機能のインストーラーや拡張バイナリの真正署名検証器ではありません。</p>
+  </div></header>
+  <main class="shell">
+    <section aria-labelledby="download-heading"><h2 id="download-heading">ダウンロードと検証</h2>
+      <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.1.0-preview.1">CLI v0.1.0-preview.1 GitHub Release</a></p>
+      <p>Releaseからpgextwin.exeとSHA256SUMS.txtを入手し、ファイルのSHA256とGitHubの署名付きビルド来歴を照合してください。</p>
+      <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256
+gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest d0056b688dc27095d2d7ffd6f8b77aff965def79</code></pre>
+      <p>SHA256 (pgextwin.exe): <code>c2782f46539bd932c9c19105055e45dcf8796d573a8c30ad9844e6ba510ddfb1</code></p>
+    </section>
+    <section aria-labelledby="usage-heading"><h2 id="usage-heading">使い方</h2><p>index.jsonとextensions/を含むCatalogリポジトリのローカル展開先を指定して実行します。Catalogの一覧情報は明示的にUNVERIFIEDです。</p>
+      <pre><code>.\pgextwin.exe --version
+.\pgextwin.exe list --catalog-dir C:\path\to\catalog --pg 18
+.\pgextwin.exe search cron --catalog-dir C:\path\to\catalog --format json</code></pre>
+    </section>
+    <section aria-labelledby="safety-heading"><h2 id="safety-heading">機能範囲と安全性</h2><p>一覧・検索・JSON出力に対応します。拡張ZIPの取得は独立したPolicyの固定値が必要で、成功してもINTEGRITY_ONLYです。拡張の真正Sigstore検証、インストール、サービス自動変更、オフライン一括ZIP作成は未提供です。CLI本体はSigstore来歴に対応しますが、Windows Authenticode署名は付いていません。</p></section>
+  </main>
+</body></html>
