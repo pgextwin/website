@@ -21,8 +21,8 @@ jobs:
       - name: Check out trusted pgextwin/website main for native and cross-repository calls
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          repository: pgextwin/website
-          ref: main
+          repository: ${{ job.workflow_repository }}
+          ref: ${{ job.workflow_sha }}
           persist-credentials: false
       - name: Check live GitHub Pages and independent Landscape Registry
         run: |
