@@ -3,6 +3,7 @@
 // This is intentionally independent of Catalog v2 / Release assets.
 import assert from "node:assert/strict";
 import { setTimeout as delay } from "node:timers/promises";
+import { verifyPublishedCli } from './published-cli-contract.mjs';
 
 const root = "https://pgextwin.github.io/website/";
 const site = root + "en/";
@@ -26,30 +27,15 @@ async function verify() {
     assert.ok(page.includes('src="../locale.js"'));
     assert.ok(page.includes('hreflang="x-default"'));
   }
-  // CLI v0.3.1 public website launch smoke; verify BOTH languages and
-  // English-then-Japanese release notes, never stale v0.2.2 labels.
+  // Verify the current approved public CLI identity and each page's own locale.
   const [cliEnglish,cliJapanese] = await Promise.all([
     get(root+"en/cli.html").then(x=>x.text()),
     get(root+"ja/cli.html").then(x=>x.text())
   ]);
-  const expectedSha="baee38b3aafdd1bbb7f61857747358dbd40ab056d989aa0f753c93b2025a7580";
   for (const [page,home,locale] of [
     [cliEnglish,html,"en"],[cliJapanese,japanese,"ja"]
   ]) {
-    assert.ok(page.includes('<html lang="'+locale+'">') &&
-      page.includes('cli-v0.3.1') &&
-      page.includes(expectedSha) &&
-      page.includes('cli-flow-steps') &&
-      page.includes('SIGSTORE VERIFIED') &&
-      page.includes('INTEGRITY_ONLY') &&
-      page.includes('download-all --pg all --fixed') &&
-      page.includes('83.83%'),
-      "Published CLI v0.3.1 incomplete ("+locale+")");
-    assert.ok(page.includes('<article lang="'+locale+'" class="cli-note-block"') &&
-              !page.includes('<article lang="'+(locale==="en"?"ja":"en")+'" class="cli-note-block"'),
-      "Published Website must show only the page's own locale release notes ("+locale+")");
-    assert.ok(home.includes('CLI v0.3.1') && home.includes('cli-home-teaser') &&
-      !home.includes('CLI v0.2.2'),"Homepage still advertises obsolete CLI ("+locale+")");
+    verifyPublishedCli(page,home,locale);
   }
 
   assert.equal((await get(root+"locale.js")).status,200);
