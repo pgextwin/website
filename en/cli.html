@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Download current Catalog-registered PostgreSQL extension ZIPs for Windows x64. Signed Catalog selection, strict original ZIP SHA256, and an explicit frozen-snapshot mode. This read-only CLI does not install extensions.">
-  <title>pgextwin — Windows CLI v0.3.2</title>
+  <title>pgextwin — Windows CLI v0.3.4</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/cli.html">
@@ -14,8 +14,8 @@
   <a class="skip-link" href="#download-heading">Get the Windows executable</a>
   <header class="site-header"><div class="shell">
     <nav class="language-nav" aria-label="Language / 言語"><a href="../ja/cli.html" lang="ja">日本語</a><a href="./">Extension catalog</a></nav>
-    <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.3.2</h1>
-    <p class="lead">Download with real-time, opt-in verbose progress.</p><p class="cli-hero-description">Download current Catalog-registered PostgreSQL extension ZIPs for Windows x64. Signed Catalog selection, strict original ZIP SHA256, and an explicit frozen-snapshot mode. This read-only CLI does not install extensions.</p>
+    <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.3.4</h1>
+    <p class="lead">Follow the latest Catalog as new extensions are registered.</p><p class="cli-hero-description">Download current Catalog-registered PostgreSQL extension ZIPs for Windows x64. Signed Catalog selection, strict original ZIP SHA256, and an explicit frozen-snapshot mode. This read-only CLI does not install extensions.</p>
     <nav class="jump-nav" aria-label="CLI navigation"><a class="jump-nav-primary" href="#download-heading">Get the Windows executable</a><a href="#flow-heading">How it works</a><a href="#release-notes-heading">Release notes</a></nav>
   </div></header>
   <main class="shell cli-page">
@@ -23,14 +23,14 @@
       <p class="eyebrow">Windows x64 · self-contained · prerelease</p>
       <h2 id="download-heading">Get the Windows executable</h2>
       <div class="cli-download-actions">
-        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.2/pgextwin.exe">Download pgextwin.exe (12.83 MB)</a>
-        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.2">GitHub Release v0.3.2</a>
-        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.2/SHA256SUMS.txt">SHA256SUMS.txt</a>
+        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.4/pgextwin.exe">Download pgextwin.exe (12.83 MB)</a>
+        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.4">GitHub Release v0.3.4</a>
+        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.4/SHA256SUMS.txt">SHA256SUMS.txt</a>
       </div>
-      <p class="cli-sha"><strong>Published EXE SHA256:</strong> <code>d4e8f63d402066b21db9d537f7679b51137ec47d9834fa4fd75b5889ad34e6f4</code></p>
+      <p class="cli-sha"><strong>Published EXE SHA256:</strong> <code>dd6d8fa928da6134efd598677196b896f7f968fdae61f3d72cc40c19dec74fd8</code></p>
       <p>Compare against the published SHA256SUMS.txt and validate the CLI build provenance:</p>
       <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256
-gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest a537f14f39be4b4ffc366cd0fef83f87aa4b9c39</code></pre>
+gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest a6c894c53f5c42333abae7875f1fb5569578c765</code></pre>
     </section>
     <section aria-labelledby="commands-heading">
       <h2 id="commands-heading">One-line usage</h2><p>Default: newest release approved and registered in the Catalog; no GitHub REST API credentials required. ZIPs are written in a new folder under the working directory.</p>
@@ -41,7 +41,7 @@ gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow p
       </div>
     </section>
     <section aria-labelledby="verbose-heading">
-      <p class="eyebrow">New in v0.3.2</p>
+      <p class="eyebrow">Latest Catalog support</p>
       <h2 id="verbose-heading">Live progress with --verbose</h2>
       <p>Opt-in UTC timestamped events report signed Catalog verification, every ZIP start, transferred bytes in 8 MiB intervals, SHA256 verification and batch completion. Diagnostic events go to stderr; normal stdout and JSON remain unchanged.</p>
       <div class="cli-command-list">
@@ -92,13 +92,13 @@ gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow p
       <p><code>UNVERIFIED</code> · <code>INTEGRITY_ONLY</code></p>
     </section>
     <section aria-labelledby="release-notes-heading">
-      <p class="eyebrow">v0.3.2</p><h2 id="release-notes-heading">Release notes</h2>
+      <p class="eyebrow">v0.3.4</p><h2 id="release-notes-heading">Release notes</h2>
       <div class="cli-release-notes"><article lang="en" class="cli-note-block" aria-labelledby="notes-en-title">
         <h3 id="notes-en-title">English</h3>
-        <p><strong>CLI v0.3.2 — live diagnostic progress.</strong> Use <code>--verbose</code> to follow Catalog Sigstore verification, individual download starts, 8 MiB transfer updates, SHA256 checks and completion of the selected ZIPs. Logs are on stderr; stdout and JSON contracts are unchanged.</p>
-        <p>The trim-compressed Windows x64 EXE is 12,829,662 bytes. Latest signed-Catalog and historical <code>--fixed</code> modes remain supported. Download failures still reject unsafe bytes, avoid overwriting existing output and fail closed.</p>
+        <p><strong>CLI v0.3.4 — growing Catalog roster support.</strong> The latest command follows the registered extension roster. Use <code>--verbose</code> to follow Catalog Sigstore verification, individual download starts, 8 MiB transfer updates, SHA256 checks and completion of the selected ZIPs. Logs are on stderr; stdout and JSON contracts are unchanged.</p>
+        <p>The trim-compressed Windows x64 EXE is 12,830,477 bytes. Latest signed-Catalog and historical <code>--fixed</code> modes remain supported. Download failures still reject unsafe bytes, avoid overwriting existing output and fail closed.</p>
         <p><strong>Scope:</strong> The CLI executable and Catalog feed have their own verification; original extension ZIPs are <code>INTEGRITY_ONLY</code>, not individually Sigstore-authenticated. No installation or extension-release authorization is granted.</p>
-        <p><a href="https://github.com/pgextwin/catalog/actions/runs/39342699236">Public v0.3.2 EXE Sigstore and verbose 70/70 ZIP Windows audit</a> · <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.2">Full GitHub Release (English → Japanese)</a></p>
+        <p><a href="https://github.com/pgextwin/catalog/actions/runs/39713885339">Public EXE and verbose latest-Catalog Windows acceptance</a> · <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.4">Full GitHub Release (English → Japanese)</a></p>
       </article></div>
     </section>
   </main>
