@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Windows x64向けPostgreSQL拡張ZIPを、Catalogに登録された最新版から安全に一括取得。署名付きCatalogの認証・元ZIPのSHA256再検証・過去の固定版への切替に対応します。インストーラーではありません。">
-  <title>pgextwin — Windows CLI v0.3.2</title>
+  <title>pgextwin — Windows CLI v0.3.4</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/ja/cli.html">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/cli.html">
@@ -14,8 +14,8 @@
   <a class="skip-link" href="#download-heading">Windows用EXEを入手</a>
   <header class="site-header"><div class="shell">
     <nav class="language-nav" aria-label="Language / 言語"><a href="../en/cli.html" lang="en">English</a><a href="./">拡張機能一覧</a></nav>
-    <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.3.2</h1>
-    <p class="lead">最新版のダウンロード状況を、詳細ログで確認。</p><p class="cli-hero-description">Windows x64向けPostgreSQL拡張ZIPを、Catalogに登録された最新版から安全に一括取得。署名付きCatalogの認証・元ZIPのSHA256再検証・過去の固定版への切替に対応します。インストーラーではありません。</p>
+    <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.3.4</h1>
+    <p class="lead">登録拡張の増えた最新版Catalogから、まとめてダウンロード。</p><p class="cli-hero-description">Windows x64向けPostgreSQL拡張ZIPを、Catalogに登録された最新版から安全に一括取得。署名付きCatalogの認証・元ZIPのSHA256再検証・過去の固定版への切替に対応します。インストーラーではありません。</p>
     <nav class="jump-nav" aria-label="CLI navigation"><a class="jump-nav-primary" href="#download-heading">Windows用EXEを入手</a><a href="#flow-heading">動作のしくみ</a><a href="#release-notes-heading">リリースノート</a></nav>
   </div></header>
   <main class="shell cli-page">
@@ -23,14 +23,14 @@
       <p class="eyebrow">Windows x64 · self-contained · prerelease</p>
       <h2 id="download-heading">Windows用EXEを入手</h2>
       <div class="cli-download-actions">
-        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.2/pgextwin.exe">pgextwin.exeをダウンロード（12.83 MB）</a>
-        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.2">GitHub Release v0.3.2</a>
-        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.2/SHA256SUMS.txt">SHA256SUMS.txt</a>
+        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.4/pgextwin.exe">pgextwin.exeをダウンロード（12.83 MB）</a>
+        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.4">GitHub Release v0.3.4</a>
+        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.4/SHA256SUMS.txt">SHA256SUMS.txt</a>
       </div>
-      <p class="cli-sha"><strong>公開EXEのSHA256:</strong> <code>d4e8f63d402066b21db9d537f7679b51137ec47d9834fa4fd75b5889ad34e6f4</code></p>
+      <p class="cli-sha"><strong>公開EXEのSHA256:</strong> <code>dd6d8fa928da6134efd598677196b896f7f968fdae61f3d72cc40c19dec74fd8</code></p>
       <p>公開SHA256SUMS.txtと一致することを確認し、CLI本体のビルド来歴も検証してください。</p>
       <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256
-gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest a537f14f39be4b4ffc366cd0fef83f87aa4b9c39</code></pre>
+gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest a6c894c53f5c42333abae7875f1fb5569578c765</code></pre>
     </section>
     <section aria-labelledby="commands-heading">
       <h2 id="commands-heading">1行で使う</h2><p>標準動作はCatalog承認・登録済みの最新Releaseです。GitHub REST APIの認証情報は不要。元ZIPは実行フォルダー内の新しいフォルダーに保存されます。</p>
@@ -41,7 +41,7 @@ gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow p
       </div>
     </section>
     <section aria-labelledby="verbose-heading">
-      <p class="eyebrow">v0.3.2 新機能</p>
+      <p class="eyebrow">最新版Catalogの拡張に対応</p>
       <h2 id="verbose-heading">--verbose で進行状況を表示</h2>
       <p>署名付きCatalogの検証、ZIPごとの取得開始、8 MiBごとの転送量、SHA256再照合、一括保存の完了をUTC時刻付きで表示します。詳細ログは標準エラー出力に分離され、通常の標準出力とJSONは変更しません。</p>
       <div class="cli-command-list">
@@ -92,13 +92,13 @@ gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow p
       <p><code>UNVERIFIED</code> · <code>INTEGRITY_ONLY</code></p>
     </section>
     <section aria-labelledby="release-notes-heading">
-      <p class="eyebrow">v0.3.2</p><h2 id="release-notes-heading">リリースノート</h2>
+      <p class="eyebrow">v0.3.4</p><h2 id="release-notes-heading">リリースノート</h2>
       <div class="cli-release-notes"><article lang="ja" class="cli-note-block" aria-labelledby="notes-ja-title">
         <h3 id="notes-ja-title">日本語</h3>
-        <p><strong>CLI v0.3.2 — 処理中の詳細ログに対応。</strong> <code>--verbose</code>でCatalogのSigstore検証、各ZIPのダウンロード開始、8 MiBごとの転送量、SHA256照合、選択したZIPの取得完了を確認できます。ログは標準エラー出力で、標準出力とJSONは変わりません。</p>
-        <p>Windows x64 EXEは12,829,662バイト。署名付き最新版Catalogと従来の<code>--fixed</code>を継続サポート。異常なZIPは拒否し、不完全な一括出力や既存成果物の上書きは行いません。</p>
+        <p><strong>CLI v0.3.4 — 増えた拡張機能をまとめて取得。</strong> 最新版Catalogに追加された拡張にも追従します。<code>--verbose</code>でCatalogのSigstore検証、各ZIPのダウンロード開始、8 MiBごとの転送量、SHA256照合、選択したZIPの取得完了を確認できます。ログは標準エラー出力で、標準出力とJSONは変わりません。</p>
+        <p>Windows x64 EXEは12,830,477バイト。署名付き最新版Catalogと従来の<code>--fixed</code>を継続サポート。異常なZIPは拒否し、不完全な一括出力や既存成果物の上書きは行いません。</p>
         <p><strong>信頼境界：</strong> CLIとCatalogフィードの来歴・署名検証に対し、拡張機能の元ZIPは<code>INTEGRITY_ONLY</code>（バイト整合性のみ）です。個別ZIPの真正署名検証、インストールや拡張機能の正式公開認可を追加したわけではありません。</p>
-        <p><a href="https://github.com/pgextwin/catalog/actions/runs/39342699236">公開EXEとverbose 70/70 ZIPのWindows独立検証</a> · <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.2">GitHub Release全文（英語→日本語）</a></p>
+        <p><a href="https://github.com/pgextwin/catalog/actions/runs/39713885339">公開EXEとverboseによる最新版CatalogのWindows実行検証</a> · <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.4">GitHub Release全文（英語→日本語）</a></p>
       </article></div>
     </section>
   </main>
