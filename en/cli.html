@@ -35,7 +35,7 @@ gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow p
     <section aria-labelledby="commands-heading">
       <h2 id="commands-heading">One-line usage</h2><p>Default: newest release approved and registered in the Catalog; no GitHub REST API credentials required. ZIPs are written in a new folder under the working directory.</p>
       <div class="cli-command-list">
-        <div><strong>Latest Catalog · 70 ZIPs, PG14–18</strong><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
+        <div><strong>Latest Catalog · all registered ZIPs</strong><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
         <div><strong>Latest Catalog · 14 ZIPs, PG18 only</strong><pre><code>.\pgextwin.exe download-all --pg 18</code></pre></div>
         <div><strong>Fixed historical snapshot · 70 ZIPs</strong><pre><code>.\pgextwin.exe download-all --pg all --fixed</code></pre></div>
       </div>
@@ -45,7 +45,7 @@ gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow p
       <h2 id="verbose-heading">Live progress with --verbose</h2>
       <p>Opt-in UTC timestamped events report signed Catalog verification, every ZIP start, transferred bytes in 8 MiB intervals, SHA256 verification and batch completion. Diagnostic events go to stderr; normal stdout and JSON remain unchanged.</p>
       <div class="cli-command-list">
-        <div><strong>Download all 70 ZIPs with live progress</strong><pre><code>.\pgextwin.exe download-all --pg all --verbose</code></pre></div>
+        <div><strong>Download all registered ZIPs with live progress</strong><pre><code>.\pgextwin.exe download-all --pg all --verbose</code></pre></div>
         <div><strong>Keep a detailed log file</strong><pre><code>.\pgextwin.exe download-all --pg all --verbose 2&gt; download-verbose.log</code></pre></div>
       </div>
       <p class="cli-caution" role="note">Verbose output does not change trust: individual extension ZIPs remain INTEGRITY_ONLY. No install or extension publication privileges are added.</p>
@@ -95,7 +95,7 @@ gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow p
       <p class="eyebrow">v0.3.2</p><h2 id="release-notes-heading">Release notes</h2>
       <div class="cli-release-notes"><article lang="en" class="cli-note-block" aria-labelledby="notes-en-title">
         <h3 id="notes-en-title">English</h3>
-        <p><strong>CLI v0.3.2 — live diagnostic progress.</strong> Use <code>--verbose</code> to follow Catalog Sigstore verification, individual download starts, 8 MiB transfer updates, SHA256 checks and the final 70-ZIP completion. Logs are on stderr; stdout and JSON contracts are unchanged.</p>
+        <p><strong>CLI v0.3.2 — live diagnostic progress.</strong> Use <code>--verbose</code> to follow Catalog Sigstore verification, individual download starts, 8 MiB transfer updates, SHA256 checks and completion of the selected ZIPs. Logs are on stderr; stdout and JSON contracts are unchanged.</p>
         <p>The trim-compressed Windows x64 EXE is 12,829,662 bytes. Latest signed-Catalog and historical <code>--fixed</code> modes remain supported. Download failures still reject unsafe bytes, avoid overwriting existing output and fail closed.</p>
         <p><strong>Scope:</strong> The CLI executable and Catalog feed have their own verification; original extension ZIPs are <code>INTEGRITY_ONLY</code>, not individually Sigstore-authenticated. No installation or extension-release authorization is granted.</p>
         <p><a href="https://github.com/pgextwin/catalog/actions/runs/39342699236">Public v0.3.2 EXE Sigstore and verbose 70/70 ZIP Windows audit</a> · <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.2">Full GitHub Release (English → Japanese)</a></p>

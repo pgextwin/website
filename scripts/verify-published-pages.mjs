@@ -72,8 +72,8 @@ async function verify() {
     return data;
   }));
   const counts = Object.fromEntries(["implemented","candidate","not-planned"].map(status=>[status,records.filter(x=>x.status===status).length]));
-  assert.equal(counts["not-planned"], 6, "Historical not-planned count changed");
-  assert.equal(counts.implemented + counts.candidate, 14, "Unexpected Landscape eligible count");
+  assert.equal(Object.values(counts).reduce((sum,count)=>sum+count,0),records.length,
+    "Unknown Landscape status");
   const wave=records.filter(x=>x.roadmap?.decision==="wave-2").sort((a,b)=>a.roadmap.order-b.roadmap.order);
   assert.deepEqual(wave.map(x=>[x.name,x.roadmap.order]),[["plpgsql_check",1],["hypopg",2],["wal2json",3]]);
   // Reserve/research are historical choices, not immutable live counts.
@@ -108,7 +108,7 @@ async function verify() {
   assert.ok(app.includes("Selection rationale") && app.includes("landscape-roadmap-label"));
   const dist = await (await get(registry+"/index.json")).json();
   assert.equal(dist.schemaVersion,2);
-  assert.ok(dist.extensions.length >= 9, "Initial implemented fleet unexpectedly removed");
+  assert.ok(dist.extensions.length > 0, "Empty distribution Catalog");
   assert.equal(dist.extensions.length, counts.implemented, "Catalog/Landscape implemented count mismatch");
   assert.ok(dist.extensions.includes("plpgsql_check"),"Pilot missing from Catalog v2");
   console.log(JSON.stringify({result:"PASS",liveSite:site,liveHtml:true,liveJs:true,responsiveCss:true,
