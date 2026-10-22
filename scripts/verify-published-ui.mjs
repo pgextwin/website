@@ -23,7 +23,19 @@ const expectedPlpgsqlMajors=Object.entries(plpgsqlExpected.postgresql)
   .filter(([,entry])=>entry.available===true).map(([major])=>Number(major)).sort((a,b)=>a-b);
 assert.ok(expectedPlpgsqlMajors.length>0,"No verified plpgsql_check binaries");
 
-assert.ok(catalogCount >= 9 && catalogCount <= 14, "Unexpected distribution Catalog size");
+assert.ok(catalogCount > 0, "Empty distribution Catalog");
+const landscapeResponse = await fetch("https://raw.githubusercontent.com/pgextwin/catalog/main/landscape/index.json", {signal: AbortSignal.timeout(40000)});
+assert.equal(landscapeResponse.status,200,"Public Landscape unavailable");
+const landscapeIndex=await landscapeResponse.json();
+const landscapeRecords=await Promise.all(landscapeIndex.extensions.map(async name=>{
+  const response=await fetch(`https://raw.githubusercontent.com/pgextwin/catalog/main/landscape/extensions/${encodeURIComponent(name)}.json`,{signal:AbortSignal.timeout(40000)});
+  assert.equal(response.status,200,`Landscape record unavailable: ${name}`);
+  return response.json();
+}));
+const landscapeCount=landscapeRecords.length;
+const expectedStatusCounts=Object.fromEntries(["implemented","candidate","not-planned"]
+  .map(status=>[status,landscapeRecords.filter(record=>record.status===status).length]));
+assert.equal(expectedStatusCounts.implemented,catalogCount,"Catalog/Landscape implemented count mismatch");
 const chromeBin = process.env.CHROME_BIN || "google-chrome";
 execFileSync("which", [chromeBin]);
 const dir = await mkdtemp(join(tmpdir(), "pgextwin-browser-"));
@@ -136,12 +148,12 @@ try {
   await send("Page.enable");
   await send("Runtime.enable");
   await send("Page.navigate",{url:site});
-  await until(`document.getElementById("landscape-count")?.textContent.includes("20 of 20") && document.getElementById("results-count")?.textContent.includes("${catalogCount} of ${catalogCount}")`,
+  await until(`document.getElementById("landscape-count")?.textContent.includes("${landscapeCount} of ${landscapeCount}") && document.getElementById("results-count")?.textContent.includes("${catalogCount} of ${catalogCount}")`,
     "public catalog and landscape data loaded");
   assert.equal(await evaluate('document.querySelectorAll("#extensions article").length'),catalogCount);
-  assert.equal(await evaluate('document.querySelectorAll("#landscape-grid article").length'),20);
+  assert.equal(await evaluate('document.querySelectorAll("#landscape-grid article").length'),landscapeCount);
   assert.equal(await evaluate('document.querySelectorAll("#extensions details.extension-collapse:not([open])").length'),catalogCount);
-  assert.equal(await evaluate('document.querySelectorAll("#landscape-grid details.landscape-collapse:not([open])").length'),20);
+  assert.equal(await evaluate('document.querySelectorAll("#landscape-grid details.landscape-collapse:not([open])").length'),landscapeCount);
   const catalogDisclosure = await evaluate(`(() => {
     const rows=[...document.querySelectorAll("#extensions .extension-collapse")];
     rows[0].querySelector("summary").click();
@@ -161,7 +173,7 @@ try {
   })()`);
   assert.ok(landscapeDisclosure,"Landscape details expand on click");
   const counts={};
-  for(const [status,expected] of [["implemented",catalogCount],["candidate",14-catalogCount],["not-planned",6]]) {
+  for(const [status,expected] of Object.entries(expectedStatusCounts)) {
     counts[status]=await evaluate(`(() => {
       const s=document.getElementById("landscape-filter");
       s.value="${status}";
@@ -229,17 +241,17 @@ try {
     mobile.inputVisible && mobile.focusCss);
   assert.ok(mobile.scrollWidth<=mobile.width+2,`Mobile horizontal overflow: ${JSON.stringify(mobile)}`);
   await send("Page.navigate",{url:"https://pgextwin.github.io/website/ja/"});
-  await until(`document.getElementById("landscape-count")?.textContent.includes("20件中20件") && document.getElementById("results-count")?.textContent.includes("${catalogCount}件中${catalogCount}件")`,
+  await until(`document.getElementById("landscape-count")?.textContent.includes("${landscapeCount}件中${landscapeCount}件") && document.getElementById("results-count")?.textContent.includes("${catalogCount}件中${catalogCount}件")`,
     "Japanese catalog and landscape data loaded");
   assert.equal(await evaluate('document.documentElement.lang'),"ja");
   assert.equal(await evaluate('document.querySelectorAll("#extensions article").length'),catalogCount);
-  assert.equal(await evaluate('document.querySelectorAll("#landscape-grid article").length'),20);
+  assert.equal(await evaluate('document.querySelectorAll("#landscape-grid article").length'),landscapeCount);
   assert.ok((await evaluate('document.querySelector("#extensions article")?.textContent'))?.includes("ZIPをダウンロード"));
   assert.equal(await evaluate('document.querySelector("nav.language-nav [aria-current=page]")?.getAttribute("lang")'),"ja");
   assert.ok((await evaluate('document.querySelector("#landscape-grid")?.textContent'))?.includes("配布中"));
   const jaReleaseEvidence=await assertPlpgsqlBilingualAssets("ja");
   console.log(JSON.stringify({result:"PASS",site,realBrowser:"Chrome headless",japanesePage:true,catalogCards:catalogCount,
-    landscapeCards:20,statusFilterCounts:counts,search:true,sourceFilter:true,
+    landscapeCards:landscapeCount,statusFilterCounts:counts,search:true,sourceFilter:true,
     externalHttpsLinks:linkSafety.count,vendorAndCondaLabels:true,mobile,
     signedReleaseVisuals:[enReleaseEvidence,jaReleaseEvidence]}));
 } finally {
