@@ -35,7 +35,7 @@ gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow p
     <section aria-labelledby="commands-heading">
       <h2 id="commands-heading">1行で使う</h2><p>標準動作はCatalog承認・登録済みの最新Releaseです。GitHub REST APIの認証情報は不要。元ZIPは実行フォルダー内の新しいフォルダーに保存されます。</p>
       <div class="cli-command-list">
-        <div><strong>最新版Catalog · PG14～18の70 ZIP</strong><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
+        <div><strong>最新版Catalog · 登録されたすべてのZIP</strong><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
         <div><strong>最新版Catalog · PG18だけの14 ZIP</strong><pre><code>.\pgextwin.exe download-all --pg 18</code></pre></div>
         <div><strong>過去の固定版 · PG14～18の70 ZIP</strong><pre><code>.\pgextwin.exe download-all --pg all --fixed</code></pre></div>
       </div>
@@ -45,7 +45,7 @@ gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow p
       <h2 id="verbose-heading">--verbose で進行状況を表示</h2>
       <p>署名付きCatalogの検証、ZIPごとの取得開始、8 MiBごとの転送量、SHA256再照合、一括保存の完了をUTC時刻付きで表示します。詳細ログは標準エラー出力に分離され、通常の標準出力とJSONは変更しません。</p>
       <div class="cli-command-list">
-        <div><strong>70 ZIPの取得を詳細表示</strong><pre><code>.\pgextwin.exe download-all --pg all --verbose</code></pre></div>
+        <div><strong>すべてのZIPの取得を詳細表示</strong><pre><code>.\pgextwin.exe download-all --pg all --verbose</code></pre></div>
         <div><strong>詳細ログをファイルに保存</strong><pre><code>.\pgextwin.exe download-all --pg all --verbose 2&gt; download-verbose.log</code></pre></div>
       </div>
       <p class="cli-caution" role="note">ログの有効化は拡張ZIPの署名検証やインストール権限を追加しません。元ZIPの判定は引き続きINTEGRITY_ONLYです。</p>
@@ -95,7 +95,7 @@ gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow p
       <p class="eyebrow">v0.3.2</p><h2 id="release-notes-heading">リリースノート</h2>
       <div class="cli-release-notes"><article lang="ja" class="cli-note-block" aria-labelledby="notes-ja-title">
         <h3 id="notes-ja-title">日本語</h3>
-        <p><strong>CLI v0.3.2 — 処理中の詳細ログに対応。</strong> <code>--verbose</code>でCatalogのSigstore検証、各ZIPのダウンロード開始、8 MiBごとの転送量、SHA256照合、70件の完了を確認できます。ログは標準エラー出力で、標準出力とJSONは変わりません。</p>
+        <p><strong>CLI v0.3.2 — 処理中の詳細ログに対応。</strong> <code>--verbose</code>でCatalogのSigstore検証、各ZIPのダウンロード開始、8 MiBごとの転送量、SHA256照合、選択したZIPの取得完了を確認できます。ログは標準エラー出力で、標準出力とJSONは変わりません。</p>
         <p>Windows x64 EXEは12,829,662バイト。署名付き最新版Catalogと従来の<code>--fixed</code>を継続サポート。異常なZIPは拒否し、不完全な一括出力や既存成果物の上書きは行いません。</p>
         <p><strong>信頼境界：</strong> CLIとCatalogフィードの来歴・署名検証に対し、拡張機能の元ZIPは<code>INTEGRITY_ONLY</code>（バイト整合性のみ）です。個別ZIPの真正署名検証、インストールや拡張機能の正式公開認可を追加したわけではありません。</p>
         <p><a href="https://github.com/pgextwin/catalog/actions/runs/39342699236">公開EXEとverbose 70/70 ZIPのWindows独立検証</a> · <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.2">GitHub Release全文（英語→日本語）</a></p>
