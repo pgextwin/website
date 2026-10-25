@@ -205,3 +205,38 @@ test("catalog index requires schema v2", () => {
   assert.equal(view.validateCatalogIndex({ schemaVersion: 2, extensions: ["pg_cron"] }).valid, true);
   assert.equal(view.validateCatalogIndex({ schemaVersion: 1, extensions: ["pg_cron"] }).valid, false);
 });
+
+test("protected Catalog fleet index allows future registered members without a fixed 17 limit", () => {
+  const names = Array.from({ length: 18 }, (_, i) => "registered_" + String(i).padStart(3, "0"));
+  assert.equal(view.validateCatalogIndex({ schemaVersion: 2, extensions: names }).valid, true);
+  const ceiling = Array.from({ length: 128 }, (_, i) => "registered_" + String(i).padStart(3, "0"));
+  assert.equal(view.validateCatalogIndex({ schemaVersion: 2, extensions: ceiling }).valid, true);
+  assert.equal(view.validateCatalogIndex({ schemaVersion: 2, extensions: [...ceiling, "zz_over_capacity"] }).valid, false);
+});
+
+test("protected Catalog fleet index rejects duplicates, noncanonical order, invalid names and empty inventories", () => {
+  for (const names of [
+    [], ["pg_cron", "pg_cron"], ["wal2json", "pg_cron"],
+    ["../escape"], ["Foo"], ["name-with-dash"], ["name space"],
+    ["other/repo"], ["a".repeat(65)]
+  ]) {
+    assert.equal(view.validateCatalogIndex({ schemaVersion: 2, extensions: names }).valid, false,
+      "unsafe roster unexpectedly accepted: " + JSON.stringify(names));
+  }
+});
+
+test("record identity must match protected Catalog index even if record otherwise validates", () => {
+  const wrongName = view.partitionCatalogRecordResults(
+    [{ status: "fulfilled", value: record({ name: "pg_cron" }) }], ["pg_repack"]);
+  assert.equal(wrongName.records.length, 0);
+  assert.equal(wrongName.failures.length, 1);
+  const wrongRepo = record({ name: "pg_cron" });
+  wrongRepo.repository = "different/pg_cron";
+  const mismatched = view.partitionCatalogRecordResults(
+    [{ status: "fulfilled", value: wrongRepo }], ["pg_cron"]);
+  assert.equal(mismatched.records.length, 0);
+  assert.equal(mismatched.failures.length, 1);
+  const correct = view.partitionCatalogRecordResults(
+    [{ status: "fulfilled", value: record({ name: "pg_cron" }) }], ["pg_cron"]);
+  assert.equal(correct.records.length, 1);
+});
