@@ -26,11 +26,25 @@
     }
   }
 
+  // Only a protected Catalog main may authorize membership. This shape
+  // validator bounds website requests and refuses unsafe names; it never
+  // independently grants permission to publish or install an extension.
+  const MAX_CATALOG_EXTENSIONS = 128;
+  const CATALOG_EXTENSION_NAME = /^[a-z][a-z0-9_]{0,63}$/;
+
   function validateCatalogIndex(index) {
     if (!isObject(index)) return { valid: false, reason: "Catalog index is not an object" };
     if (index.schemaVersion !== 2) return { valid: false, reason: "Catalog index schemaVersion must be 2" };
-    if (!Array.isArray(index.extensions)) return { valid: false, reason: "Catalog index extensions must be an array" };
-    if (!index.extensions.every(isNonEmptyString)) return { valid: false, reason: "Catalog index contains an invalid extension name" };
+    const names = index.extensions;
+    if (!Array.isArray(names) || names.length === 0 || names.length > MAX_CATALOG_EXTENSIONS) {
+      return { valid: false, reason: "Catalog index extension count is invalid or exceeds the resource limit" };
+    }
+    if (!names.every((name) => typeof name === "string" && CATALOG_EXTENSION_NAME.test(name))) {
+      return { valid: false, reason: "Catalog index contains an invalid extension name" };
+    }
+    if (names.some((name, i) => i > 0 && names[i - 1] >= name)) {
+      return { valid: false, reason: "Catalog index extensions must be unique and sorted" };
+    }
     return { valid: true, reason: null };
   }
 
@@ -254,10 +268,10 @@
     return match ? match[1] : value;
   }
 
-  function partitionCatalogRecordResults(results) {
+  function partitionCatalogRecordResults(results, expectedNames) {
     const records = [];
     const failures = [];
-    for (const result of Array.isArray(results) ? results : []) {
+    for (const [i, result] of (Array.isArray(results) ? results : []).entries()) {
       if (!result || result.status !== "fulfilled") {
         failures.push({ reason: result && result.reason ? String(result.reason) : "Record fetch failed" });
         continue;
@@ -265,6 +279,13 @@
       const validation = validateCatalogRecord(result.value);
       if (!validation.valid) {
         failures.push({ reason: validation.reason });
+        continue;
+      }
+      // Never display a valid-looking record under a different indexed identity.
+      if (Array.isArray(expectedNames) &&
+          (result.value.name !== expectedNames[i] ||
+           result.value.repository !== "pgextwin/" + expectedNames[i])) {
+        failures.push({ reason: "Catalog record identity differs from protected index" });
         continue;
       }
       records.push(result.value);

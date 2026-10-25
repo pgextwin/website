@@ -542,7 +542,7 @@ async function loadCatalogRecords() {
     if (!response.ok) throw new Error(`${name}: HTTP ${response.status}`);
     return response.json();
   }));
-  return catalogView.partitionCatalogRecordResults(settled);
+  return catalogView.partitionCatalogRecordResults(settled, index.extensions);
 }
 
 async function loadLifecycleMetadata() {

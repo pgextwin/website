@@ -2,6 +2,7 @@
 // Fleet-wide public Catalog/Release asset parity audit.
 // Existing verify-catalog-release.mjs performs full-byte verification for the signed pilot.
 import assert from "node:assert/strict";
+import catalogView from "../catalog-view.js";
 
 const base = "https://raw.githubusercontent.com/pgextwin/catalog/main";
 async function json(url) {
@@ -82,9 +83,9 @@ async function verify(name) {
 }
 async function main() {
   const index = await json(base + "/index.json");
-  assert.equal(index.schemaVersion, 2);
+  const validation = catalogView.validateCatalogIndex(index);
+  assert.ok(validation.valid, validation.reason || "Invalid protected Catalog index");
   assert.ok(index.extensions.length >= 9, "Initial distribution fleet unexpectedly reduced");
-  assert.equal(new Set(index.extensions).size, index.extensions.length, "Duplicate Catalog extension");
   // Sequential public requests keep this smoke test inside conservative API rate limits.
   const results = [];
   for (const name of index.extensions) results.push(await verify(name));
