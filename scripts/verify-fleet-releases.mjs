@@ -31,8 +31,15 @@ async function verify(name) {
   assert.equal(record.schemaVersion, 2);
   assert.equal(record.name, name);
   assert.equal(record.repository, "pgextwin/" + name);
-  const release = await json("https://api.github.com/repos/" + record.repository + "/releases/latest");
-  assert.equal(release.tag_name, record.latest.releaseTag, "Stale Catalog release for " + name);
+  // Catalog latest is the newest *authorized* signed Release, not necessarily
+  // GitHub's most recently published tag. A failed Publisher schedule must not
+  // force a newer public-but-unapproved tag into the protected Catalog.
+  const tag = record.latest.releaseTag;
+  assert.match(tag, /^v[A-Za-z0-9][A-Za-z0-9._-]{0,110}-windows\.[1-9][0-9]*$/,
+    "Unsafe Catalog-pinned Release tag");
+  const release = await json("https://api.github.com/repos/" + record.repository
+    + "/releases/tags/" + encodeURIComponent(tag));
+  assert.equal(release.tag_name, tag, "Mismatched Catalog-approved Release for " + name);
   assert.equal(release.draft, false);
   assert.equal(release.prerelease, false);
   assert.equal(release.published_at, record.latest.publishedAt);
