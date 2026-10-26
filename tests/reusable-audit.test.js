@@ -24,8 +24,8 @@ test("reusable audit keeps the same public-supply-chain and browser checks", () 
 
 test("fleet parity checks each authorized Catalog tag without admitting a newer denied Release", () => {
   const script = readFileSync(join(__dirname, "..", "scripts", "verify-fleet-releases.mjs"), "utf8");
-  assert.ok(script.includes(' + '"/releases/tags/"' + '));
-  assert.ok(!script.includes(' + '"/releases/latest"' + '));
+  assert.ok(script.includes("/releases/tags/"));
+  assert.ok(!script.includes("/releases/latest"));
   assert.ok(script.includes("record.latest.releaseTag"));
   assert.ok(script.includes("encodeURIComponent(tag)"));
   assert.ok(script.includes("assert.equal(release.tag_name, tag"));
