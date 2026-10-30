@@ -39,7 +39,7 @@ test("R09-01 exact-key EN/JA and CLI loopback HTTP preview: no public Pages writ
       const cli = await request("/" + lang + "/cli.html");
       assert.match(home, new RegExp('<html lang="' + lang + '">'));
       assert.match(home, /cli/i);
-      assert.match(cli, /pgextwin\\.exe/);
+      assert.match(cli, /pgextwin[.]exe/);
       assert.doesNotMatch(home + cli, /NONPUBLISHING_PR_PREVIEW_ONLY|174b48df34a82ef147b599b1b33a86964990ea6ee4fb6932b365e338dd23410f/);
     }
     assert.equal((await fetch(base + "/__not_an_approved_page__")).status, 404);
