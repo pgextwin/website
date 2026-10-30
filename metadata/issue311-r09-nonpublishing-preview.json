@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "type": "pgextwin-r09-private-bilingual-preview",
+  "status": "NONPUBLISHING_PR_PREVIEW_ONLY",
+  "catalogProtectedMainSha": "dc8390fd816aa7bf0bf3b541e822b1320a47846e",
+  "websiteBaseSha": "2eb3bd618f230cea424b99dac5148ca72d923cd7",
+  "catalogDraftPr": "https://github.com/pgextwin/catalog/pull/179",
+  "sourceRequestSha256": "174b48df34a82ef147b599b1b33a86964990ea6ee4fb6932b365e338dd23410f",
+  "originalStateBlobSha": "e588b93f5f607dc05e240e07c3351d75e1f34727",
+  "r09BuildRunId": 41082159167,
+  "r09ArtifactId": 12989134273,
+  "r09ActualZipSha256": "a6a9e5a02d45eb4dd71419726c8e1a55c701b9e4befa6935e7e3d7e8db698cb6",
+  "catalogHistoricalPublicReleaseTag": "v4.16.13-windows.1",
+  "languages": [
+    "en",
+    "ja"
+  ],
+  "catalogRecordUpdateAuthorized": false,
+  "feedPublicReleaseAuthorized": false,
+  "websitePublishAuthorized": false,
+  "publisherTokenRequested": false,
+  "runtimeEnabled": false,
+  "decision": "PUBLISH_DENY"
+}
