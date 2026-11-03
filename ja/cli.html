@@ -15,7 +15,7 @@
   <header class="site-header"><div class="shell">
     <nav class="language-nav" aria-label="Language / 言語"><a href="../en/cli.html" lang="en">English</a><a href="./">拡張機能一覧</a></nav>
     <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.3.5</h1>
-    <p class="lead">登録拡張の増えた最新版Catalogから、まとめてダウンロード。</p><p class="cli-hero-description">Windows x64向けPostgreSQL拡張ZIPを、Catalogに登録された最新版から安全に一括取得。署名付きCatalogの認証・元ZIPのSHA256再検証・過去の固定版への切替に対応します。インストーラーではありません。</p>
+    <p class="lead">複数の拡張機能ZIPを、PostgreSQLのバージョンごとにまとめてダウンロード。</p><p class="cli-hero-description">Windows x64向けの公開済みZIPを一括取得するコマンドラインツールです。署名付きCatalogを検証し、各ZIPのSHA-256を照合します。過去の固定版も選択できます。インストールは行いません。</p>
     <nav class="jump-nav" aria-label="CLI navigation"><a class="jump-nav-primary" href="#download-heading">Windows用EXEを入手</a><a href="#flow-heading">動作のしくみ</a><a href="#release-notes-heading">リリースノート</a></nav>
   </div></header>
   <main class="shell cli-page">
@@ -28,12 +28,12 @@
         <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.5/SHA256SUMS.txt">SHA256SUMS.txt</a>
       </div>
       <p class="cli-sha"><strong>公開EXEのSHA256:</strong> <code>ee0a0b203d25e054c59999c711c0305f39fb8322a076d00df807cde2a859e327</code></p>
-      <p>公開SHA256SUMS.txtと一致することを確認し、CLI本体のビルド来歴も検証してください。</p>
+      <p>ダウンロード後は、次のPowerShellコマンドでSHA-256を確認できます。続くコマンドは、CLI本体のビルド来歴を検証する場合に使用します。</p>
       <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256
 gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest ed6c69ca259eee2fb2454d3a1c416cd2766dbb17</code></pre>
     </section>
     <section aria-labelledby="commands-heading">
-      <h2 id="commands-heading">1行で使う</h2><p>標準動作はCatalog承認・登録済みの最新Releaseです。GitHub REST APIの認証情報は不要。元ZIPは実行フォルダー内の新しいフォルダーに保存されます。</p>
+      <h2 id="commands-heading">目的に合うコマンドを選ぶ</h2><p>通常は公開Catalogに登録された最新版を取得します。GitHub APIの認証情報は不要です。ダウンロードしたZIPは実行フォルダー内の新しいフォルダーに保存され、既存ファイルは上書きされません。</p>
       <div class="cli-command-list">
         <div><strong>最新版Catalog · 登録されたすべてのZIP</strong><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
         <div><strong>最新版Catalog · PG18向けの全登録ZIP</strong><pre><code>.\pgextwin.exe download-all --pg 18</code></pre></div>
@@ -42,7 +42,7 @@ gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow p
     </section>
     <section aria-labelledby="verbose-heading">
       <p class="eyebrow">最新版Catalogの拡張に対応</p>
-      <h2 id="verbose-heading">--verbose で進行状況を表示</h2>
+      <h2 id="verbose-heading">進行状況を確認・保存する</h2>
       <p>署名付きCatalogの検証、ZIPごとの取得開始、8 MiBごとの転送量、SHA256再照合、一括保存の完了をUTC時刻付きで表示します。詳細ログは標準エラー出力に分離され、通常の標準出力とJSONは変更しません。</p>
       <div class="cli-command-list">
         <div><strong>すべてのZIPの取得を詳細表示</strong><pre><code>.\pgextwin.exe download-all --pg all --verbose</code></pre></div>
