@@ -15,7 +15,7 @@
   <header class="site-header"><div class="shell">
     <nav class="language-nav" aria-label="Language / 言語"><a href="../ja/cli.html" lang="ja">日本語</a><a href="./">Extension catalog</a></nav>
     <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.3.5</h1>
-    <p class="lead">Follow the latest Catalog as new extensions are registered.</p><p class="cli-hero-description">Download current Catalog-registered PostgreSQL extension ZIPs for Windows x64. Signed Catalog selection, strict original ZIP SHA256, and an explicit frozen-snapshot mode. This read-only CLI does not install extensions.</p>
+    <p class="lead">Download multiple extension ZIPs for your PostgreSQL version in one command.</p><p class="cli-hero-description">This Windows x64 CLI downloads published ZIPs, verifies the signed Catalog and each ZIP SHA-256, and offers a fixed historical snapshot. It does not install extensions.</p>
     <nav class="jump-nav" aria-label="CLI navigation"><a class="jump-nav-primary" href="#download-heading">Get the Windows executable</a><a href="#flow-heading">How it works</a><a href="#release-notes-heading">Release notes</a></nav>
   </div></header>
   <main class="shell cli-page">
@@ -28,12 +28,12 @@
         <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.5/SHA256SUMS.txt">SHA256SUMS.txt</a>
       </div>
       <p class="cli-sha"><strong>Published EXE SHA256:</strong> <code>ee0a0b203d25e054c59999c711c0305f39fb8322a076d00df807cde2a859e327</code></p>
-      <p>Compare against the published SHA256SUMS.txt and validate the CLI build provenance:</p>
+      <p>After downloading, use this PowerShell command to check the SHA-256. The second command optionally verifies the CLI build provenance:</p>
       <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256
 gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest ed6c69ca259eee2fb2454d3a1c416cd2766dbb17</code></pre>
     </section>
     <section aria-labelledby="commands-heading">
-      <h2 id="commands-heading">One-line usage</h2><p>Default: newest release approved and registered in the Catalog; no GitHub REST API credentials required. ZIPs are written in a new folder under the working directory.</p>
+      <h2 id="commands-heading">Choose a download command</h2><p>By default, the CLI fetches the latest published releases registered in the Catalog. No GitHub API credentials are needed. ZIPs are saved in a new folder under your working directory; existing files are not overwritten.</p>
       <div class="cli-command-list">
         <div><strong>Latest Catalog · all registered ZIPs</strong><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
         <div><strong>Latest Catalog · all registered PG18 ZIPs</strong><pre><code>.\pgextwin.exe download-all --pg 18</code></pre></div>
@@ -42,7 +42,7 @@ gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow p
     </section>
     <section aria-labelledby="verbose-heading">
       <p class="eyebrow">Latest Catalog support</p>
-      <h2 id="verbose-heading">Live progress with --verbose</h2>
+      <h2 id="verbose-heading">View or save download progress</h2>
       <p>Opt-in UTC timestamped events report signed Catalog verification, every ZIP start, transferred bytes in 8 MiB intervals, SHA256 verification and batch completion. Diagnostic events go to stderr; normal stdout and JSON remain unchanged.</p>
       <div class="cli-command-list">
         <div><strong>Download all registered ZIPs with live progress</strong><pre><code>.\pgextwin.exe download-all --pg all --verbose</code></pre></div>

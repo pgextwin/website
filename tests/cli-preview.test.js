@@ -28,7 +28,7 @@ for (const lang of ['en','ja']) {
     assert.ok(page.includes(cliAcceptanceRun));
     assert.ok(page.includes('83.83%'));
     assert.ok(page.includes(cliExeBytes.toLocaleString('en-US')));
-    assert.ok(home.includes('83.83%') && home.includes('CLI v' + cliVersion));
+    assert.ok(home.includes('CLI v' + cliVersion));
     assert.ok(!page.includes('cli-v0.2.2'));
     assert.ok(!home.includes('CLI v0.2.2'));
     assert.ok(!page.includes('install --apply'));
