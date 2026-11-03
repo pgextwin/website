@@ -1,77 +1,24 @@
-# pgextwin website
+# pgextwin 拡張機能カタログ
 
-[English](README.md) | **日本語**
+[English](README.md) | 日本語
 
-pgextwinのWindows x64 PostgreSQL Extension binaryを探すための静的Website v2です。Frontend frameworkやbuild stepは導入せず、vanilla HTML/CSS/JavaScript構成を維持します。
+[pgextwinの日本語サイト](https://pgextwin.github.io/website/ja/)では、PostgreSQL拡張機能の**非公式Windows x64バイナリ**を探せます。
 
-## 日本語版と英語版のURL
+## ダウンロードまでの手順
 
-- `https://pgextwin.github.io/website/`：ブラウザーの最優先言語が日本語（`ja`、`ja-JP`など）の場合のみ`ja/`へ、それ以外は`en/`へ移動します。検索パラメーターとページ内リンクも引き継ぎます。
-- `https://pgextwin.github.io/website/ja/`：日本語版の固定URL。
-- `https://pgextwin.github.io/website/en/`：英語版の固定URL。
-- 両ページには相互切替リンクを設けています。明示的に選んだ言語のURLへアクセスした場合、端末言語による再判定は行いません。
-- `locale.js`でカタログ・対応状況の画面文言、既存データの説明、CIテスト内容、選定理由、外部配布物の補足情報を日本語化しています。ダウンロードURLや正規データの取得元は従来どおり共通です。
-- **新しい拡張機能の追加や説明文の変更時には、同時に`locale.js`の日本語訳を更新してください。** 新しい英語文面について翻訳が未登録の場合、原文の英語を表示し、自動翻訳はしません。
-- 単体テストは`node --test tests/*.test.js`で、公開後のページはPagesのスモークテストで日英両方を検証します。
+1. 拡張機能名や説明で検索するか、PostgreSQLのメジャーバージョンで絞り込みます。
+2. 公開状況、利用条件、上流ドキュメントを確認します。
+3. 利用中のPostgreSQLメジャーバージョンに一致するZIPをダウンロードします。詳しい変更内容や付属ファイルはリンク先のGitHub Releaseで確認できます。
+4. ZIPのSHA-256を表示された値と照合してから、各拡張機能のインストール手順に従ってください。追加設定や再起動が必要な拡張機能もあります。
 
-## 情報源と責務分離
+PostgreSQLのサポートが終了しても、過去のバイナリをダウンロードできる場合があります。ただし、ダウンロードできることと、PostgreSQLのサポートが続いていることは別です。
 
-Browserではruntimeに、役割の異なる2つの正規情報源を結合します。
+## pgextwin以外の入手先
 
-- `pgextwin/catalog` schema v2: Release identity、binary availability、canonical direct-download URL、ZIP SHA-256、runtime requirements、Test Contract由来capability、immutable capability provenance、Release固有のsupply-chain evidence提供状態
-- `pgextwin/build/metadata/postgresql.json`: PostgreSQLコミュニティのLifecycle/EOL日。現在のmaintenance状態をここから導出
+サイトには、ほかのWindows向け配布元や将来の候補も掲載しています。**pgextwinが公開するバイナリとは区別**して表示しています。外部の配布物は、各提供元のライセンス、互換性、サポート条件を確認してください。
 
-`available` と `maintained` は別概念です。PostgreSQLがEOLになっても既存binaryはhistorical artifactとしてdownload可能なまま保持します。EOL当日はmaintained、翌UTC日からhistoricalです。Lifecycle metadataを取得できない場合でもCatalogの検索/downloadは継続し、Lifecycleだけ `Lifecycle unknown` へfallbackします。
+## 言語と問い合わせ先
 
-## Website v2 UX
+[日本語サイト](https://pgextwin.github.io/website/ja/) · [English website](https://pgextwin.github.io/website/en/)
 
-Website v2では次を提供します。
-
-- Extension name / display name / description / upstream repositoryを対象にしたcase-insensitive検索
-- Catalogの`available: true` recordから動的に導出するPostgreSQL major filter
-- search + PostgreSQL filterのAND条件、result count、明示的empty state
-- `postgresql.<major>.downloadUrl`をそのまま使うcanonical direct ZIP link
-- Catalog CIが公開`SHA256SUMS.txt`と同期確認する64文字すべてのZIP SHA-256
-- `runtime.requirements`に基づくCREATE EXTENSION、preload、background worker、required client executable / package pathの表示
-- Test Contract v2由来functional scenario / CI coverageと、PostgreSQL major限定scenarioの正確なscope表示
-- Extension repositoryのexact commitへ固定された`capabilitiesSource`
-- major別のBuild Provenance / SPDX SBOM / SBOM Attestation / vulnerability report提供状態
-- 実assetが存在する場合のSPDX SBOMおよびpoint-in-time Grype report direct link
-
-Attestationを架空のRelease assetとして扱いません。CI coverageの`not-covered`を`unsupported`とも表示しません。Vulnerability reportはpoint-in-time evidenceであり、Website側でsecurity verdictを生成しません。
-
-初期8 Extensionの現在のReleaseはStep 6〜10対応release pathより前に公開されたため、追加evidenceは「そのhistorical Releaseでは公開されていない」というneutralな状態で表示します。現在のbuild infrastructureにStep 6〜10機能が未実装という意味ではありません。
-
-## 障害時の継続表示とURL safety
-
-index取得/schema失敗はCatalog全体errorとします。一方、個別Extension recordのfetchまたはdefensive validation失敗では、正常recordを引き続き表示し、取得できなかった件数をstatusへ通知します。Lifecycle取得失敗も分離し、binary availability/downloadは維持します。
-
-Catalog v2の完全なschema validationはCatalog CIが担当します。Website側は軽量なdefensive checkだけを行い、index/recordのschema v2を必須とし、`https:` URLだけをlink化します。Catalog値の挿入はDOM API / `textContent`中心で、`innerHTML`は使用しません。
-
-## Accessibility
-
-Search/filterには明示labelを付け、status/result countはpolite live regionで通知します。Lifecycle/evidence/coverageは色だけで表現せずtextも表示します。情報量の多い部分はnative `<details>` / `<summary>`でkeyboard操作できます。SHA-256は省略せずwrapし、narrow layoutや200% zoomでもsearch/filter/download/checksum/project linkを失わない構成です。Link、form control、summaryにはvisible focusを用意します。
-
-## ローカル確認
-
-任意の静的HTTP serverでこのディレクトリを配信してください。Browserのfetch制限により、`index.html`をfileとして直接開く方法では外部metadataを取得できない場合があります。
-
-## Tests
-
-Catalog表示のpure logicは`catalog-view.js`、PostgreSQL Lifecycle判定は既存`lifecycle.js`へ分離し、Node標準test runnerだけで検証します。
-
-```text
-node --test tests/*.test.js
-```
-
-Search、dynamic major導出/filter、AND filter、runtime wording、background worker/client executable、PG-major限定scenario、CI coverage wording、historical/future evidence fixture、URL safety、schema rejection、partial record failure、既存PG14 EOL/fallback contractをtestします。
-
-## CI / 公開
-
-`.github/workflows/validate.yml`はPull Requestと`main` pushでJavaScriptの`node --check`と`node --test tests/*.test.js`を実行します。GitHub Actionsは`contents: read`を維持し、公式Actionはfull SHA pinのままです。GitHub Pagesは静的`main` branchを公開し、runtime metadataの正規情報源とは独立しています。
-
-## Windows Extension Landscape（Step 14）
-
-Websiteは3つの独立したデータをruntime取得します。配布中の実物だけを示すCatalog v2、PostgreSQL Lifecycle、そして候補・外部入手先を示す独立したLandscape Registry v1です。Landscapeの取得が失敗しても従来のdownload UIは動作し、部分的なrecordエラーでも有効な項目を表示します。
-
-Landscapeは検索、状態/取得元種別フィルター、最終確認日、候補の暫定優先度、理由、外部の取得リンクを掲載します。外部配布元のpublic/commercialと通常PostgreSQL/ベンダー版/Conda環境は区別して説明し、安全性・互換性・更新をpgextwinが保証しない旨を明記します。HTTPSのURLだけをDOM APIでリンク化し、キーボード操作、拡大表示、モバイル幅に対応します。
+pgextwinは独立したコミュニティプロジェクトです。拡張機能の使い方は上流ドキュメントを参照してください。[問題を報告する](https://github.com/pgextwin/website/issues)。
