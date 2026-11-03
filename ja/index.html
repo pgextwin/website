@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="PostgreSQL拡張機能の非公式Windows x64バイナリを検索・ダウンロードできます。">
+  <meta name="description" content="pgextwinが公開する非公式のPostgreSQL拡張機能Windows x64バイナリを検索・ダウンロードできます。">
   <title>pgextwin — PostgreSQL拡張機能のWindowsバイナリ</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/ja/">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/">
@@ -18,7 +18,7 @@
       <nav class="language-nav" aria-label="表示言語"><a href="../ja/" lang="ja" aria-current="page">日本語</a><a href="../en/" lang="en">English</a></nav>
       <p class="eyebrow">pgextwin</p>
       <h1>PostgreSQL拡張機能のWindowsバイナリ</h1>
-      <p class="lead">PostgreSQLのバージョンからWindows x64向け拡張機能を検索し、GitHub Releaseの正規バイナリを直接ダウンロードできます。導入要件、CIで検証した機能、チェックサム、サプライチェーンの検証情報を確認できます。</p>
+      <p class="lead">使用しているPostgreSQLのバージョンに合う、Windows x64向け拡張機能の非公式バイナリを探せます。公開済みZIPのダウンロード、導入要件、SHA-256の確認まで、このページで案内します。</p>
       <nav class="jump-nav" aria-label="ページ内ナビゲーション">
         <a class="jump-nav-primary" href="#extensions-heading">バイナリを探す</a>
         <a href="./cli.html">CLI v0.3.5</a>
@@ -31,13 +31,14 @@
   </header>
 
   <main class="shell">
-    <section class="cli-home-teaser" aria-labelledby="cli-home-heading">
-      <p class="eyebrow">Windows CLI · v0.3.5</p>
-      <h2 id="cli-home-heading">Catalog登録済みのZIPを1行でまとめて取得</h2>
-      <p><strong>最新版Catalogに登録された各拡張の元ZIP</strong>を、選択したPostgreSQLバージョン分まとめて取得できます。CLIはSigstore署名付きCatalogフィードを認証し、各ZIPのSHA256を照合します。過去の固定版は<code>--fixed</code>で指定できます。個々のZIPの真正署名は検証せず、<code>INTEGRITY_ONLY</code>です。</p>
-      <pre><code>.\pgextwin.exe download-all --pg all</code></pre>
-      <div class="cli-teaser-metrics"><strong>−83.83%</strong><span>79.34 MB → 12.83 MB（v0.3.0 → v0.3.1）</span></div>
-      <div class="cli-teaser-actions"><a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.5/pgextwin.exe">CLI v0.3.5をダウンロード</a><a href="./cli.html">図解・安全性・リリースノートを見る →</a></div>
+    <section class="info quickstart" aria-labelledby="quickstart-heading">
+      <p class="eyebrow">はじめて利用する方へ</p>
+      <h2 id="quickstart-heading">ダウンロードまでの3ステップ</h2>
+      <ol class="quickstart-steps">
+        <li><strong>拡張機能を探す。</strong>名前で検索し、使用中のPostgreSQLメジャーバージョンで絞り込みます。</li>
+        <li><strong>対応状況を確認する。</strong>拡張機能を開き、導入要件と対象バージョンを確認してZIPをダウンロードします。</li>
+        <li><strong>ファイルを照合して導入する。</strong>ZIPのSHA-256を確認し、各拡張機能の導入手順に従ってください。ZIPの取得だけではインストールされません。</li>
+      </ol>
     </section>
 
     <section aria-labelledby="extensions-heading">
@@ -69,6 +70,14 @@
       <div id="extensions" class="extension-grid"></div>
     </section>
 
+
+    <section class="cli-home-teaser" aria-labelledby="cli-home-heading">
+      <p class="eyebrow">Windows CLI · v0.3.5</p>
+      <h2 id="cli-home-heading">複数の拡張機能をCLIでまとめてダウンロード</h2>
+      <p><strong>公開Catalogに登録された拡張機能のZIP</strong>を、指定したPostgreSQLバージョンごとに一括取得できます。CLIはCatalogの署名を確認し、ZIPのSHA-256を照合します。過去の固定版は<code>--fixed</code>で選べます。個別ZIPの署名検証は行わず、判定は<code>INTEGRITY_ONLY</code>です。</p>
+      <pre><code>.\pgextwin.exe download-all --pg all</code></pre>
+      <div class="cli-teaser-actions"><a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.5/pgextwin.exe">CLI v0.3.5をダウンロード</a><a href="./cli.html">図解・安全性・リリースノートを見る →</a></div>
+    </section>
 
     <section class="landscape-section" aria-labelledby="landscape-heading">
       <div class="section-heading">
@@ -117,8 +126,8 @@
 
     <section class="info" aria-labelledby="lifecycle-heading">
       <p class="eyebrow">PostgreSQLのサポート期間</p>
-      <h2 id="lifecycle-heading">配布の有無とメンテナンス状況は別です</h2>
-      <p><strong>配布中</strong>は、そのPostgreSQLメジャーバージョン向けの検証済みバイナリが公開されていることを意味します。<strong>サポート期間内</strong>は、pgextwin/buildのライフサイクル情報に基づきPostgreSQLコミュニティのサポート期間内であることを示します。サポート終了日当日まではサポート期間内とし、翌UTC日から過去バージョン扱いになります。</p>
+      <h2 id="lifecycle-heading">ダウンロードできても、サポート期間内とは限りません</h2>
+      <p><strong>配布中</strong>は、そのPostgreSQLバージョン用のバイナリが公開されていることを示します。一方、<strong>サポート期間内</strong>はPostgreSQLコミュニティのサポート状況です。サポートが終了したバージョンのZIPも、過去の配布物として残る場合があります。</p>
 
 
       <div id="lifecycle-notice" class="lifecycle-notice" aria-live="polite"></div>
@@ -126,14 +135,14 @@
 
     <section class="info" aria-labelledby="integrity-heading">
       <p class="eyebrow">整合性と検証情報</p>
-      <h2 id="integrity-heading">チェックサムはリリース固有の整合性情報です</h2>
-      <p>各ZIPのSHA-256を、公開された<code>SHA256SUMS.txt</code>と照合できる形式で表示します。サプライチェーンの検証情報はリリースの付随情報であり、安全性・信頼性を保証する判定ではありません。脆弱性レポートは生成時点のGrypeスキャン結果です。</p>
+      <h2 id="integrity-heading">ダウンロードしたZIPのSHA-256を確認してください</h2>
+      <p>各ZIPには、公開済みの<code>SHA256SUMS.txt</code>と照合できるSHA-256を表示しています。署名・ビルド来歴などの情報がある場合も、それだけで安全性や互換性が保証されるわけではありません。脆弱性レポートは作成時点の検査結果です。</p>
     </section>
 
     <section class="info" aria-labelledby="about-heading">
       <p class="eyebrow">このプロジェクトについて</p>
-      <h2 id="about-heading">固定した上流ソースからビルド</h2>
-      <p>pgextwinは独立したコミュニティプロジェクトです。各パッケージには、上流プロジェクト、ソースのバージョン、対応PostgreSQLメジャーバージョン、アーキテクチャ、ライセンスを明記します。</p>
+      <h2 id="about-heading">pgextwinが公開するパッケージについて</h2>
+      <p>pgextwinはPostgreSQL拡張機能の非公式Windows x64パッケージを公開する独立したコミュニティプロジェクトです。各パッケージの上流プロジェクト、ソースのバージョン、対応PostgreSQLバージョン、ライセンスを確認できます。</p>
 
 
     </section>
@@ -145,8 +154,8 @@
       <a href="https://github.com/pgextwin/catalog">Catalog</a>
       <a href="https://github.com/pgextwin/build">ビルド基盤</a>
       <section class="release-limitations" role="note" aria-labelledby="release-limitations-title">
-        <h2 id="release-limitations-title">現在の運用上の制約</h2>
-        <p>ダウンロード一覧には検証済みの正式Releaseのみを掲載します。候補ビルドは正式Releaseではありません。正式公開にはGitHub Actions上で認証済みの担当者による明示的な操作が必要で、ReleaseからCatalogまでの完全無人運用はまだ検証できていません。独立した非公開Writerと実認証の隔離も未実証です。これらの運用上の制約は、各公開済みReleaseに表示される個別の検証証跡を否定するものではありません。進捗は<a href="https://github.com/pgextwin/build/issues/75">公開運用の追跡Issue</a>をご覧ください。</p>
+        <h2 id="release-limitations-title">ご利用前の注意</h2>
+        <p>ダウンロード一覧には、公開済みの検証済みReleaseのみを掲載します。開発途中の候補はダウンロード対象ではありません。pgextwinの配布物は非公式です。導入前に、対応PostgreSQLバージョン、ライセンス、拡張機能の設定方法を確認してください。公開・配布に関する詳しい状況は<a href="https://github.com/pgextwin/build/issues/75">公開運用の追跡Issue</a>で確認できます。</p>
       </section>
     </div>
   </footer>
