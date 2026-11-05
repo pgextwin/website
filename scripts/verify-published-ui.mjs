@@ -23,6 +23,15 @@ const expectedPlpgsqlMajors=Object.entries(plpgsqlExpected.postgresql)
   .filter(([,entry])=>entry.available===true).map(([major])=>Number(major)).sort((a,b)=>a-b);
 assert.ok(expectedPlpgsqlMajors.length>0,"No verified plpgsql_check binaries");
 
+const setUserRecordResponse=await fetch("https://raw.githubusercontent.com/pgextwin/catalog/main/extensions/set_user.json",
+  {signal:AbortSignal.timeout(40000)});
+assert.equal(setUserRecordResponse.status,200,"Signed set_user Catalog record unavailable");
+const setUserExpected=await setUserRecordResponse.json();
+assert.equal(setUserExpected.name,"set_user");
+assert.ok(/^v[0-9.]+-windows\.[1-9][0-9]*$/.test(setUserExpected.latest.releaseTag));
+assert.ok(Object.values(setUserExpected.postgresql).some(item=>item.available===true),
+  "No verified set_user binaries");
+
 assert.ok(catalogCount > 0, "Empty distribution Catalog");
 const landscapeResponse = await fetch("https://raw.githubusercontent.com/pgextwin/catalog/main/landscape/index.json", {signal: AbortSignal.timeout(40000)});
 assert.equal(landscapeResponse.status,200,"Public Landscape unavailable");
@@ -98,10 +107,13 @@ try {
     }
     throw new Error("Browser did not reach: "+what);
   }
-  async function assertPlpgsqlBilingualAssets(locale) {
+  async function assertBilingualAssets(locale, record) {
+    const expectedMajors=Object.entries(record.postgresql)
+      .filter(([,entry])=>entry.available===true)
+      .map(([major])=>Number(major)).sort((a,b)=>a-b);
     // Real, published DOM in Chrome: do not mistake correct JSON for correct visible UI.
     const displayed=await evaluate(`(() => {
-      const card=document.getElementById("extension-plpgsql_check");
+      const card=document.getElementById("extension-${record.name}");
       if (!card) return null;
       const rows=[...card.querySelectorAll(".binary-table tbody tr")].map(row=>({
         major:Number(row.querySelector("th")?.textContent.match(/[0-9]+/)?.[0]),
@@ -118,14 +130,14 @@ try {
       }));
       return {releaseTag:card.querySelector(".summary-release")?.textContent?.trim(),rows,perPg};
     })()`);
-    assert.ok(displayed,"Published plpgsql_check card missing ("+locale+")");
-    assert.equal(displayed.releaseTag,plpgsqlExpected.latest.releaseTag,"Stale release shown ("+locale+")");
-    assert.deepEqual(displayed.rows.map(r=>r.major).sort((a,b)=>a-b),expectedPlpgsqlMajors,
+    assert.ok(displayed,"Published signed extension card missing ("+locale+")");
+    assert.equal(displayed.releaseTag,record.latest.releaseTag,"Stale release shown ("+locale+")");
+    assert.deepEqual(displayed.rows.map(r=>r.major).sort((a,b)=>a-b),expectedMajors,
       "Missing PG binary download rows ("+locale+")");
-    assert.deepEqual(displayed.perPg.map(r=>r.major).sort((a,b)=>a-b),expectedPlpgsqlMajors,
+    assert.deepEqual(displayed.perPg.map(r=>r.major).sort((a,b)=>a-b),expectedMajors,
       "Missing per-PG checksum/evidence disclosures ("+locale+")");
-    for(const major of expectedPlpgsqlMajors) {
-      const item=plpgsqlExpected.postgresql[String(major)];
+    for(const major of expectedMajors) {
+      const item=record.postgresql[String(major)];
       const row=displayed.rows.find(r=>r.major===major);
       const pg=displayed.perPg.find(r=>r.major===major);
       const links=[item.evidence.sbom.downloadUrl,item.evidence.vulnerabilityReport.downloadUrl].sort();
@@ -142,7 +154,7 @@ try {
       assert.ok(pg.evidenceText[0].includes(yes),`Build attestation invisible PG${major} (${locale})`);
       assert.ok(pg.evidenceText[2].includes(yes),`SBOM attestation invisible PG${major} (${locale})`);
     }
-    return {locale,releaseTag:displayed.releaseTag,majors:expectedPlpgsqlMajors,
+    return {locale,extension:record.name,releaseTag:displayed.releaseTag,majors:expectedMajors,
       renderedDirectZipShaSbomGrypeAttestations:true};
   }
   await send("Page.enable");
@@ -165,7 +177,8 @@ try {
   })()`);
   assert.ok(catalogDisclosure.hasTable && catalogDisclosure.validZip && catalogDisclosure.exclusive,
     "Original ZIP table and single-open catalog disclosure");
-  const enReleaseEvidence=await assertPlpgsqlBilingualAssets("en");
+  const enReleaseEvidence=await assertBilingualAssets("en",plpgsqlExpected);
+  const enSetUserEvidence=await assertBilingualAssets("en",setUserExpected);
   const landscapeDisclosure = await evaluate(`(() => {
     const row=document.querySelector("#landscape-grid .landscape-collapse");
     row.querySelector("summary").click();
@@ -249,11 +262,12 @@ try {
   assert.ok((await evaluate('document.querySelector("#extensions article")?.textContent'))?.includes("ZIPをダウンロード"));
   assert.equal(await evaluate('document.querySelector("nav.language-nav [aria-current=page]")?.getAttribute("lang")'),"ja");
   assert.ok((await evaluate('document.querySelector("#landscape-grid")?.textContent'))?.includes("配布中"));
-  const jaReleaseEvidence=await assertPlpgsqlBilingualAssets("ja");
+  const jaReleaseEvidence=await assertBilingualAssets("ja",plpgsqlExpected);
+  const jaSetUserEvidence=await assertBilingualAssets("ja",setUserExpected);
   console.log(JSON.stringify({result:"PASS",site,realBrowser:"Chrome headless",japanesePage:true,catalogCards:catalogCount,
     landscapeCards:landscapeCount,statusFilterCounts:counts,search:true,sourceFilter:true,
     externalHttpsLinks:linkSafety.count,vendorAndCondaLabels:true,mobile,
-    signedReleaseVisuals:[enReleaseEvidence,jaReleaseEvidence]}));
+    signedReleaseVisuals:[enReleaseEvidence,jaReleaseEvidence,enSetUserEvidence,jaSetUserEvidence]}));
 } finally {
   try { ws?.close(); } catch {}
   chrome.kill("SIGTERM");
