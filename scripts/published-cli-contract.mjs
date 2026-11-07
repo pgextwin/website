@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 
-// Public CLI Release 423228906, EXE asset 674428079; source and public
-// Windows runtime verified by Run 40174175588.
-export const cliVersion = '0.3.5';
-export const cliExeSha = 'ee0a0b203d25e054c59999c711c0305f39fb8322a076d00df807cde2a859e327';
+// Public CLI Release 437323712, EXE asset 719567215; source and public
+// Windows runtime verified by Run 42337357425.
+export const cliVersion = '0.3.6';
+export const cliExeSha = '88fe6c95205e5b98790e98b5a083cced9564de5d42d422df5b2f80f2b86efe9d';
 
-export const cliSource = 'ed6c69ca259eee2fb2454d3a1c416cd2766dbb17';
-export const cliExeBytes = 12833222;
-export const cliAcceptanceRun = '40174175588';
+export const cliSource = 'c8d5de5b44535b9f21b4b8fd5ea86a4c33da1baa';
+export const cliExeBytes = 12883093;
+export const cliAcceptanceRun = '42337357425';
 
 export function verifyPublishedCli(page, home, locale) {
   assert.ok(['en', 'ja'].includes(locale), 'Unknown CLI page language');
@@ -15,7 +15,8 @@ export function verifyPublishedCli(page, home, locale) {
     page.includes('cli-v' + cliVersion) && page.includes(cliExeSha) && page.includes(cliSource) &&
     page.includes('GitHub Release v' + cliVersion) &&
     page.includes('cli-flow-steps') && page.includes('SIGSTORE VERIFIED') &&
-    page.includes('INTEGRITY_ONLY') && page.includes('download-all --pg all --fixed') &&
+    page.includes('INTEGRITY_ONLY') && page.includes('verify-external-all') &&
+    page.includes('DOWNLOAD_DENY') && page.includes('download-all --pg all --fixed') &&
     page.includes('download-all --pg all --verbose') && page.includes('download-verbose.log') &&
     page.includes('83.83%'), 'Published CLI v' + cliVersion + ' incomplete (' + locale + ')');
   assert.ok(page.includes('<article lang="' + locale + '" class="cli-note-block"') &&
