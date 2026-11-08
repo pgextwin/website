@@ -18,7 +18,12 @@ async function get(url) {
     headers.Authorization="Bearer "+process.env.GITHUB_TOKEN;
     headers.Accept="application/vnd.github+json";
   }
-  const response=await fetch(url,{headers,signal:AbortSignal.timeout(40000)});
+  let response;
+  try {
+    response=await fetch(url,{headers,signal:AbortSignal.timeout(40000)});
+  } catch (error) {
+    throw new Error("Public HTTP request failed: "+url,{cause:error});
+  }
   assert.equal(response.status,200,"Public HTTP check failed: "+url+" status="+response.status);
   return response;
 }
@@ -54,9 +59,19 @@ async function audit() {
   assert.equal(release.published_at,rec.latest.publishedAt);
   assert.equal(rec.latest.releaseUrl,release.html_url);
   const assets=new Map(release.assets.map(x=>[x.name,x]));
-  const checksums=await (await get(
-    "https://github.com/pgextwin/plpgsql_check/releases/download/"
-      +encodeURIComponent(rec.latest.releaseTag)+"/SHA256SUMS.txt")).text();
+  const checksumUrl="https://github.com/pgextwin/plpgsql_check/releases/download/"
+    +encodeURIComponent(rec.latest.releaseTag)+"/SHA256SUMS.txt";
+  const checksumBytes=Buffer.from(await (await get(checksumUrl)).arrayBuffer());
+  const checksumAsset=assets.get("SHA256SUMS.txt");
+  assert.ok(checksumAsset,"published SHA256SUMS asset missing");
+  assert.ok(checksumBytes.length>0,"published SHA256SUMS is empty");
+  assert.equal(checksumBytes.length,checksumAsset.size,"published SHA256SUMS size mismatch");
+  assert.match(checksumAsset.digest ?? "",/^sha256:[a-f0-9]{64}$/,"published SHA256SUMS digest missing");
+  const checksumHash=createHash("sha256").update(checksumBytes).digest("hex");
+  assert.equal("sha256:"+checksumHash,checksumAsset.digest,"published SHA256SUMS digest mismatch");
+  console.log(JSON.stringify({status:"PUBLIC_CHECKSUM_BYTES_VERIFIED",url:checksumUrl,
+    size:checksumBytes.length,sha256:checksumHash}));
+  const checksums=checksumBytes.toString("utf8");
   const listed=new Map(checksums.trim().split("\n").map(line=>{
     const match=/^([a-f0-9]{64})  (?:\.\/)?([A-Za-z0-9_.-]+)$/.exec(line.trim());
     assert.ok(match,"invalid SHA256SUMS entry");
