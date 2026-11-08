@@ -18,15 +18,15 @@ async function get(url) {
     headers.Authorization="Bearer "+process.env.GITHUB_TOKEN;
     headers.Accept="application/vnd.github+json";
   }
-  // Retry only transient network resets and gateway failures, always on the same
+  // Retry only transient resets, timeouts and gateway failures on the same
   // public URL. Permanent HTTP errors and bad bytes remain fail-closed.
   for (let attempt=1;attempt<=3;attempt++) {
     let response;
     try {
       response=await fetch(url,{headers,signal:AbortSignal.timeout(40000)});
     } catch (error) {
-      const code=error?.cause?.code ?? error?.code;
-      if (attempt===3 || !["UND_ERR_SOCKET","ECONNRESET","ETIMEDOUT"].includes(code)) {
+      const code=error?.cause?.code ?? (error?.name==="TimeoutError" ? error.name : error?.code);
+      if (attempt===3 || !["UND_ERR_SOCKET","ECONNRESET","ETIMEDOUT","TimeoutError"].includes(code)) {
         throw new Error("Public HTTP request failed: "+url,{cause:error});
       }
       console.warn(JSON.stringify({status:"PUBLIC_GET_RETRY",url,attempt,reason:code}));
