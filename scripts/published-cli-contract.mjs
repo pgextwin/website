@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 
-// Public CLI Release 438064153, EXE asset 723055892; source and public
-// Windows runtime verified by Run 42452743495.
-export const cliVersion = '0.3.7';
-export const cliExeSha = '0fa5c3d02da9fe5f89a09dcd405e607c0449739565698d2bdfb4950ce12503af';
+// Public CLI Release 438186482, EXE asset 723667038; source and public
+// Windows runtime verified by Run 42474871097.
+export const cliVersion = '0.3.8';
+export const cliExeSha = 'aecb0537622148b46b731b543ce511ee281877f4e6fbc31c77f8346689ce6077';
 
-export const cliSource = '513583c7473c189057b3c698a184b4806813d86a';
-export const cliExeBytes = 12892638;
-export const cliAcceptanceRun = '42452743495';
+export const cliSource = '3ce07983ef0a93069b2b0ba850b9dc970e3f373f';
+export const cliExeBytes = 12892708;
+export const cliAcceptanceRun = '42474871097';
 
 export function verifyPublishedCli(page, home, locale) {
   assert.ok(['en', 'ja'].includes(locale), 'Unknown CLI page language');
