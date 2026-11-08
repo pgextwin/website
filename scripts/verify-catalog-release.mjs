@@ -18,14 +18,31 @@ async function get(url) {
     headers.Authorization="Bearer "+process.env.GITHUB_TOKEN;
     headers.Accept="application/vnd.github+json";
   }
-  let response;
-  try {
-    response=await fetch(url,{headers,signal:AbortSignal.timeout(40000)});
-  } catch (error) {
-    throw new Error("Public HTTP request failed: "+url,{cause:error});
+  // Retry only transient network resets and gateway failures, always on the same
+  // public URL. Permanent HTTP errors and bad bytes remain fail-closed.
+  for (let attempt=1;attempt<=3;attempt++) {
+    let response;
+    try {
+      response=await fetch(url,{headers,signal:AbortSignal.timeout(40000)});
+    } catch (error) {
+      const code=error?.cause?.code ?? error?.code;
+      if (attempt===3 || !["UND_ERR_SOCKET","ECONNRESET","ETIMEDOUT"].includes(code)) {
+        throw new Error("Public HTTP request failed: "+url,{cause:error});
+      }
+      console.warn(JSON.stringify({status:"PUBLIC_GET_RETRY",url,attempt,reason:code}));
+      await new Promise(resolve=>setTimeout(resolve,attempt*500));
+      continue;
+    }
+    if ([502,503,504].includes(response.status) && attempt<3) {
+      console.warn(JSON.stringify({status:"PUBLIC_GET_RETRY",url,attempt,reason:response.status}));
+      await response.body?.cancel();
+      await new Promise(resolve=>setTimeout(resolve,attempt*500));
+      continue;
+    }
+    assert.equal(response.status,200,"Public HTTP check failed: "+url+" status="+response.status);
+    return response;
   }
-  assert.equal(response.status,200,"Public HTTP check failed: "+url+" status="+response.status);
-  return response;
+  throw new Error("Public HTTP retry limit reached: "+url);
 }
 async function json(url) {return (await get(url)).json();}
 async function sha(url) {
