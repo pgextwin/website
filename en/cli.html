@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Download current Catalog-registered PostgreSQL extension ZIPs for Windows x64. Signed Catalog selection, strict original ZIP SHA256, and an explicit frozen-snapshot mode. This read-only CLI does not install extensions.">
-  <title>pgextwin — Windows CLI v0.3.6</title>
+  <title>pgextwin — Windows CLI v0.3.7</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/cli.html">
@@ -14,7 +14,7 @@
   <a class="skip-link" href="#download-heading">Get the Windows executable</a>
   <header class="site-header"><div class="shell">
     <nav class="language-nav" aria-label="Language / 言語"><a href="../ja/cli.html" lang="ja">日本語</a><a href="./">Extension catalog</a></nav>
-    <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.3.6</h1>
+    <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.3.7</h1>
     <p class="lead">Download multiple extension ZIPs for your PostgreSQL version in one command.</p><p class="cli-hero-description">This Windows x64 CLI downloads published ZIPs, verifies the signed Catalog and each ZIP SHA-256, and offers a fixed historical snapshot. It does not install extensions.</p>
     <nav class="jump-nav" aria-label="CLI navigation"><a class="jump-nav-primary" href="#download-heading">Get the Windows executable</a><a href="#flow-heading">How it works</a><a href="#release-notes-heading">Release notes</a></nav>
   </div></header>
@@ -23,14 +23,14 @@
       <p class="eyebrow">Windows x64 · self-contained · prerelease</p>
       <h2 id="download-heading">Get the Windows executable</h2>
       <div class="cli-download-actions">
-        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.6/pgextwin.exe">Download pgextwin.exe (12.88 MB)</a>
-        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.6">GitHub Release v0.3.6</a>
-        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.6/SHA256SUMS.txt">SHA256SUMS.txt</a>
+        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.7/pgextwin.exe">Download pgextwin.exe (12.89 MB)</a>
+        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.7">GitHub Release v0.3.7</a>
+        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.7/SHA256SUMS.txt">SHA256SUMS.txt</a>
       </div>
-      <p class="cli-sha"><strong>Published EXE SHA256:</strong> <code>88fe6c95205e5b98790e98b5a083cced9564de5d42d422df5b2f80f2b86efe9d</code></p>
+      <p class="cli-sha"><strong>Published EXE SHA256:</strong> <code>0fa5c3d02da9fe5f89a09dcd405e607c0449739565698d2bdfb4950ce12503af</code></p>
       <p>After downloading, use this PowerShell command to check the SHA-256. The second command optionally verifies the CLI build provenance:</p>
       <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256
-gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest c8d5de5b44535b9f21b4b8fd5ea86a4c33da1baa</code></pre>
+gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest 513583c7473c189057b3c698a184b4806813d86a</code></pre>
     </section>
     <section aria-labelledby="commands-heading">
       <h2 id="commands-heading">Choose a download command</h2><p>By default, the CLI fetches the latest published releases registered in the Catalog. No GitHub API credentials are needed. ZIPs are saved in a new folder under your working directory; existing files are not overwritten.</p>
@@ -39,8 +39,9 @@ gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow p
         <div><strong>Latest Catalog · all registered PG18 ZIPs</strong><pre><code>.\pgextwin.exe download-all --pg 18</code></pre></div>
         <div><strong>Fixed historical snapshot · 70 ZIPs</strong><pre><code>.\pgextwin.exe download-all --pg all --fixed</code></pre></div>
         <div><strong>Verify separately obtained external original ZIPs offline (no provider GET)</strong><pre><code>.\pgextwin.exe verify-external-all --ledger .\evidence\issue112-external-pg18-direct-link-review-v1.json --input-dir C:\original-external --pg 18</code></pre></div>
+        <div><strong>Download the pg_trickle PG18 provider original (valid signed admission required)</strong><pre><code>.\pgextwin.exe download-all --source external --pg 18 --output C:\pgextwin-external --external-admission .\external\external-get-admission.json --external-bundle .\external\attestation.json</code></pre></div>
       </div>
-      <p class="cli-caution" role="note">For <code>verify-external-all</code>, separately obtain the original provider ZIPs under applicable terms and place the review ledger locally (<a href="https://github.com/pgextwin/catalog/blob/main/evidence/issue112-external-pg18-direct-link-review-v1.json">example PG18 ledger</a>). The ledger is an untrusted review reference, not distribution authorization. The command is local integrity verification only: external automatic download and mirror remain <code>DOWNLOAD_DENY</code> / <code>MIRROR_DENY</code>.</p>
+      <p class="cli-caution" role="note"><code>verify-external-all</code> checks separately obtained ZIPs offline; its <a href="https://github.com/pgextwin/catalog/blob/main/evidence/issue112-external-pg18-direct-link-review-v1.json">ledger</a> is not GET authorization. For provider-original GET, save the <a href="https://github.com/pgextwin/catalog/tree/main/external/signed-direct-get/pg_trickle">signed admission JSON and Sigstore proof from the same issuer Run</a> and specify an existing output folder. Expired, invalid or out-of-scope admissions are denied. Other external providers remain <code>DOWNLOAD_DENY</code>; mirror and redistribution remain <code>MIRROR_DENY</code>.</p>
     </section>
     <section aria-labelledby="verbose-heading">
       <p class="eyebrow">Latest Catalog support</p>
@@ -94,13 +95,13 @@ gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow p
       <p><code>UNVERIFIED</code> · <code>INTEGRITY_ONLY</code></p>
     </section>
     <section aria-labelledby="release-notes-heading">
-      <p class="eyebrow">v0.3.6</p><h2 id="release-notes-heading">Release notes</h2>
+      <p class="eyebrow">v0.3.7 · prerelease</p><h2 id="release-notes-heading">Release notes</h2>
       <div class="cli-release-notes"><article lang="en" class="cli-note-block" aria-labelledby="notes-en-title">
         <h3 id="notes-en-title">English</h3>
-        <p><strong>CLI v0.3.6 — offline external ZIP integrity checking and resilient native GET.</strong> The new <code>verify-external-all</code> checks separately obtained, unmodified provider ZIPs in one local all-or-nothing pass using exact SHA256, size and safe ZIP structure. The native downloader can recover from bounded GitHub CDN 502/503/504 with a pinned native GitHub REST asset-ID GET, without weakening hash, redirect, or no-overwrite rules. The public Windows CLI verified all 85 Catalog ZIPs for 17 extensions across PostgreSQL 14–18.</p>
-        <p>Published Windows x64 EXE: <strong>12,883,093 bytes</strong>. Verified original protected-main source <code>c8d5de5b44535b9f21b4b8fd5ea86a4c33da1baa</code> and public asset SHA256 <code>88fe6c95205e5b98790e98b5a083cced9564de5d42d422df5b2f80f2b86efe9d</code>. The authenticated latest and historical <code>--fixed</code> modes remain available.</p>
-        <p><strong>Trust boundary:</strong> CLI and Catalog feed provenance are Sigstore-verified; original extension and external-provider ZIPs remain <code>INTEGRITY_ONLY</code>. The local external review ledger does not authorize provider GET, redistribution, mirror, installation or a signed external Catalog. Automatic external source selection stays <code>DOWNLOAD_DENY</code>.</p>
-        <p><a href="https://github.com/pgextwin/catalog/actions/runs/42337357425">Public EXE and verbose latest-Catalog Windows acceptance</a> · <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.6">Full GitHub Release (English → Japanese)</a></p>
+        <p><strong>CLI v0.3.7 — direct provider-original GET for pg_trickle PG18.</strong> Only with an unexpired, owner-approved and independently Sigstore-verified admission, the CLI fetches the unchanged original ZIP directly to the user's machine and checks its size and SHA256. Expired or out-of-scope admissions remain <code>DOWNLOAD_DENY</code>. Offline <code>verify-external-all</code> is also available.</p>
+        <p>Published Windows x64 EXE: <strong>12,892,638 bytes</strong>. Verified protected-main source <code>513583c7473c189057b3c698a184b4806813d86a</code> and public asset SHA256 <code>0fa5c3d02da9fe5f89a09dcd405e607c0449739565698d2bdfb4950ce12503af</code>. The public Windows EXE verified all 85 native Catalog ZIPs for 17 extensions.</p>
+        <p><strong>Trust boundary:</strong> Individual external-provider ZIPs remain <code>INTEGRITY_ONLY</code>. No third-party ZIP mirroring, redistribution or installation. oracle_fdw and community pgvector remain on hold.</p>
+        <p><a href="https://github.com/pgextwin/catalog/actions/runs/42452743495">Public EXE Windows acceptance</a> · <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.7">Full GitHub Release (English → Japanese)</a></p>
       </article></div>
     </section>
   </main>
