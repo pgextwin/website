@@ -420,71 +420,195 @@ function renderExtension(record, lifecycleByMajor, effectiveDate, selectedMajor)
   identity.children[1].append(text(record.description));
   const badges = element("span", "extension-summary-badges");
   const release = element("span", "summary-release");
-  release.append(text(recor…17789 tokens truncated… below.":"カタログを取得できなかったか、データ形式が対応するschema v2ではありません。GitHubのCatalogを確認してください。","Catalog unavailable.":"カタログを利用できません。","PostgreSQL lifecycle data is unavailable. Published binary availability is still shown from the catalog, but current maintenance status cannot be determined.":"PostgreSQLのサポート情報を取得できません。公開済みバイナリは引き続き表示しますが、現在の保守状況は判定できません。","Last reviewed":"最終確認日","Formal roadmap":"正式な開発計画","Historical roadmap":"過去の選定履歴","Decision date":"選定日","Stable version":"安定版","Windows build effort":"Windowsでのビルド難易度","PG19 readiness":"PG19の準備状況","Upstream Windows":"上流のWindows対応","Existing source":"既存の入手先","Why consider it":"候補とする理由","Selection rationale":"選定理由","Why not planned":"実装予定がない理由","External Windows binary sources":"外部Windowsバイナリの取得先","Research evidence":"調査の根拠","No generally available Windows binary identified":"一般公開されているWindowsバイナリは未確認です","Formal decision pending":"正式な選定は未決定です。","Acquisition URL unavailable":"取得先URLは利用できません","Loading independent Landscape registry…":"独立した拡張機能一覧を読み込んでいます…","Landscape registry unavailable. Existing pgextwin catalog and downloads remain independent.":"拡張機能の対応状況を取得できません。pgextwinの配布Catalogとダウンロードには影響しません。","Not planned in pgextwin":"pgextwinでの実装予定なし","Official upstream":"上流公式","Community":"コミュニティ","Vendor":"ベンダー","Public":"一般公開","Vendor product users":"ベンダー製品の利用者向け","Support customers only":"サポート契約者限定","Commercial bundle":"商用製品に同梱","Standard PostgreSQL":"通常版PostgreSQL","Vendor PostgreSQL":"ベンダー版PostgreSQL","Conda PostgreSQL environment":"CondaのPostgreSQL環境","Target unknown":"対象不明","Ordinary PostgreSQL":"通常版PostgreSQL向け","Vendor-specific":"ベンダー専用","Manual compatibility verification required":"導入前に互換性の確認が必要","Compatibility unknown":"互換性不明","Decision pending":"選定待ち","Reserve candidate":"次点候補","Further research":"継続調査","supported":"対応","not-supported":"非対応","unknown":"不明","documented":"文書あり","under-review":"調査中","low":"低","medium":"中","high":"高","very-high":"非常に高","none-identified":"確認できず","limited":"限定的","public":"公開","unranked":"順位なし","build-instructions":"ビルド手順あり","native-binary":"ネイティブバイナリあり","source":"取得元"};
-  const reasons = {"Useful advisor functionality; isolated issue-attached community DLLs are not an established official Windows release channel.":"仮想インデックスによる性能評価は有益ですが、Issueに個別添付されたコミュニティ製DLLは公式の継続的なWindows配布経路ではありません。","Oracle migration utility warrants further review; EDB Advanced Server's built-in Oracle compatibility is not equivalent to a downloadable orafce DLL for community PostgreSQL.":"Oracleからの移行支援機能として検討価値があります。ただしEDB Advanced Server標準のOracle互換機能は、コミュニティ版PostgreSQL用orafce DLLの配布と同一ではありません。","High demand for partition operations; C background worker and maintenance lifecycle require extra validation.":"パーティション管理への需要は高い一方、C言語製バックグラウンドワーカーと保守ライフサイクルには追加検証が必要です。","Percona publishes PostgreSQL 14–18 Linux packages; public binaries for ordinary Windows PostgreSQL not confirmed.":"PerconaはPostgreSQL 14〜18用のLinuxパッケージを公開していますが、通常のWindows版PostgreSQL向けバイナリは確認できていません。","High-value CDC gap: upstream Visual Studio build exists but the official 2.6 Release has no binary assets; PG18 compile and logical-decoding runtime remain a mandatory pilot gate.":"CDC用途で需要があります。上流にはVisual Studioビルド手順がありますが、公式2.6リリースにバイナリは含まれません。PG18でのビルドと論理デコードの動作検証が必須です。","Upstream officially publishes Windows ZIP assets for PG14–18; no need to duplicate native Oracle SDK dependency handling.":"上流公式がPG14〜18用のWindows ZIPを公開しているため、Oracle SDK依存のビルドをpgextwinで重複実装する必要はありません。","PostGIS Windows bundles now ship pgSphere binaries; niche demand does not justify a duplicate standalone pipeline.":"PostGISのWindowsバンドルにpgSphereが含まれており、専用パイプラインを追加する優先度は高くありません。","Published PostGIS Windows bundles include pgRouting; building overlapping native GIS toolchains adds little value.":"公開されているPostGISのWindowsバンドルにpgRoutingが含まれるため、GISビルド基盤の重複整備は不要です。","Upstream supplies an nmake build path and conda-forge publishes win-64 packages; standard EDB installations are not necessarily ABI-compatible with conda packages.":"上流にnmakeでのビルド手順があり、conda-forgeでもWindows向けパッケージが公開されています。ただし通常のEDB版PostgreSQLとCondaのパッケージはABI互換とは限りません。","Official Windows installers cover PG14–18 including dependencies; duplicating GIS dependency packaging is unnecessary now.":"依存関係を含む公式WindowsインストーラーがPG14〜18に対応しているため、GIS関連の再パッケージ化は現時点では不要です。","Upstream publishes matching Windows ZIPs and installation documentation; complex native build and upgrade surface better handled upstream.":"上流公式がWindows向けZIPとインストール手順を公開しているため、複雑なネイティブビルドとアップグレード対応は上流に委ねます。","Planner advisor with explicit PG18/PG19 upstream fixes and reliable EXPLAIN tests; historical upstream Windows releases cover only PG14–16 and newer issue attachments are not maintained official assets. Pilot planner hooks and imported internal symbols.":"PG18/PG19向けの上流修正と再現性のあるEXPLAINテストがあります。一方、上流公式の過去のWindows配布はPG14〜16のみで、Issue添付DLLは継続保守された公式成果物ではありません。プランナーフックと内部シンボルの取扱いを技術検証します。","Upstream offers MSVC/Meson builds and PG18 path, but ICU/toolchain alignment, very broad SQL/export surface and historical alternative Windows channels warrant further scoping.":"上流にはMSVC/MesonビルドとPG18対応経路がありますが、ICU・ツールチェーンの整合性、広範なSQL関数・エクスポート、既存のWindows配布経路を詳しく調査する必要があります。","High production value and PG18 support, but SQL-only versus optional background worker packaging, secure maintenance-role setup and broad lifecycle coverage need a dedicated Windows design gate.":"実運用での価値とPG18対応は明確ですが、SQL機能と任意のバックグラウンドワーカーの構成、保守ロールの安全な設定、ライフサイクル全体の検証についてWindows固有の設計審査が必要です。","Percona actively maintains PG18 observability; mandatory preload, hooks, shared memory and OS assumptions make reliable Windows delivery more complex than selected pilots.":"PerconaはPG18向け監視機能を積極的に保守していますが、必須の事前読み込み、フック、共有メモリ、OS依存のため、安定したWindows配布の難易度が高くなります。","Useful CDC JSON plugin and substantial standard-Windows availability gap, with upstream Visual Studio project and slot-based test. PG18 compile/runtime, output callback ABI and deterministic logical decoding must pass an explicit pilot gate.":"CDC向けJSONプラグインで、通常版Windows向けの配布が不足しています。上流のVisual Studioプロジェクトとレプリケーションスロットを用いたテストを活用し、PG18でのビルド・実行、出力コールバックのABI、決定的な論理デコードを検証します。","First pilot: documented native MSVC/Meson path, PostgreSQL 14–19 upstream support, deterministic linting scenario and high developer value. Validate PL/pgSQL internal symbol linkage, ABI and DLL exports before any release.":"第1パイロットとして、文書化されたMSVC/Mesonビルド、上流のPG14〜19対応、再現性のある静的解析テスト、開発者への価値を評価しました。リリース前にPL/pgSQL内部シンボルのリンク、ABI、DLLエクスポートを検証します。"};
-  const sourceNotes = {"BGW is optional and requires explicit shared_preload_libraries configuration.":"BGWは任意機能です。使用する場合のみshared_preload_librariesを明示的に設定してください。","Independently verified signed Windows x64 PG14-18 release. BGW is optional and requires explicit shared_preload_libraries configuration.":"PostgreSQL 14〜18対応の署名付きWindows x64版を独立検証済み。BGW DLLを同梱し、利用時にはshared_preload_librariesの明示的な設定が必要です。","Independently verified signed Windows x64 PG14-18 release. See Test Contract for feature and preload requirements.":"署名付きのWindows x64版をPostgreSQL 14〜18で独立検証済み。機能範囲と事前ロードの要件はテスト契約を参照してください。","Official 1.4.1 Windows x64 release assets cover PG14–16; there are no official 1.4.3/PG17–18 assets. Not a current alternative for the later majors.":"公式1.4.1のWindows x64成果物はPG14〜16向けです。1.4.3およびPG17〜18向けの公式成果物はなく、新しいPGバージョンの代替入手先にはなりません。","Individually attached PG17/18 DLLs; not an official, maintained release channel. Validate provenance, matching PG build, and runtime safety independently.":"PG17/18用のDLLが個別に添付されていますが、公式の継続保守された配布経路ではありません。出自、ビルドの一致、実行時の安全性を個別に検証してください。","Official release 2.9.0 provides pg14–18 win64 ZIPs; Oracle Instant Client runtime required. Match PostgreSQL build and Oracle client.":"公式2.9.0リリースにはPG14〜18向けwin64 ZIPがあります。Oracle Instant Clientが必要なため、PostgreSQLのビルドとOracleクライアントの整合性をご確認ください。","Windows binaries provided to support-contract customers, not public downloads. Request the exact PostgreSQL major/version from SRA OSS.":"Windowsバイナリはサポート契約者向けに提供され、一般公開されていません。対応するPostgreSQLのメジャーバージョンと詳細はSRA OSSにお問い合わせください。","pgSphere artifacts are under the bundle's extras directories; verify the actual target major and compatible DLLs.":"pgSphereの成果物はバンドルのextrasディレクトリ内にあります。対応するPGメジャーバージョンとDLLの互換性を確認してください。","PostGIS 3.6.2 bundle lists pgRouting 4.0.1; verify exact PG major and included subpackage.":"PostGIS 3.6.2のバンドルにはpgRouting 4.0.1が含まれます。対応するPGメジャーバージョンと同梱パッケージをご確認ください。","win-64 package published; use the matching conda PostgreSQL environment. Not a drop-in EDB/PostgreSQL installer.":"win-64パッケージが公開されています。対応するCondaのPostgreSQL環境で使用してください。通常のEDB/PostgreSQLインストールにそのまま追加できるものではありません。","PostGIS 3.6.2 PG18 x64 installer; choose a matching PostgreSQL major at the official downloads page.":"PostGIS 3.6.2のPG18 x64向けインストーラーです。公式ダウンロードページでPostgreSQLのバージョンに合うものを選択してください。","Release 2.30.2 includes Windows amd64 archives for PostgreSQL 16–18. Check runtime libraries and upstream version matrix.":"2.30.2リリースにはPostgreSQL 16〜18向けのWindows amd64アーカイブがあります。実行時ライブラリと上流の対応バージョン表をご確認ください。"};
-  function selectLanguage(preferred) {
-    return /^ja(?:[-_]|$)/i.test(String(preferred || "")) ? "ja" : "en";
+  release.append(text(record.latest.releaseTag));
+  badges.append(release);
+  for (const [major, info] of Object.entries(record.postgresql).sort((a, b) => Number(b[0])-Number(a[0]))) {
+    if (!info.available || (selectedMajor && Number(major) !== Number(selectedMajor))) continue;
+    const badge = element("span", "summary-pg");
+    badge.append(text("PG " + major));
+    badges.append(badge);
   }
-  function bilingual(value, japanese) {
-    return value.split(" — ").map(part => {
-      const at = part.lastIndexOf(" / ");
-      if (at < 0) return part;
-      const last = part.slice(at + 3);
-      if (!/[\u3040-\u30ff\u3400-\u9fff]/.test(last)) return part;
-      return japanese ? last : part.slice(0, at);
-    }).join(" — ");
-  }
-  function createLocale(language) {
-    const japanese = language === "ja";
-    function t(value) {
-      const original = String(value);
-      if (japanese) {
-        const direct = descriptions[original] || scenarios[original] || labels[original] || reasons[original] || sourceNotes[original];
-        if (direct) return direct;
-      }
-      if (/[\u3040-\u30ff\u3400-\u9fff]/.test(original) && original.includes(" / ")) return bilingual(original,japanese);
-      if (!japanese) return original;
-      let match;
-      if ((match = /^PostgreSQL (\d+(?:[–-]\d+)?) only$/.exec(original))) return "PostgreSQL " + match[1] + "のみ";
-      if ((match = /^Upstream version for PostgreSQL (\d+): (.+)$/.exec(original))) return "PostgreSQL " + match[1] + "の上流バージョン：" + match[2];
-      if ((match = /^Available binary · Supported through (\d{4}-\d{2}-\d{2})$/.exec(original))) return "配布中のバイナリ · サポート終了日：" + match[1];
-      if ((match = /^Historical binary · PostgreSQL (\d+) reached EOL on (.+)$/.exec(original))) return "過去バージョンのバイナリ · PostgreSQL " + match[1] + "のサポート終了日：" + match[2];
-      if ((match = /^Build provenance attestation: (Available|Not published for this release)$/.exec(original))) return "ビルド来歴の証明：" + t(match[1]);
-      if ((match = /^SBOM attestation: (Available|Not published for this release)$/.exec(original))) return "SBOMの証明：" + t(match[1]);
-      if ((match = /^Client executable: required(.*)$/.exec(original))) return "クライアント実行ファイル：必要" + match[1];
-      if ((match = /^Copy ZIP SHA-256 for (.+), PostgreSQL (\d+)$/.exec(original))) return match[1] + " のPostgreSQL " + match[2] + "用ZIPのSHA-256をコピー";
-      if ((match = /^(\d+) of (\d+) extensions shown\.$/.exec(original))) return match[2] + "件中" + match[1] + "件の拡張機能を表示しています。";
-      if ((match = /^(\d+) of (\d+) Landscape entries shown\.$/.exec(original))) return "対応状況" + match[2] + "件中" + match[1] + "件を表示しています。";
-      if ((match = /^(\d+) extension records loaded\.(.*)$/.exec(original))) return match[1] + "件の拡張機能を読み込みました。" + translateSuffix(match[2]);
-      if ((match = /^(\d+) Landscape entries loaded\.(.*)$/.exec(original))) return "拡張機能の対応状況を" + match[1] + "件読み込みました。" + translateSuffix(match[2]);
-      if ((match = /^ (\d+) catalog records? could not be loaded or validated; other records remain available\.(.*)$/.exec(original))) return " " + match[1] + "件のデータを検証できませんでしたが、他のデータは表示しています。" + translateSuffix(match[2]);
-      if ((match = /^ (\d+) entry\/entries failed; valid entries remain visible\.(.*)$/.exec(original))) return " " + match[1] + "件を取得できませんでしたが、有効なデータは表示しています。" + translateSuffix(match[2]);
-      if ((match = /^Wave 2 #(\d+)(.*)$/.exec(original))) return "第2弾 #" + match[1] + t(match[2]);
-      if (original === " — selection history (now distributed)") return " — 選定履歴（現在配布中）";
-      if ((match = /^ Lifecycle status uses the (\d{4}-\d{2}-\d{2}) UTC calendar date\.$/.exec(original))) return " サポート状況はUTCの" + match[1] + "時点で判定しています。";
-      if (original === " Lifecycle data unavailable; binary availability and downloads are still shown.") return " サポート情報は取得できませんが、バイナリとダウンロード先は表示しています。";
-      if (original === " External source details are point-in-time research, not pgextwin guarantees.") return " 外部配布元の情報は調査時点のもので、pgextwinによる保証ではありません。";
-      if (original === "No Landscape entries match the selected filters.") return "条件に一致する拡張機能はありません。";
-      if (original === "No valid Landscape entries loaded.") return "有効な対応状況データを取得できません。";
-      if (original === "Find pgextwin downloads") return "pgextwinのダウンロードを探す";
-      if (original === "Formal decision pending") return "正式選定待ち";
-      if ((match = /^Source (\d+)$/.exec(original))) return "根拠資料 " + match[1];
-      if ((match = /^(\d{4}-\d{2}-\d{2}) \(recheck before use\)$/.exec(original))) return match[1] + "（利用前に再確認）";
-      if (original === "0 extensions shown.") return "拡張機能は0件です。";
-      if (original === "PostgreSQL 14") return original;
-      return original;
+  const affordance = element("span", "summary-affordance");
+  affordance.append(text("View downloads"));
+  summary.append(identity, badges, affordance);
+  details.append(summary, content);
+  details.addEventListener("toggle", () => {
+    const url = new URL(window.location.href);
+    if (details.open) {
+      for (const other of gridElement.querySelectorAll(".extension-collapse"))
+        if (other !== details && other.open) other.open = false;
+      url.searchParams.set("extension", record.name);
+      window.history.replaceState(null, "", url);
+    } else if (url.searchParams.get("extension") === record.name) {
+      url.searchParams.delete("extension");
+      window.history.replaceState(null, "", url);
     }
-    function translateSuffix(s) {
-      return s.replace(/ \d+ catalog records? could not be loaded or validated; other records remain available\./g, m=>t(m))
-        .replace(/ \d+ entry\/entries failed; valid entries remain visible\./g, m=>t(m))
-        .replace(/ Lifecycle status uses the \d{4}-\d{2}-\d{2} UTC calendar date\./g,m=>t(m))
-        .replace(" Lifecycle data unavailable; binary availability and downloads are still shown.",t(" Lifecycle data unavailable; binary availability and downloads are still shown."))
-        .replace(" External source details are point-in-time research, not pgextwin guarantees.",t(" External source details are point-in-time research, not pgextwin guarantees."));
-    }
-    return Object.freeze({language:japanese?"ja":"en",t});
+  });
+  card.append(details);
+  return card;
+}
+
+function renderLifecycleNotice(lifecycleByMajor, effectiveDate) {
+  lifecycleNoticeElement.replaceChildren();
+  const { entry, status } = lifecycleView(lifecycleByMajor, 14, effectiveDate);
+  const english = element("p");
+  const japanese = element("p");
+  japanese.lang = "ja";
+
+  if (status === "maintained") {
+    const nextDate = lifecycle.nextCalendarDate(entry.eol);
+    english.append(text(
+      `PostgreSQL 14 is supported through ${formatEnglishCalendarDate(entry.eol)}. ` +
+      `Existing binaries will remain available after EOL, but new normal builds will exclude PG14 beginning ${formatEnglishCalendarDate(nextDate)}.`
+    ));
+    japanese.append(text(
+      `PostgreSQL 14は${formatJapaneseCalendarDate(entry.eol)}まで保守対象です。` +
+      `サポート終了後も既存バイナリは保持しますが、${formatJapaneseCalendarDate(nextDate)}以降の通常の新規ビルドではPG14を対象外とします。`
+    ));
+  } else if (status === "historical") {
+    const nextDate = lifecycle.nextCalendarDate(entry.eol);
+    english.append(text(
+      `PostgreSQL 14 reached EOL on ${formatEnglishCalendarDate(entry.eol)}. ` +
+      `Existing binaries remain available as historical downloads; normal new builds have excluded PG14 since ${formatEnglishCalendarDate(nextDate)}.`
+    ));
+    japanese.append(text(
+      `PostgreSQL 14は${formatJapaneseCalendarDate(entry.eol)}にサポートが終了しました（EOL）。` +
+      `既存バイナリは過去版のダウンロード用に保持しています。${formatJapaneseCalendarDate(nextDate)}以降、通常の新規ビルドではPG14を対象外としています。`
+    ));
+  } else {
+    english.append(text(
+      "PostgreSQL lifecycle data is unavailable. Published binary availability is still shown from the catalog, but current maintenance status cannot be determined."
+    ));
+    japanese.append(text(
+      "PostgreSQLのライフサイクル情報を取得できません。Catalogに登録された公開済みバイナリは引き続き表示しますが、現在の保守状況は判定できません。"
+    ));
   }
-  const api = {selectLanguage,createLocale};
-  if (typeof module === "object" && module.exports) module.exports = api;
-  root.pgextwinI18n = createLocale(root.document && root.document.documentElement && root.document.documentElement.lang);
-})(typeof globalThis !== "undefined" ? globalThis : this);
+  lifecycleNoticeElement.append(document.documentElement.lang === "ja" ? japanese : english);
+}
+
+function populateMajorFilter(records) {
+  const previous = pgFilter.value;
+  pgFilter.replaceChildren();
+  const all = element("option");
+  all.value = "";
+  all.append(text("All PostgreSQL versions"));
+  pgFilter.append(all);
+  for (const major of catalogView.deriveAvailableMajors(records)) {
+    const option = element("option");
+    option.value = String(major);
+    option.append(text(`PostgreSQL ${major}`));
+    pgFilter.append(option);
+  }
+  if ([...pgFilter.options].some((option) => option.value === previous)) pgFilter.value = previous;
+}
+
+function renderFilteredCatalog() {
+  const selectedMajor = pgFilter.value || null;
+  const query = searchInput.value.trim().toLocaleLowerCase();
+  const records = catalogView.filterRecords(state.records, { query: searchInput.value, major: selectedMajor });
+  if (document.documentElement.lang === "ja" && query) {
+    for (const record of state.records) {
+      if (!records.includes(record) && t(record.description).toLocaleLowerCase().includes(query) &&
+          catalogView.isAvailableForMajor(record,selectedMajor)) records.push(record);
+    }
+  }
+  gridElement.replaceChildren(
+    ...records.map((record) => renderExtension(record, state.lifecycleByMajor, state.effectiveDate, selectedMajor))
+  );
+  const requested = new URL(window.location.href).searchParams.get("extension");
+  if (requested) {
+    const found = [...gridElement.querySelectorAll(".extension-collapse")]
+      .find((item) => item.id === "extension-" + requested);
+    if (found) found.open = true;
+  }
+  resultsCountElement.textContent = t(`${records.length} of ${state.records.length} extensions shown.`);
+  emptyStateElement.hidden = records.length !== 0;
+  if (records.length === 0) {
+    emptyStateElement.textContent = t(state.records.length === 0
+      ? "No valid extension records are currently available."
+      : "No extensions match the current search and PostgreSQL filters.");
+  }
+}
+
+async function loadCatalogRecords() {
+  const indexResponse = await fetch(`${CATALOG_BASE}/index.json`, { cache: "no-store" });
+  if (!indexResponse.ok) throw new Error(`Catalog index: HTTP ${indexResponse.status}`);
+  const index = await indexResponse.json();
+  const indexValidation = catalogView.validateCatalogIndex(index);
+  if (!indexValidation.valid) throw new Error(indexValidation.reason);
+
+  const settled = await Promise.allSettled(index.extensions.map(async (name) => {
+    const response = await fetch(`${CATALOG_BASE}/extensions/${encodeURIComponent(name)}.json`, { cache: "no-store" });
+    if (!response.ok) throw new Error(`${name}: HTTP ${response.status}`);
+    return response.json();
+  }));
+  return catalogView.partitionCatalogRecordResults(settled, index.extensions);
+}
+
+async function loadLifecycleMetadata() {
+  const response = await fetch(POSTGRESQL_LIFECYCLE_URL, { cache: "no-store" });
+  if (!response.ok) throw new Error(`PostgreSQL lifecycle metadata: HTTP ${response.status}`);
+  const metadata = await response.json();
+  if (!metadata || metadata.schemaVersion !== 1 || !Array.isArray(metadata.postgresql)) {
+    throw new Error("PostgreSQL lifecycle metadata has an unsupported shape");
+  }
+  return metadata;
+}
+
+async function loadCatalog() {
+  reloadButton.disabled = true;
+  statusElement.textContent = t("Loading catalog…");
+  resultsCountElement.textContent = t("");
+  emptyStateElement.hidden = true;
+  gridElement.replaceChildren();
+
+  try {
+    const [catalogResult, lifecycleResult] = await Promise.all([
+      loadCatalogRecords(),
+      loadLifecycleMetadata().then(
+        (metadata) => ({ ok: true, metadata }),
+        (error) => ({ ok: false, error })
+      )
+    ]);
+
+    state.records = catalogResult.records.sort((a, b) => a.displayName.localeCompare(b.displayName));
+    state.recordFailureCount = catalogResult.failures.length;
+    state.effectiveDate = lifecycle.getUtcCalendarDate(new Date());
+    state.lifecycleAvailable = lifecycleResult.ok;
+    state.lifecycleByMajor = lifecycleResult.ok
+      ? lifecycle.indexPostgresqlLifecycleMetadata(lifecycleResult.metadata)
+      : new Map();
+
+    if (!lifecycleResult.ok) console.warn(lifecycleResult.error);
+    for (const failure of catalogResult.failures) console.warn("Catalog record unavailable:", failure.reason);
+
+    populateMajorFilter(state.records);
+    renderFilteredCatalog();
+    renderLifecycleNotice(state.lifecycleByMajor, state.effectiveDate);
+
+    const partial = state.recordFailureCount
+      ? ` ${state.recordFailureCount} catalog record${state.recordFailureCount === 1 ? "" : "s"} could not be loaded or validated; other records remain available.`
+      : "";
+    const lifecycleSuffix = state.lifecycleAvailable
+      ? ` Lifecycle status uses the ${state.effectiveDate} UTC calendar date.`
+      : " Lifecycle data unavailable; binary availability and downloads are still shown.";
+    statusElement.textContent = t(`${state.records.length} extension records loaded.${partial}${lifecycleSuffix}`);
+  } catch (error) {
+    console.error(error);
+    state.records = [];
+    state.recordFailureCount = 0;
+    statusElement.textContent = t("The catalog index could not be loaded or does not use supported schema v2. Please use the GitHub catalog link below.");
+    resultsCountElement.textContent = t("0 extensions shown.");
+    gridElement.replaceChildren();
+    emptyStateElement.hidden = false;
+    emptyStateElement.textContent = t("Catalog unavailable.");
+    lifecycleNoticeElement.textContent = "";
+  } finally {
+    reloadButton.disabled = false;
+  }
+}
+
+searchInput.addEventListener("input", renderFilteredCatalog);
+pgFilter.addEventListener("change", renderFilteredCatalog);
+reloadButton.addEventListener("click", loadCatalog);
+loadCatalog();
