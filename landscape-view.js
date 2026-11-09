@@ -50,7 +50,7 @@
   function roadmapLabel(record) {
     const r=record && record.roadmap;
     if (!r) return "Decision pending / 正式選定待ち";
-    if (r.decision === "wave-2") return "Wave 2 #" + r.order + " / 第2弾 #" + r.order + (record.status === "implemented" ? " — selection history (now distributed) / 選定履歴（現在配布中）" : "");
+    if (r.decision === "wave-2") return "Wave 2 #" + r.order + " / 第2弾 #" + r.order + (record.status === "implemented" ? " — selection history (now distributed) / 選定履歴（現在は配布中）" : "");
     if (r.decision === "reserve") return "Reserve candidate / 次点候補";
     if (r.decision === "research") return "Further research / 継続調査";
     return "Decision pending / 正式選定待ち";

@@ -462,8 +462,8 @@ function renderLifecycleNotice(lifecycleByMajor, effectiveDate) {
       `Existing binaries will remain available after EOL, but new normal builds will exclude PG14 beginning ${formatEnglishCalendarDate(nextDate)}.`
     ));
     japanese.append(text(
-      `PostgreSQL 14は${formatJapaneseCalendarDate(entry.eol)}までメンテナンス対象です。` +
-      `EOL後も既存バイナリは保持しますが、${formatJapaneseCalendarDate(nextDate)}以降の通常の新規ビルド対象からは除外します。`
+      `PostgreSQL 14は${formatJapaneseCalendarDate(entry.eol)}まで保守対象です。` +
+      `サポート終了後も既存バイナリは保持しますが、${formatJapaneseCalendarDate(nextDate)}以降の通常の新規ビルドではPG14を対象外とします。`
     ));
   } else if (status === "historical") {
     const nextDate = lifecycle.nextCalendarDate(entry.eol);
@@ -472,15 +472,15 @@ function renderLifecycleNotice(lifecycleByMajor, effectiveDate) {
       `Existing binaries remain available as historical downloads; normal new builds have excluded PG14 since ${formatEnglishCalendarDate(nextDate)}.`
     ));
     japanese.append(text(
-      `PostgreSQL 14は${formatJapaneseCalendarDate(entry.eol)}にEOLを迎えました。` +
-      `既存バイナリは過去バージョンのダウンロードとして保持し、通常の新規ビルドでは${formatJapaneseCalendarDate(nextDate)}以降PG14を対象外としています。`
+      `PostgreSQL 14は${formatJapaneseCalendarDate(entry.eol)}にサポートが終了しました（EOL）。` +
+      `既存バイナリは過去版のダウンロード用に保持しています。${formatJapaneseCalendarDate(nextDate)}以降、通常の新規ビルドではPG14を対象外としています。`
     ));
   } else {
     english.append(text(
       "PostgreSQL lifecycle data is unavailable. Published binary availability is still shown from the catalog, but current maintenance status cannot be determined."
     ));
     japanese.append(text(
-      "PostgreSQLのライフサイクル情報を取得できません。カタログに基づく公開済みバイナリの表示は継続しますが、現在の保守状況は判定できません。"
+      "PostgreSQLのライフサイクル情報を取得できません。Catalogに登録された公開済みバイナリは引き続き表示しますが、現在の保守状況は判定できません。"
     ));
   }
   lifecycleNoticeElement.append(document.documentElement.lang === "ja" ? japanese : english);

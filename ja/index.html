@@ -18,7 +18,7 @@
       <nav class="language-nav" aria-label="表示言語"><a href="../ja/" lang="ja" aria-current="page">日本語</a><a href="../en/" lang="en">English</a></nav>
       <p class="eyebrow">pgextwin</p>
       <h1>PostgreSQL拡張機能のWindowsバイナリ</h1>
-      <p class="lead">使用しているPostgreSQLのバージョンに合う、Windows x64向け拡張機能の非公式バイナリを探せます。公開済みZIPのダウンロード、導入要件、SHA-256の確認まで、このページで案内します。</p>
+      <p class="lead">使用しているPostgreSQLのバージョンに対応する、Windows x64向け拡張機能の非公式バイナリを探せます。公開済みZIPのダウンロード先、導入要件、SHA-256の確認方法を案内します。</p>
       <nav class="jump-nav" aria-label="ページ内ナビゲーション">
         <a class="jump-nav-primary" href="#extensions-heading">バイナリを探す</a>
         <a href="./cli.html">CLI v0.3.8</a>
@@ -35,9 +35,9 @@
       <p class="eyebrow">はじめて利用する方へ</p>
       <h2 id="quickstart-heading">ダウンロードまでの3ステップ</h2>
       <ol class="quickstart-steps">
-        <li><strong>拡張機能を探す。</strong>名前で検索し、使用中のPostgreSQLメジャーバージョンで絞り込みます。</li>
-        <li><strong>対応状況を確認する。</strong>拡張機能を開き、導入要件と対象バージョンを確認してZIPをダウンロードします。</li>
-        <li><strong>ファイルを照合して導入する。</strong>ZIPのSHA-256を確認し、各拡張機能の導入手順に従ってください。ZIPの取得だけではインストールされません。</li>
+        <li><strong>拡張機能を探す。</strong>名前で検索し、使用しているPostgreSQLのメジャーバージョンで絞り込みます。</li>
+        <li><strong>対応状況を確認する。</strong>拡張機能の詳細を開き、導入要件と対象バージョンを確認してZIPをダウンロードします。</li>
+        <li><strong>ファイルを照合して導入する。</strong>ZIPのSHA-256を照合し、各拡張機能の導入手順に従ってください。ZIPを取得するだけではインストールされません。</li>
       </ol>
     </section>
 
@@ -50,7 +50,7 @@
         <button id="reload" type="button">カタログを再読み込み</button>
       </div>
 
-      <div class="catalog-hint" role="note"><strong>pgextwinが作成したオリジナルのWindowsバイナリ</strong><p>拡張機能を選択するとPostgreSQLバージョン別のZIPダウンロード表を表示します。ZIPがインストール用成果物です。SBOM・Grype・証明情報は補助的な検証成果物です。</p></div>
+      <div class="catalog-hint" role="note"><strong>pgextwinがビルドしたWindowsバイナリ</strong><p>拡張機能を選ぶと、PostgreSQLのバージョン別にZIPのダウンロード先が表示されます。インストールに使用するのはZIPです。SBOM・Grypeレポート・証明情報は検証用の補助成果物です。</p></div>
       <div class="filters" aria-label="拡張機能の絞り込み">
         <div class="filter-field filter-field--search">
           <label for="search">拡張機能を検索</label>
@@ -74,7 +74,7 @@
     <section class="cli-home-teaser" aria-labelledby="cli-home-heading">
       <p class="eyebrow">Windows CLI · v0.3.8</p>
       <h2 id="cli-home-heading">複数の拡張機能をCLIでまとめてダウンロード</h2>
-      <p><strong>公開Catalogに登録された拡張機能のZIP</strong>を、指定したPostgreSQLバージョンごとに一括取得できます。CLIはCatalogの署名を確認し、ZIPのSHA-256を照合します。過去の固定版は<code>--fixed</code>で選べます。個別ZIPの署名検証は行わず、判定は<code>INTEGRITY_ONLY</code>です。</p>
+      <p><strong>公開Catalogに登録された拡張機能のZIP</strong>を、指定したPostgreSQLバージョンごとに一括取得できます。CLIはCatalogの署名とZIPのSHA-256を検証します。過去の固定版は<code>--fixed</code>で選べます。個別ZIPの真正署名は検証せず、検証状態は<code>INTEGRITY_ONLY</code>です。</p>
       <pre><code>.\pgextwin.exe download-all --pg all</code></pre>
       <div class="cli-teaser-actions"><a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.8/pgextwin.exe">CLI v0.3.8をダウンロード</a><a href="./cli.html">図解・安全性・リリースノートを見る →</a></div>
     </section>
@@ -87,7 +87,7 @@
         </div>
         <button id="landscape-reload" type="button">対応状況を再読み込み</button>
       </div>
-      <p>pgextwinで配布中の拡張機能、今後の実装候補、他のWindowsバイナリ配布元を確認できます。<strong>「pgextwinで実装予定なし」は「Windowsで使用できない」という意味ではありません。</strong></p>
+      <p>pgextwinで配布中の拡張機能、今後の実装候補、外部のWindowsバイナリ配布元を確認できます。<strong>「pgextwinで実装予定なし」は、Windowsで使用できないことを意味しません。</strong></p>
 
 
       <p class="landscape-disclaimer">外部配布物は記載されたプロジェクトまたはベンダーが提供します。pgextwinはその正確性、安全性、更新状況、サポート、互換性を保証しません。導入前に提供元の利用条件と対象PostgreSQLバージョンの要件をご確認ください。</p>
@@ -136,7 +136,7 @@
     <section class="info" aria-labelledby="integrity-heading">
       <p class="eyebrow">整合性と検証情報</p>
       <h2 id="integrity-heading">ダウンロードしたZIPのSHA-256を確認してください</h2>
-      <p>各ZIPには、公開済みの<code>SHA256SUMS.txt</code>と照合できるSHA-256を表示しています。署名・ビルド来歴などの情報がある場合も、それだけで安全性や互換性が保証されるわけではありません。脆弱性レポートは作成時点の検査結果です。</p>
+      <p>各ZIPについて、公開済みの<code>SHA256SUMS.txt</code>と照合できるSHA-256を表示しています。署名やビルド来歴の情報があっても、安全性や互換性が保証されるわけではありません。脆弱性レポートは作成時点の検査結果です。</p>
     </section>
 
     <section class="info" aria-labelledby="about-heading">
@@ -155,7 +155,7 @@
       <a href="https://github.com/pgextwin/build">ビルド基盤</a>
       <section class="release-limitations" role="note" aria-labelledby="release-limitations-title">
         <h2 id="release-limitations-title">ご利用前の注意</h2>
-        <p>ダウンロード一覧には、公開済みの検証済みReleaseのみを掲載します。開発途中の候補はダウンロード対象ではありません。pgextwinの配布物は非公式です。導入前に、対応PostgreSQLバージョン、ライセンス、拡張機能の設定方法を確認してください。公開・配布に関する詳しい状況は<a href="https://github.com/pgextwin/build/issues/75">公開運用の追跡Issue</a>で確認できます。</p>
+        <p>ダウンロード一覧には、公開済みの検証済みReleaseのみを掲載します。開発途中の候補はダウンロード対象ではありません。pgextwinの配布物は非公式です。導入前に、対応するPostgreSQLのバージョン、ライセンス、拡張機能の設定方法を確認してください。公開・配布の詳細は<a href="https://github.com/pgextwin/build/issues/75">公開運用の追跡Issue</a>で確認できます。</p>
       </section>
     </div>
   </footer>

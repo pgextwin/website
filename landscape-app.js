@@ -72,7 +72,7 @@
         field(meta,"Decision date / 選定日",record.roadmap.decisionDate);
         article.append(node("p","landscape-muted",(document.documentElement.lang === "ja" ? "当時の選定理由：" : "Original selection rationale: ") + t(record.roadmap.rationale)));
       }
-      article.append(node("p",null,"Published, verified binaries are in the distribution catalog. / 配布中のバイナリは上部の配布カタログをご確認ください。"));
+      article.append(node("p",null,"Published, verified binaries are in the distribution catalog. / 公開・検証済みのバイナリは、ページ上部の配布Catalogで確認できます。"));
       const actions = node("p");
       const a = node("a","download-link","Find pgextwin downloads / 配布一覧へ");
       a.href = "#extensions-heading";
@@ -89,7 +89,7 @@
       article.append(node("h4",null,"Selection rationale / 正式選定の理由"));
       article.append(node("p",null,record.roadmap?.rationale || "Formal decision pending / 正式決定は未登録です。"));
       if (record.windowsBinarySources.length === 0) {
-        article.append(node("p","landscape-muted","No generally available Windows binary identified / 一般入手可能なWindowsバイナリは未確認（使用不可という意味ではありません）。"));
+        article.append(node("p","landscape-muted","No generally available Windows binary identified / 一般に入手できるWindowsバイナリは確認できていません（使用できないという意味ではありません）。"));
       }
     }
     if (record.status === "not-planned") {
