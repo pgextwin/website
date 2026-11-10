@@ -100,10 +100,16 @@ async function verify() {
         name+": stale candidate roadmap after promotion");
     }
   }
-  assert.equal(records.filter(x=>x.roadmap?.decision==="reserve").length,
-    reviewedCandidates.filter(([name,decision])=>decision==="reserve" && byName.get(name).status==="candidate").length);
-  assert.equal(records.filter(x=>x.roadmap?.decision==="research").length,
-    reviewedCandidates.filter(([name,decision])=>decision==="research" && byName.get(name).status==="candidate").length);
+  // Additional evidence-only candidates (e.g. PGroonga under Issue #112) are
+  // allowed without weakening the fixed, named historical candidate checks above.
+  // Requiring a GLOBAL exact count would prevent any new research candidate.
+  for (const decision of ["reserve", "research"]) {
+    const observed = records.filter(x=>x.roadmap?.decision===decision).length;
+    const required = reviewedCandidates.filter(([name, wanted]) =>
+      wanted===decision && byName.get(name).status==="candidate").length;
+    assert.ok(observed >= required,
+      decision + ": reviewed candidate roster lost a required entry");
+  }
   assert.ok(js.includes("roadmapLabel") && js.includes("sortRecords"));
   assert.ok(app.includes("Selection rationale") && app.includes("landscape-roadmap-label"));
   const dist = await (await get(registry+"/index.json")).json();
