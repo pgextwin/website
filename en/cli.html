@@ -3,107 +3,90 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Download current Catalog-registered PostgreSQL extension ZIPs for Windows x64. Signed Catalog selection, strict original ZIP SHA256, and an explicit frozen-snapshot mode. This read-only CLI does not install extensions.">
-  <title>pgextwin — Windows CLI v0.3.8</title>
+  <meta name="description" content="Download PostgreSQL extension ZIPs for Windows x64. CLI v0.3.15 download, command examples, and SHA-256 verification.">
+  <title>pgextwin — Windows CLI v0.3.15</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/cli.html">
   <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#download-heading">Get the Windows executable</a>
+  <a class="skip-link" href="#download-heading">Skip to CLI download</a>
   <header class="site-header"><div class="shell">
-    <nav class="language-nav" aria-label="Language / 言語"><a href="../ja/cli.html" lang="ja">日本語</a><a href="./">Extension catalog</a></nav>
-    <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.3.8</h1>
-    <p class="lead">Download multiple extension ZIPs for your PostgreSQL version in one command.</p><p class="cli-hero-description">This Windows x64 CLI downloads published ZIPs, verifies the signed Catalog and each ZIP SHA-256, and offers a fixed historical snapshot. It does not install extensions.</p>
-    <nav class="jump-nav" aria-label="CLI navigation"><a class="jump-nav-primary" href="#download-heading">Get the Windows executable</a><a href="#flow-heading">How it works</a><a href="#release-notes-heading">Release notes</a></nav>
+    <nav class="language-nav" aria-label="Language / 言語">
+      <a href="../ja/cli.html" lang="ja">日本語</a>
+      <a href="../en/cli.html" lang="en" aria-current="page">English</a>
+    </nav>
+    <p class="eyebrow">pgextwin CLI</p>
+    <h1>Windows CLI v0.3.15</h1>
+    <p class="lead">Download 11 external ZIPs or pgextwin-published ZIPs in batches on Windows.</p>
+    <p class="cli-hero-description">Choose your PostgreSQL version, extension, or release. The CLI downloads files; it does not install them.</p>
+    <nav class="jump-nav" aria-label="CLI navigation">
+      <a class="jump-nav-primary" href="#download-heading">Get the CLI</a>
+      <a href="#commands-heading">Download commands</a>
+      <a href="#checksum-heading">Verify SHA-256</a>
+      <a href="./">Extension catalog</a>
+    </nav>
   </div></header>
   <main class="shell cli-page">
     <section class="cli-download" aria-labelledby="download-heading">
-      <p class="eyebrow">Windows x64 · self-contained · prerelease</p>
-      <h2 id="download-heading">Get the Windows executable</h2>
+      <p class="eyebrow">Windows x64 · Stable · Released November 12, 2026</p>
+      <h2 id="download-heading">Get the CLI</h2>
       <div class="cli-download-actions">
-        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.8/pgextwin.exe">Download pgextwin.exe (12.89 MB)</a>
-        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.8">GitHub Release v0.3.8</a>
-        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.8/SHA256SUMS.txt">SHA256SUMS.txt</a>
+        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.15/pgextwin.exe">Download pgextwin.exe (12.90 MB)</a>
+        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.15">GitHub Release v0.3.15</a>
+        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.15/SHA256SUMS.txt">View SHA256SUMS.txt</a>
       </div>
-      <p class="cli-sha"><strong>Published EXE SHA256:</strong> <code>aecb0537622148b46b731b543ce511ee281877f4e6fbc31c77f8346689ce6077</code></p>
-      <p>After downloading, use this PowerShell command to check the SHA-256. The second command optionally verifies the CLI build provenance:</p>
-      <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256
-gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest 3ce07983ef0a93069b2b0ba850b9dc970e3f373f</code></pre>
+      <p class="cli-exe-size">EXE size: 12,904,699 bytes</p>
+      <p class="cli-sha"><strong>EXE SHA-256: </strong><code>2f573a33765c1c0103ac898674b11e849a643f174844c8caeddf15afd64ebb9f</code></p>
+      <p>After downloading, run the following in PowerShell. Compare the displayed SHA-256 with the value above or the value in SHA256SUMS.txt.</p>
+      <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256</code></pre>
     </section>
     <section aria-labelledby="commands-heading">
-      <h2 id="commands-heading">Choose a download command</h2><p>By default, the CLI fetches the latest published releases registered in the Catalog. No GitHub API credentials are needed. ZIPs are saved in a new folder under your working directory; existing files are not overwritten.</p>
+      <p class="eyebrow">Download commands</p>
+      <h2 id="commands-heading">Download commands</h2>
       <div class="cli-command-list">
-        <div><strong>Latest Catalog · all registered ZIPs</strong><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
-        <div><strong>Latest Catalog · all registered PG18 ZIPs</strong><pre><code>.\pgextwin.exe download-all --pg 18</code></pre></div>
-        <div><strong>Fixed historical snapshot · 70 ZIPs</strong><pre><code>.\pgextwin.exe download-all --pg all --fixed</code></pre></div>
-        <div><strong>Verify separately obtained external original ZIPs offline (no provider GET)</strong><pre><code>.\pgextwin.exe verify-external-all --ledger .\evidence\issue112-external-pg18-direct-link-review-v1.json --input-dir C:\original-external --pg 18</code></pre></div>
-        <div><strong>Download the pg_trickle PG18 provider original (valid signed admission required)</strong><pre><code>.\pgextwin.exe download-all --source external --pg 18 --output C:\pgextwin-external --external-admission .\external\external-get-admission.json --external-bundle .\external\attestation.json</code></pre></div>
+        <div><h3>Download all 11 external ZIPs</h3><pre><code>.\pgextwin.exe download-all --source external</code></pre></div>
+        <div><h3>Download external ZIPs for PG18 only</h3><pre><code>.\pgextwin.exe download-all --source external --pg 18</code></pre></div>
+        <div><h3>Choose pgvector 0.8.7 for PG18</h3><pre><code>.\pgextwin.exe download-all --source external --extension pgvector --version 0.8.7 --pg 18</code></pre></div>
+        <div><h3>Download pgextwin-published ZIPs</h3><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
+        <div><h3>Use an older fixed selection</h3><pre><code>.\pgextwin.exe download-all --pg all --fixed</code></pre></div>
+        <div><h3>Show download progress</h3><pre><code>.\pgextwin.exe download-all --source external --verbose</code></pre></div>
       </div>
-      <p class="cli-caution" role="note"><code>verify-external-all</code> checks separately obtained ZIPs offline; its <a href="https://github.com/pgextwin/catalog/blob/main/evidence/issue112-external-pg18-direct-link-review-v1.json">ledger</a> is not GET authorization. For provider-original GET, save the <a href="https://github.com/pgextwin/catalog/tree/main/external/signed-direct-get/pg_trickle">signed admission JSON and Sigstore proof from the same issuer Run</a> and specify an existing output folder. Expired, invalid or out-of-scope admissions are denied. Other external providers remain <code>DOWNLOAD_DENY</code>; mirror and redistribution remain <code>MIRROR_DENY</code>.</p>
-    </section>
-    <section aria-labelledby="verbose-heading">
-      <p class="eyebrow">Latest Catalog support</p>
-      <h2 id="verbose-heading">View or save download progress</h2>
-      <p>Opt-in UTC timestamped events report signed Catalog verification, every ZIP start, transferred bytes in 8 MiB intervals, SHA256 verification and batch completion. Diagnostic events go to stderr; normal stdout and JSON remain unchanged.</p>
-      <div class="cli-command-list">
-        <div><strong>Download all registered ZIPs with live progress</strong><pre><code>.\pgextwin.exe download-all --pg all --verbose</code></pre></div>
-        <div><strong>Keep a detailed log file</strong><pre><code>.\pgextwin.exe download-all --pg all --verbose 2&gt; download-verbose.log</code></pre></div>
+      <div class="cli-included">
+        <h3>Included external ZIPs (11 total)</h3>
+        <ul><li>oracle_fdw 2.9.0: PostgreSQL 14–18 (5 ZIPs)</li><li>pgvector 0.8.7: PostgreSQL 14–18 (5 ZIPs)</li><li>pg_trickle 0.108.3: PostgreSQL 18 (1 ZIP)</li></ul>
       </div>
-      <p class="cli-caution" role="note">Verbose output does not change trust: individual extension ZIPs remain INTEGRITY_ONLY. No install or extension publication privileges are added.</p>
     </section>
     <section aria-labelledby="flow-heading">
-      <p class="eyebrow">How it works / 動作のしくみ</p>
-      <h2 id="flow-heading">How it works</h2><p>The two download paths converge on the same original-ZIP integrity checks and atomic output. The displayed steps describe the CLI, not a Windows installer.</p>
-      <div class="cli-flow" role="group" aria-label="How it works">
-        <div class="cli-flow-start"><strong>1 · Choose a source</strong>
-          <div class="cli-paths">
-            <div class="cli-flow-node cli-flow-latest"><span class="cli-node-label">LATEST</span><h3>Latest (default)</h3><p>Fetch the published Catalog selection feed and its Sigstore bundle over HTTPS, and verify the signer, source, commit and immutable Catalog records.</p></div>
-            <div class="cli-flow-node"><span class="cli-node-label">FIXED</span><h3>Fixed (--fixed)</h3><p>Use the immutable historical Catalog/policy snapshot pinned by the CLI, with its independently pinned SHA256.</p></div>
-          </div>
-        </div>
-        <ol class="cli-flow-steps">
-          <li class="cli-flow-node"><h3>2 · Select packages</h3><p>Choose the Catalog-registered Release tag and original ZIP for each requested PostgreSQL major. Never infer the upstream's latest tag.</p></li>
-          <li class="cli-flow-node"><h3>3 · Download & check</h3><p>Fetch original GitHub Release ZIP bytes over bounded HTTPS; verify each SHA256 and reject mismatches, unsafe redirects and partial batches.</p></li>
-          <li class="cli-flow-node"><h3>4 · Save & report</h3><p>Commit the verified set to a new output directory and write DOWNLOAD-INFO.json. Existing output is not overwritten.</p><code>DOWNLOAD-INFO.json</code></li>
-        </ol>
-      </div>
+      <p class="eyebrow">Three steps to download</p>
+      <h2 id="flow-heading">Three steps to download</h2>
+      <ol class="cli-flow-steps">
+        <li><h3>1. Download pgextwin.exe</h3><p>Use the download button above and save the EXE in your preferred folder.</p></li>
+        <li><h3>2. Run a command</h3><p>Open PowerShell in that folder and choose a command. Narrow by --pg, --extension, or --version as needed.</p></li>
+        <li><h3>3. Verify your ZIP</h3><p>Check the ZIP's SHA-256, then follow the provider's installation instructions.</p></li>
+      </ol>
     </section>
-    <section aria-labelledby="trust-heading">
-      <h2 id="trust-heading">What is (and is not) verified</h2>
-      <div class="cli-trust-grid">
-        <article><span class="cli-trust-status">SIGSTORE VERIFIED</span><h3>CLI executable</h3><p>GitHub Actions Sigstore-attested build; SHA256 of public EXE independently checked.</p></article>
-        <article><span class="cli-trust-status">SIGSTORE VERIFIED</span><h3>Catalog feed (latest mode)</h3><p>Independent Sigstore verification of the feed and immutable Catalog byte hashes.</p></article>
-        <article><span class="cli-trust-status cli-trust-status--limited">INTEGRITY_ONLY</span><h3>Extension ZIPs</h3><p>SHA256 integrity against authenticated/pinned metadata only: INTEGRITY_ONLY. Individual extension signatures/provenance and install authorization are not established.</p></article>
-      </div>
-      <p class="cli-caution" role="note">The CLI is download-only; it does not install ZIPs, modify services, create a signed combined bundle, or make original extension publication decisions.</p>
+    <section class="info" aria-labelledby="checksum-heading">
+      <h2 id="checksum-heading">ZIP verification example</h2>
+      <p>Replace the example file name with the downloaded ZIP and compare the SHA-256 with the download information or provider's published checksum.</p>
+      <pre><code>Get-FileHash .\downloaded-file.zip -Algorithm SHA256</code></pre>
     </section>
-    <section aria-labelledby="size-heading">
-      <h2 id="size-heading">v0.3.1 size improvement</h2>
-      <div class="cli-size-chart" role="img" aria-label="v0.3.0: 79.34 MB; v0.3.1: 12.83 MB; 83.83% reduction">
-        <div class="cli-size-row"><span>v0.3.0</span><div class="cli-size-track"><span class="cli-size-bar cli-size-bar--old"></span></div><strong>79.34 MB</strong></div>
-        <div class="cli-size-row"><span>v0.3.1</span><div class="cli-size-track"><span class="cli-size-bar cli-size-bar--new"></span></div><strong>12.83 MB</strong></div>
-      </div>
-      <p><strong>−83.83%</strong> · Full .NET 10 trimming + single-file compression; original Windows x64 EXE sizes measured from published Releases.</p>
-    </section>
-    <section aria-labelledby="other-heading">
-      <h2 id="other-heading">Other commands</h2><p>Local Catalog browsing is separate from authenticated latest downloads. Local listing/search results remain UNVERIFIED.</p>
-      <pre><code>.\pgextwin.exe --version
-.\pgextwin.exe list --catalog-dir C:\path\to\catalog --pg 18
-.\pgextwin.exe search cron --catalog-dir C:\path\to\catalog --format json</code></pre>
-      <p><code>UNVERIFIED</code> · <code>INTEGRITY_ONLY</code></p>
+    <section class="cli-caution" role="note" aria-labelledby="caution-heading">
+      <h2 id="caution-heading">Before you use the downloads</h2>
+      <p>Third-party ZIPs come from their respective providers. Check PostgreSQL compatibility and licenses. Official PostgreSQL 14 support ended on November 12, 2026. The CLI is download-only; it does not install extensions or change settings.</p>
     </section>
     <section aria-labelledby="release-notes-heading">
-      <p class="eyebrow">v0.3.8 · prerelease</p><h2 id="release-notes-heading">Release notes</h2>
-      <div class="cli-release-notes"><article lang="en" class="cli-note-block" aria-labelledby="notes-en-title">
-        <h3 id="notes-en-title">English</h3>
-        <p><strong>CLI v0.3.8 — direct provider-original GET for pg_trickle PG18 and historical HypoPG 1.4.1 PG14–16.</strong> Only with an unexpired, owner-approved and independently Sigstore-verified admission, the CLI fetches the unchanged original ZIP directly to the user's machine and checks its size and SHA256. Expired or out-of-scope admissions remain <code>DOWNLOAD_DENY</code>. Offline <code>verify-external-all</code> is also available.</p>
-        <p>Published Windows x64 EXE: <strong>12,892,708 bytes</strong>. Verified protected-main source <code>3ce07983ef0a93069b2b0ba850b9dc970e3f373f</code> and public asset SHA256 <code>aecb0537622148b46b731b543ce511ee281877f4e6fbc31c77f8346689ce6077</code>. The public Windows EXE verified all 85 native Catalog ZIPs for 17 extensions.</p>
-        <p><strong>Trust boundary:</strong> Individual external-provider ZIPs remain <code>INTEGRITY_ONLY</code>. No third-party ZIP mirroring, redistribution or installation. oracle_fdw and community pgvector remain on hold.</p>
-        <p><a href="https://github.com/pgextwin/catalog/actions/runs/42474871097">Public EXE Windows acceptance</a> · <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.8">Full GitHub Release (English → Japanese)</a></p>
-      </article></div>
+      <h2 id="release-notes-heading">What's new</h2>
+      <div class="cli-release-notes">
+        <article lang="en" class="cli-note-block">
+          <h3>CLI v0.3.15</h3>
+          <p>v0.3.15 (November 12, 2026) provides batch access to 11 external Windows ZIPs for oracle_fdw, pgvector, and pg_trickle. Filter by PostgreSQL, extension, and version; choose historical fixed versions or show progress. The published EXE is 12,904,699 bytes (12.90 MB).</p>
+          <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.15">GitHub Release v0.3.15</a></p>
+        </article>
+      </div>
     </section>
+    <p class="cli-back"><a href="./">Back to catalog</a></p>
   </main>
 </body>
 </html>

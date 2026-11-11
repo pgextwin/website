@@ -3,107 +3,90 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Windows x64向けPostgreSQL拡張ZIPを、Catalogに登録された最新版から一括取得できます。署名付きCatalogの検証、元ZIPのSHA256照合、過去の固定版の選択に対応します。インストーラーではありません。">
-  <title>pgextwin — Windows CLI v0.3.8</title>
+  <meta name="description" content="PostgreSQL拡張機能のWindows x64用ZIPをまとめて取得。CLI v0.3.15のダウンロード、コマンド例、SHA-256照合方法。">
+  <title>pgextwin — Windows CLI v0.3.15</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/ja/cli.html">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/cli.html">
   <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#download-heading">Windows用EXEを入手</a>
+  <a class="skip-link" href="#download-heading">CLIのダウンロードへ</a>
   <header class="site-header"><div class="shell">
-    <nav class="language-nav" aria-label="Language / 言語"><a href="../en/cli.html" lang="en">English</a><a href="./">拡張機能一覧</a></nav>
-    <p class="eyebrow">pgextwin CLI</p><h1>Windows CLI v0.3.8</h1>
-    <p class="lead">複数の拡張機能ZIPを、PostgreSQLのバージョンごとに一括ダウンロードできます。</p><p class="cli-hero-description">Windows x64向けの公開済みZIPを一括取得するコマンドラインツールです。署名付きCatalogと各ZIPのSHA-256を検証し、過去の固定版も選択できます。インストールは行いません。</p>
-    <nav class="jump-nav" aria-label="CLI navigation"><a class="jump-nav-primary" href="#download-heading">Windows用EXEを入手</a><a href="#flow-heading">動作のしくみ</a><a href="#release-notes-heading">リリースノート</a></nav>
+    <nav class="language-nav" aria-label="Language / 言語">
+      <a href="../ja/cli.html" lang="ja" aria-current="page">日本語</a>
+      <a href="../en/cli.html" lang="en">English</a>
+    </nav>
+    <p class="eyebrow">pgextwin CLI</p>
+    <h1>Windows CLI v0.3.15</h1>
+    <p class="lead">外部配布の11 ZIPとpgextwinの公開ZIPを、Windowsでまとめてダウンロード。</p>
+    <p class="cli-hero-description">PostgreSQLのバージョン、拡張機能名、版を選んで取得できます。ダウンロードしたファイルは自動インストールされません。</p>
+    <nav class="jump-nav" aria-label="CLI navigation">
+      <a class="jump-nav-primary" href="#download-heading">CLIを入手</a>
+      <a href="#commands-heading">コマンド例</a>
+      <a href="#checksum-heading">SHA-256を確認</a>
+      <a href="./">拡張機能一覧</a>
+    </nav>
   </div></header>
   <main class="shell cli-page">
     <section class="cli-download" aria-labelledby="download-heading">
-      <p class="eyebrow">Windows x64 · self-contained · prerelease</p>
-      <h2 id="download-heading">Windows用EXEを入手</h2>
+      <p class="eyebrow">Windows x64 · 正式版 · 2026年11月12日公開</p>
+      <h2 id="download-heading">CLIを入手</h2>
       <div class="cli-download-actions">
-        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.8/pgextwin.exe">pgextwin.exeをダウンロード（12.89 MB）</a>
-        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.8">GitHub Release v0.3.8</a>
-        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.8/SHA256SUMS.txt">SHA256SUMS.txt</a>
+        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.15/pgextwin.exe">pgextwin.exe をダウンロード（12.90 MB）</a>
+        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.15">GitHub Release v0.3.15</a>
+        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.15/SHA256SUMS.txt">SHA256SUMS.txt を表示</a>
       </div>
-      <p class="cli-sha"><strong>公開EXEのSHA256:</strong> <code>aecb0537622148b46b731b543ce511ee281877f4e6fbc31c77f8346689ce6077</code></p>
-      <p>ダウンロード後、最初のPowerShellコマンドでSHA-256を確認できます。2つ目のコマンドはCLI本体のビルド来歴の検証に使用します。</p>
-      <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256
-gh attestation verify .\pgextwin.exe --repo pgextwin/catalog --signer-workflow pgextwin/catalog/.github/workflows/cli-candidate.yml --source-ref refs/heads/main --source-digest 3ce07983ef0a93069b2b0ba850b9dc970e3f373f</code></pre>
+      <p class="cli-exe-size">EXEサイズ：12,904,699 バイト</p>
+      <p class="cli-sha"><strong>EXEのSHA-256：</strong><code>2f573a33765c1c0103ac898674b11e849a643f174844c8caeddf15afd64ebb9f</code></p>
+      <p>ダウンロード後、PowerShellで次のコマンドを実行してください。表示されたSHA-256が上記の値、またはSHA256SUMS.txtの値と一致することを確認します。</p>
+      <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256</code></pre>
     </section>
     <section aria-labelledby="commands-heading">
-      <h2 id="commands-heading">目的に合うコマンドを選ぶ</h2><p>標準では、公開Catalogに登録された最新版を取得します。GitHub APIの認証情報は不要です。取得したZIPは実行フォルダー内の新しいフォルダーに保存し、既存ファイルは上書きしません。</p>
+      <p class="eyebrow">コマンド例</p>
+      <h2 id="commands-heading">コマンド例</h2>
       <div class="cli-command-list">
-        <div><strong>最新版Catalog · 登録されたすべてのZIP</strong><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
-        <div><strong>最新版Catalog · PG18向けの全登録ZIP</strong><pre><code>.\pgextwin.exe download-all --pg 18</code></pre></div>
-        <div><strong>過去の固定版 · PG14～18の70 ZIP</strong><pre><code>.\pgextwin.exe download-all --pg all --fixed</code></pre></div>
-        <div><strong>別途取得した外部ZIP原本をオフライン一括検証（自動取得なし）</strong><pre><code>.\pgextwin.exe verify-external-all --ledger .\evidence\issue112-external-pg18-direct-link-review-v1.json --input-dir C:\original-external --pg 18</code></pre></div>
-        <div><strong>pg_trickle PG18 の外部原本を取得（有効な署名許可が必要）</strong><pre><code>.\pgextwin.exe download-all --source external --pg 18 --output C:\pgextwin-external --external-admission .\external\external-get-admission.json --external-bundle .\external\attestation.json</code></pre></div>
+        <div><h3>外部配布の11 ZIPをすべて取得</h3><pre><code>.\pgextwin.exe download-all --source external</code></pre></div>
+        <div><h3>外部配布からPG18用だけ取得</h3><pre><code>.\pgextwin.exe download-all --source external --pg 18</code></pre></div>
+        <div><h3>pgvector 0.8.7 のPG18用ZIPを指定して取得</h3><pre><code>.\pgextwin.exe download-all --source external --extension pgvector --version 0.8.7 --pg 18</code></pre></div>
+        <div><h3>pgextwin公開ZIPをまとめて取得</h3><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
+        <div><h3>過去の固定版を選ぶ</h3><pre><code>.\pgextwin.exe download-all --pg all --fixed</code></pre></div>
+        <div><h3>進行状況を表示</h3><pre><code>.\pgextwin.exe download-all --source external --verbose</code></pre></div>
       </div>
-      <p class="cli-caution" role="note"><code>verify-external-all</code> は、別途入手したZIPをオフラインで照合するコマンドです。<a href="https://github.com/pgextwin/catalog/blob/main/evidence/issue112-external-pg18-direct-link-review-v1.json">確認用台帳</a>は取得許可ではありません。外部原本の直接取得には、対象原本ごとに有効な本人承認済みのGET専用許可が必要です。<a href="https://github.com/pgextwin/catalog/tree/main/external/signed-direct-get/pg_trickle">同一発行Runの署名付き許可JSONとSigstore証明</a>を保存し、既存の出力先フォルダーを指定してください。期限切れ・署名不一致・対象外では取得を拒否します。許可のない外部原本は <code>DOWNLOAD_DENY</code>、ミラー・再配布は <code>MIRROR_DENY</code> です。</p>
-    </section>
-    <section aria-labelledby="verbose-heading">
-      <p class="eyebrow">最新版Catalogの拡張に対応</p>
-      <h2 id="verbose-heading">進行状況を確認・保存する</h2>
-      <p>署名付きCatalogの検証から、ZIPごとの取得開始、8 MiBごとの転送量、SHA256再照合、一括保存の完了までをUTC時刻付きで表示します。詳細ログは標準エラー出力に記録し、通常の標準出力とJSONは変更しません。</p>
-      <div class="cli-command-list">
-        <div><strong>すべてのZIPの取得を詳細表示</strong><pre><code>.\pgextwin.exe download-all --pg all --verbose</code></pre></div>
-        <div><strong>詳細ログをファイルに保存</strong><pre><code>.\pgextwin.exe download-all --pg all --verbose 2&gt; download-verbose.log</code></pre></div>
+      <div class="cli-included">
+        <h3>対象の外部ZIP（合計11件）</h3>
+        <ul><li>oracle_fdw 2.9.0：PostgreSQL 14～18（5 ZIP）</li><li>pgvector 0.8.7：PostgreSQL 14～18（5 ZIP）</li><li>pg_trickle 0.108.3：PostgreSQL 18（1 ZIP）</li></ul>
       </div>
-      <p class="cli-caution" role="note">ログの有効化は拡張ZIPの署名検証やインストール権限を追加しません。元ZIPの判定は引き続きINTEGRITY_ONLYです。</p>
     </section>
     <section aria-labelledby="flow-heading">
-      <p class="eyebrow">How it works / 動作のしくみ</p>
-      <h2 id="flow-heading">動作のしくみ</h2><p>最新版と固定版の2つの取得経路は、共通のZIPバイト整合性検証と保存処理を使用します。インストール処理は含みません。</p>
-      <div class="cli-flow" role="group" aria-label="動作のしくみ">
-        <div class="cli-flow-start"><strong>1 · 取得元を選択</strong>
-          <div class="cli-paths">
-            <div class="cli-flow-node cli-flow-latest"><span class="cli-node-label">LATEST</span><h3>最新版（標準）</h3><p>公開CatalogフィードとSigstore署名をHTTPSで取得。発行元、署名、コミット、固定Catalog原本を確認します。</p></div>
-            <div class="cli-flow-node"><span class="cli-node-label">FIXED</span><h3>固定版（--fixed）</h3><p>CLI内にSHA256で固定された過去の不変Catalog・ポリシースナップショットを使用します。</p></div>
-          </div>
-        </div>
-        <ol class="cli-flow-steps">
-          <li class="cli-flow-node"><h3>2 · ZIPを選択</h3><p>Catalogに登録されたReleaseタグをもとに、指定したPostgreSQLバージョン向けの原本ZIPを選びます。上流の最新タグを自動的に採用することはありません。</p></li>
-          <li class="cli-flow-node"><h3>3 · 取得・照合</h3><p>GitHub Releaseの原本ZIPを制限付きHTTPS経由で取得し、各ファイルのSHA256を検証します。危険なリダイレクトや一部の取得失敗は拒否します。</p></li>
-          <li class="cli-flow-node"><h3>4 · 保存・証跡</h3><p>全件成功した場合に新しいフォルダーへの保存を確定し、DOWNLOAD-INFO.jsonを出力します。既存の成果物は上書きしません。</p><code>DOWNLOAD-INFO.json</code></li>
-        </ol>
-      </div>
+      <p class="eyebrow">使い方は3ステップ</p>
+      <h2 id="flow-heading">使い方は3ステップ</h2>
+      <ol class="cli-flow-steps">
+        <li><h3>1. pgextwin.exeを取得</h3><p>上のボタンからEXEをダウンロードし、使いたいフォルダーに保存します。</p></li>
+        <li><h3>2. コマンドを実行</h3><p>そのフォルダーでPowerShellを開き、目的のコマンドを実行します。--pg、--extension、--versionで対象を絞り込めます。</p></li>
+        <li><h3>3. ZIPを照合</h3><p>取得したZIPのSHA-256を確認し、提供元の導入手順に従ってください。</p></li>
+      </ol>
     </section>
-    <section aria-labelledby="trust-heading">
-      <h2 id="trust-heading">検証できること・できないこと</h2>
-      <div class="cli-trust-grid">
-        <article><span class="cli-trust-status">SIGSTORE VERIFIED</span><h3>CLI本体</h3><p>GitHub ActionsのSigstore来歴を検証。公開EXEのSHA256も独立照合済みです。</p></article>
-        <article><span class="cli-trust-status">SIGSTORE VERIFIED</span><h3>Catalogフィード（最新版）</h3><p>Sigstore署名と不変Catalog原本のSHA256を独立検証します。</p></article>
-        <article><span class="cli-trust-status cli-trust-status--limited">INTEGRITY_ONLY</span><h3>拡張機能の元ZIP</h3><p>認証済みの固定情報とのSHA256整合性のみを確認します（INTEGRITY_ONLY）。個別ZIPの真正署名・来歴の検証やインストール認可は成立していません。</p></article>
-      </div>
-      <p class="cli-caution" role="note">このCLIはダウンロード専用です。ZIPのインストール、サービス変更、統合署名ZIP作成、個別拡張の公開認可は実行しません。</p>
+    <section class="info" aria-labelledby="checksum-heading">
+      <h2 id="checksum-heading">ZIPの照合例</h2>
+      <p>実際のファイル名に置き換えて実行し、提供元やダウンロード結果のSHA-256と照合してください。</p>
+      <pre><code>Get-FileHash .\downloaded-file.zip -Algorithm SHA256</code></pre>
     </section>
-    <section aria-labelledby="size-heading">
-      <h2 id="size-heading">v0.3.1の軽量化</h2>
-      <div class="cli-size-chart" role="img" aria-label="v0.3.0: 79.34 MB; v0.3.1: 12.83 MB; 83.83% reduction">
-        <div class="cli-size-row"><span>v0.3.0</span><div class="cli-size-track"><span class="cli-size-bar cli-size-bar--old"></span></div><strong>79.34 MB</strong></div>
-        <div class="cli-size-row"><span>v0.3.1</span><div class="cli-size-track"><span class="cli-size-bar cli-size-bar--new"></span></div><strong>12.83 MB</strong></div>
-      </div>
-      <p><strong>−83.83%</strong> · .NET 10の完全トリミング＋単一ファイル圧縮。公開済みWindows x64 EXEの実バイト比較です。</p>
-    </section>
-    <section aria-labelledby="other-heading">
-      <h2 id="other-heading">そのほかのコマンド</h2><p>ローカルCatalogの一覧・検索は認証済みの最新版取得とは別です。ローカル一覧の信頼状態はUNVERIFIEDです。</p>
-      <pre><code>.\pgextwin.exe --version
-.\pgextwin.exe list --catalog-dir C:\path\to\catalog --pg 18
-.\pgextwin.exe search cron --catalog-dir C:\path\to\catalog --format json</code></pre>
-      <p><code>UNVERIFIED</code> · <code>INTEGRITY_ONLY</code></p>
+    <section class="cli-caution" role="note" aria-labelledby="caution-heading">
+      <h2 id="caution-heading">ご利用前の注意</h2>
+      <p>外部配布物はそれぞれの提供元が公開しています。対応するPostgreSQLバージョンとライセンスを確認してください。PostgreSQL 14の公式サポートは2026年11月12日に終了しました。CLIはダウンロード専用で、拡張機能のインストールや設定変更は行いません。</p>
     </section>
     <section aria-labelledby="release-notes-heading">
-      <p class="eyebrow">v0.3.8 · プレリリース</p><h2 id="release-notes-heading">リリースノート</h2>
-      <div class="cli-release-notes"><article lang="ja" class="cli-note-block" aria-labelledby="notes-ja-title">
-        <h3 id="notes-ja-title">日本語</h3>
-        <p><strong>CLI v0.3.8では、pg_trickle PG18と過去版HypoPG 1.4.1 PG14〜16の原本直接取得に対応しました。</strong> 本人承認と独立Sigstore検証を経た有効期限内の許可がある場合に限り、提供元から利用者の端末へ原本ZIPを取得してサイズとSHA256を照合します。期限切れや対象外の場合は <code>DOWNLOAD_DENY</code> です。<code>verify-external-all</code> によるオフライン照合も利用できます。</p>
-        <p>公開Windows x64 EXEは<strong>12,892,708バイト</strong>。保護mainの来歴 <code>3ce07983ef0a93069b2b0ba850b9dc970e3f373f</code> と公開EXEのSHA256 <code>aecb0537622148b46b731b543ce511ee281877f4e6fbc31c77f8346689ce6077</code> を検証済みです。公開EXEによる通常のWindows一括取得では17拡張・85 ZIPを照合しました。</p>
-        <p><strong>信頼境界：</strong>外部提供元ZIPの検証状態は <code>INTEGRITY_ONLY</code> です。外部ZIPのミラー・再配布・インストールは行いません。oracle_fdwとコミュニティ版pgvectorの取得許可は保留中です。</p>
-        <p><a href="https://github.com/pgextwin/catalog/actions/runs/42474871097">公開EXEのWindows検証</a> · <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.8">GitHub Release全文（英語→日本語）</a></p>
-      </article></div>
+      <h2 id="release-notes-heading">更新内容</h2>
+      <div class="cli-release-notes">
+        <article lang="ja" class="cli-note-block">
+          <h3>CLI v0.3.15</h3>
+          <p>v0.3.15（2026年11月12日）では、oracle_fdw・pgvector・pg_trickleの外部Windowsバイナリ計11 ZIPを一括取得する方法を案内しています。PostgreSQL、拡張機能、版の指定、過去の固定版、進行状況表示にも対応します。公開EXEは12,904,699バイト（12.90 MB）です。</p>
+          <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.15">GitHub Release v0.3.15</a></p>
+        </article>
+      </div>
     </section>
+    <p class="cli-back"><a href="./">カタログへ戻る</a></p>
   </main>
 </body>
 </html>
