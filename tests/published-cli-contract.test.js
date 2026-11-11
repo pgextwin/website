@@ -15,7 +15,7 @@ for (const locale of ['en','ja']) {
       [page.replaceAll('cli-v' + cliVersion, 'cli-v0.3.8'), home],
       [page.replaceAll(cliExeSha, '0'.repeat(64)), home],
       [page.replace(cliExeBytes.toLocaleString('en-US'), '12,892,708'), home],
-      [page.replace('download-all --source external', 'download-all --source unknown'), home],
+      [page.replaceAll('download-all --source external', 'download-all --source unknown'), home],
       [page.replace('--extension pgvector', '--extension unknown'), home],
       [page.replace('--version 0.8.7', '--version 0.0.0'), home],
       [page.replace('download-all --pg all --fixed', 'download-all --pg all'), home],
