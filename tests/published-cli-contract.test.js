@@ -14,7 +14,7 @@ for (const locale of ['en','ja']) {
     const corruptions = [
       [page.replaceAll('cli-v' + cliVersion, 'cli-v0.3.8'), home],
       [page.replaceAll(cliExeSha, '0'.repeat(64)), home],
-      [page.replace(cliExeBytes.toLocaleString('en-US'), '12,892,708'), home],
+      [page.replaceAll(cliExeBytes.toLocaleString('en-US'), '12,892,708'), home],
       [page.replaceAll('download-all --source external', 'download-all --source unknown'), home],
       [page.replace('--extension pgvector', '--extension unknown'), home],
       [page.replace('--version 0.8.7', '--version 0.0.0'), home],
@@ -28,6 +28,6 @@ for (const locale of ['en','ja']) {
       [page, home + '<p>SBOM</p>'],
       [page, home.replace('id="landscape-grid"', 'id="removed-grid"')]
     ];
-    for (const [p, h] of corruptions) assert.throws(() => verifyPublishedCli(p, h, locale));
+    for (const [i, [p, h]] of corruptions.entries()) assert.throws(() => verifyPublishedCli(p, h, locale), 'mutation #' + i);
   });
 }
