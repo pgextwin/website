@@ -1,27 +1,33 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {verifyPublishedCli, cliVersion, cliExeSha} from '../scripts/published-cli-contract.mjs';
+import {verifyPublishedCli,cliVersion,cliExeSha,cliExeBytes} from '../scripts/published-cli-contract.mjs';
 
-for (const locale of ['en', 'ja']) {
+for (const locale of ['en','ja']) {
   const page = readFileSync(new URL('../' + locale + '/cli.html', import.meta.url), 'utf8');
   const home = readFileSync(new URL('../' + locale + '/index.html', import.meta.url), 'utf8');
-  test('Published ' + locale + ' CLI contract accepts current full served-page fixtures', () => {
+  test('Published ' + locale + ' CLI contract accepts stable v' + cliVersion, () => {
     verifyPublishedCli(page, home, locale);
   });
-  test('Published ' + locale + ' CLI contract rejects stale tag/hash/label, missing verbose and mixed locales', () => {
+  test('Published ' + locale + ' CLI contract rejects old identity, missing commands and private wording', () => {
     const opposite = locale === 'en' ? 'ja' : 'en';
-    const changes = [
-      [page.replaceAll('cli-v' + cliVersion, 'cli-v0.3.1'), home],
+    const corruptions = [
+      [page.replaceAll('cli-v' + cliVersion, 'cli-v0.3.8'), home],
       [page.replaceAll(cliExeSha, '0'.repeat(64)), home],
-      [page.replaceAll('GitHub Release v' + cliVersion, 'GitHub Release v0.3.1'), home],
-      [page.replaceAll('download-all --pg all --verbose', 'download-all --pg all'), home],
-      [page.replaceAll('download-verbose.log', 'none.log'), home],
+      [page.replaceAll(cliExeBytes.toLocaleString('en-US'), '12,892,708'), home],
+      [page.replaceAll('download-all --source external', 'download-all --source unknown'), home],
+      [page.replace('--extension pgvector', '--extension unknown'), home],
+      [page.replace('--version 0.8.7', '--version 0.0.0'), home],
+      [page.replace('download-all --pg all --fixed', 'download-all --pg all'), home],
+      [page.replace('--verbose', '--quiet'), home],
+      [page + '<p>DOWNLOAD_DENY</p>', home],
+      [page + '<p>Sigstore</p>', home],
+      [page + '<p>verify-external-all</p>', home],
       [page + '<article lang="' + opposite + '" class="cli-note-block">', home],
-      [page, home.replaceAll('Windows CLI · v' + cliVersion, 'Windows CLI · v0.3.1')]
+      [page, home.replaceAll('Windows CLI · v' + cliVersion, 'Windows CLI · v0.3.8')],
+      [page, home + '<p>SBOM</p>'],
+      [page, home.replace('id="landscape-grid"', 'id="removed-grid"')]
     ];
-    for (const [modified, modifiedHome] of changes) {
-      assert.throws(() => verifyPublishedCli(modified, modifiedHome, locale));
-    }
+    for (const [i, [p, h]] of corruptions.entries()) assert.throws(() => verifyPublishedCli(p, h, locale), 'mutation #' + i);
   });
 }

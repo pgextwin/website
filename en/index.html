@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Find and download unofficial Windows x64 binaries for PostgreSQL extensions published by pgextwin.">
+  <meta name="description" content="Find Windows x64 PostgreSQL extensions and download 11 external ZIPs with the CLI.">
   <title>pgextwin — PostgreSQL Extensions for Windows</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/en/">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/">
@@ -21,7 +21,7 @@
       <p class="lead">Find unofficial Windows x64 extension binaries for your PostgreSQL version. Browse published ZIP downloads, installation requirements, and SHA-256 checksums in one place.</p>
       <nav class="jump-nav" aria-label="Page sections">
         <a class="jump-nav-primary" href="#extensions-heading">Browse downloads</a>
-        <a href="./cli.html">CLI v0.3.8</a>
+        <a href="./cli.html">CLI v0.3.15</a>
         <a href="#landscape-heading">Other Windows sources</a>
         <a href="#about-heading">About pgextwin</a>
       </nav>
@@ -32,12 +32,13 @@
 
   <main class="shell">
     <section class="info quickstart" aria-labelledby="quickstart-heading">
-      <p class="eyebrow">New to pgextwin?</p>
-      <h2 id="quickstart-heading">Get a package in three steps</h2>
+      <p class="eyebrow">Getting started</p>
+      <h2 id="quickstart-heading">Find → Choose → Download → Verify</h2>
       <ol class="quickstart-steps">
-        <li><strong>Find an extension.</strong>Search by name and filter for your installed PostgreSQL major version.</li>
-        <li><strong>Check compatibility.</strong>Open the extension, review its runtime requirements, and download the matching ZIP.</li>
-        <li><strong>Verify and install.</strong>Compare the ZIP's SHA-256 checksum and follow the extension's installation instructions. Downloading does not install it.</li>
+        <li><strong>Find</strong> — Search by extension name and filter by your PostgreSQL major version.</li>
+        <li><strong>Choose</strong> — Check the matching version and installation requirements.</li>
+        <li><strong>Download</strong> — Get the ZIP file, or use the <a href="./cli.html">Windows CLI</a> for multiple packages.</li>
+        <li><strong>Verify</strong> — Compare the downloaded ZIP's SHA-256, then follow that extension's installation steps.</li>
       </ol>
     </section>
 
@@ -50,7 +51,7 @@
         <button id="reload" type="button">Reload catalog</button>
       </div>
 
-      <div class="catalog-hint" role="note"><strong>Original pgextwin Windows binaries</strong><p>Select an extension to display its PostgreSQL-version ZIP download table. ZIP files are installable packages; SBOM, Grype and attestations are supporting evidence.</p></div>
+      <div class="catalog-hint" role="note"><strong>pgextwin Windows x64 ZIP downloads (17 extensions)</strong><p>Filter by name and PostgreSQL version. Open an extension to see its matching ZIP and SHA-256.</p></div>
       <div class="filters" aria-label="Extension filters">
         <div class="filter-field filter-field--search">
           <label for="search">Search extensions</label>
@@ -72,11 +73,15 @@
 
 
     <section class="cli-home-teaser" aria-labelledby="cli-home-heading">
-      <p class="eyebrow">Windows CLI · v0.3.8</p>
-      <h2 id="cli-home-heading">Download multiple extension ZIPs with the CLI</h2>
-      <p>Download <strong>original ZIPs registered in the published Catalog</strong> for your chosen PostgreSQL versions. The CLI verifies the signed Catalog feed and each ZIP SHA-256. Use <code>--fixed</code> for a historical snapshot. Individual ZIP signatures are not verified; the ZIP result is <code>INTEGRITY_ONLY</code>.</p>
-      <pre><code>.\pgextwin.exe download-all --pg all</code></pre>
-      <div class="cli-teaser-actions"><a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.8/pgextwin.exe">Download CLI v0.3.8</a><a href="./cli.html">Visual guide, safety and release notes →</a></div>
+      <p class="eyebrow">Windows CLI · v0.3.15 · Stable</p>
+      <h2 id="cli-home-heading">Get all 11 external Windows ZIPs in one command</h2>
+      <p>The Windows CLI can download <strong>oracle_fdw 2.9.0 and pgvector 0.8.7 (PG14–18 each), plus pg_trickle 0.108.3 (PG18)</strong> directly from their providers. It also supports batch downloads of pgextwin-published ZIPs.</p>
+      <div class="cli-command-list">
+        <div><strong>All 11 external ZIPs</strong><pre><code>.\pgextwin.exe download-all --source external</code></pre></div>
+        <div><strong>pgextwin ZIPs</strong><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
+      </div>
+      <p>Choose an extension or PostgreSQL version to narrow your download. The CLI downloads files but does not install them.</p>
+      <div class="cli-teaser-actions"><a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.15/pgextwin.exe">Download CLI v0.3.15 (12.90 MB)</a><a href="./cli.html">Commands and SHA-256 verification</a></div>
     </section>
 
     <section class="landscape-section" aria-labelledby="landscape-heading">
@@ -134,9 +139,10 @@
     </section>
 
     <section class="info" aria-labelledby="integrity-heading">
-      <p class="eyebrow">Integrity and evidence</p>
-      <h2 id="integrity-heading">Verify your downloaded ZIP with SHA-256</h2>
-      <p>Each ZIP displays an SHA-256 checksum that you can compare with the published <code>SHA256SUMS.txt</code>. Signatures and build provenance may provide additional evidence, but they do not guarantee security or compatibility. Vulnerability reports reflect the time they were generated.</p>
+      <p class="eyebrow">After downloading</p>
+      <h2 id="integrity-heading">Check the ZIP's SHA-256</h2>
+      <p>Run the following in PowerShell with your downloaded ZIP file name. Compare the result with the SHA-256 shown in the extension details.</p>
+      <pre><code>Get-FileHash .\downloaded-file.zip -Algorithm SHA256</code></pre>
     </section>
 
     <section class="info" aria-labelledby="about-heading">
@@ -150,12 +156,12 @@
 
   <footer class="site-footer">
     <div class="shell">
-      <a href="https://github.com/pgextwin">GitHub Organization</a>
-      <a href="https://github.com/pgextwin/catalog">Catalog</a>
-      <a href="https://github.com/pgextwin/build">Build infrastructure</a>
+      <a href="https://github.com/pgextwin">GitHub</a>
+      <a href="https://github.com/pgextwin/catalog">Published catalog</a>
+      <a href="./cli.html">Windows CLI</a>
       <section class="release-limitations" role="note" aria-labelledby="release-limitations-title">
         <h2 id="release-limitations-title">Before you install</h2>
-        <p>Only published, verified Release assets appear in the download catalog. Work-in-progress candidates are not available for installation. pgextwin packages are unofficial. Check PostgreSQL compatibility, licensing, and each extension's configuration instructions before use. See <a href="https://github.com/pgextwin/build/issues/75">the release-operation tracking issue</a> for further publication details.</p>
+        <p>pgextwin packages are unofficial. Check PostgreSQL compatibility, provider licenses, and required configuration. Downloading a ZIP does not install it. For third-party packages, consult the original provider's documentation.</p>
       </section>
     </div>
   </footer>
