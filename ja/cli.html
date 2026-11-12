@@ -19,8 +19,8 @@
     </nav>
     <p class="eyebrow">pgextwin CLI</p>
     <h1>Windows CLI v0.3.15</h1>
-    <p class="lead">外部配布の11 ZIPとpgextwinの公開ZIPを、Windowsでまとめてダウンロード。</p>
-    <p class="cli-hero-description">PostgreSQLのバージョン、拡張機能名、版を選んで取得できます。ダウンロードしたファイルは自動インストールされません。</p>
+    <p class="lead">外部配布の11 ZIPとpgextwinの公開ZIPをWindowsでまとめてダウンロード。</p>
+    <p class="cli-hero-description">PostgreSQLのバージョン、拡張機能名、拡張機能の版を指定して取得できます。ダウンロードしたファイルは自動インストールされません。</p>
     <nav class="jump-nav" aria-label="CLI navigation">
       <a class="jump-nav-primary" href="#download-heading">CLIを入手</a>
       <a href="#commands-heading">コマンド例</a>
@@ -39,7 +39,7 @@
       </div>
       <p class="cli-exe-size">EXEサイズ：12,904,699 バイト</p>
       <p class="cli-sha"><strong>EXEのSHA-256：</strong><code>2f573a33765c1c0103ac898674b11e849a643f174844c8caeddf15afd64ebb9f</code></p>
-      <p>ダウンロード後、PowerShellで次のコマンドを実行してください。表示されたSHA-256が上記の値、またはSHA256SUMS.txtの値と一致することを確認します。</p>
+      <p>ダウンロード後、PowerShellで次のコマンドを実行してください。表示されたSHA-256が上記の値またはSHA256SUMS.txtの値と一致することを確認します。</p>
       <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256</code></pre>
     </section>
     <section aria-labelledby="commands-heading">
@@ -62,7 +62,7 @@
       <p class="eyebrow">使い方は3ステップ</p>
       <h2 id="flow-heading">使い方は3ステップ</h2>
       <ol class="cli-flow-steps">
-        <li><h3>1. pgextwin.exeを取得</h3><p>上のボタンからEXEをダウンロードし、使いたいフォルダーに保存します。</p></li>
+        <li><h3>1. pgextwin.exeを取得</h3><p>上のボタンからEXEをダウンロードし、使用するフォルダーに保存します。</p></li>
         <li><h3>2. コマンドを実行</h3><p>そのフォルダーでPowerShellを開き、目的のコマンドを実行します。--pg、--extension、--versionで対象を絞り込めます。</p></li>
         <li><h3>3. ZIPを照合</h3><p>取得したZIPのSHA-256を確認し、提供元の導入手順に従ってください。</p></li>
       </ol>
@@ -74,14 +74,14 @@
     </section>
     <section class="cli-caution" role="note" aria-labelledby="caution-heading">
       <h2 id="caution-heading">ご利用前の注意</h2>
-      <p>外部配布物はそれぞれの提供元が公開しています。対応するPostgreSQLバージョンとライセンスを確認してください。PostgreSQL 14の公式サポートは2026年11月12日に終了しました。CLIはダウンロード専用で、拡張機能のインストールや設定変更は行いません。</p>
+      <p>外部配布物は、それぞれの提供元が公開しています。対応するPostgreSQLバージョンとライセンスを確認してください。PostgreSQL 14の公式サポートは2026年11月12日に終了しました。CLIはダウンロード専用で、拡張機能のインストールや設定変更は行いません。</p>
     </section>
     <section aria-labelledby="release-notes-heading">
       <h2 id="release-notes-heading">リリースノート</h2>
       <div class="cli-release-notes">
         <article lang="ja" class="cli-note-block">
           <h3>CLI v0.3.15</h3>
-          <p>v0.3.15（2026年11月12日）では、oracle_fdw・pgvector・pg_trickleの外部Windowsバイナリ計11 ZIPを一括取得する方法を案内しています。PostgreSQL、拡張機能、版の指定、過去の固定版、進行状況表示にも対応します。公開EXEは12,904,699バイト（12.90 MB）です。</p>
+          <p>v0.3.15（2026年11月12日）では、oracle_fdw・pgvector・pg_trickleの外部Windowsバイナリ計11 ZIPを一括取得する方法を案内しています。PostgreSQL、拡張機能、拡張機能の版の指定、過去の固定版、進行状況表示にも対応します。公開EXEは12,904,699バイト（12.90 MB）です。</p>
           <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.15">GitHub Release v0.3.15</a></p>
         </article>
       </div>
