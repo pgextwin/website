@@ -18,7 +18,7 @@
       <nav class="language-nav" aria-label="表示言語"><a href="../ja/" lang="ja" aria-current="page">日本語</a><a href="../en/" lang="en">English</a></nav>
       <p class="eyebrow">pgextwin</p>
       <h1>PostgreSQL拡張機能のWindowsバイナリ</h1>
-      <p class="lead">使用しているPostgreSQLのバージョンに対応する、Windows x64向け拡張機能の非公式バイナリを探せます。公開済みZIPのダウンロード先、導入要件、SHA-256の確認方法を案内します。</p>
+      <p class="lead">お使いのPostgreSQLのバージョンに対応するWindows x64向け拡張機能の非公式バイナリを探せます。公開済みZIPのダウンロード先、導入要件、SHA-256の確認方法を案内します。</p>
       <nav class="jump-nav" aria-label="ページ内ナビゲーション">
         <a class="jump-nav-primary" href="#extensions-heading">バイナリを探す</a>
         <a href="./cli.html">CLI v0.3.15</a>
@@ -35,9 +35,9 @@
       <p class="eyebrow">はじめて利用する方へ</p>
       <h2 id="quickstart-heading">探す → 選ぶ → ダウンロード → 照合</h2>
       <ol class="quickstart-steps">
-        <li><strong>探す</strong> — 拡張機能名で検索し、PostgreSQLのバージョンを絞り込みます。</li>
+        <li><strong>探す</strong> — 拡張機能名で検索し、PostgreSQLのバージョンで絞り込みます。</li>
         <li><strong>選ぶ</strong> — 対応するバージョンと導入要件を確認します。</li>
-        <li><strong>ダウンロード</strong> — 対象のZIPを取得します。複数まとめて取得する場合は<a href="./cli.html">Windows CLI</a>が便利です。</li>
+        <li><strong>ダウンロード</strong> — 対象のZIPを取得します。複数のZIPをまとめて取得する場合は<a href="./cli.html">Windows CLI</a>が便利です。</li>
         <li><strong>SHA-256で照合</strong> — ダウンロードしたZIPのハッシュ値を確認してから、拡張機能ごとの導入手順に従います。</li>
       </ol>
     </section>
@@ -51,7 +51,7 @@
         <button id="reload" type="button">カタログを再読み込み</button>
       </div>
 
-      <div class="catalog-hint" role="note"><strong>pgextwinが公開するWindows x64用ZIP（17拡張機能）</strong><p>名前とPostgreSQLのバージョンで絞り込んでください。拡張機能を開くと、対応するZIPとSHA-256を確認できます。</p></div>
+      <div class="catalog-hint" role="note"><strong>pgextwinが公開するWindows x64用ZIP（17拡張機能）</strong><p>拡張機能名とPostgreSQLのバージョンで絞り込んでください。拡張機能を開くと、対応するZIPとSHA-256を確認できます。</p></div>
       <div class="filters" aria-label="拡張機能の絞り込み">
         <div class="filter-field filter-field--search">
           <label for="search">拡張機能を検索</label>
@@ -74,13 +74,13 @@
 
     <section class="cli-home-teaser" aria-labelledby="cli-home-heading">
       <p class="eyebrow">Windows CLI · v0.3.15 · 正式版</p>
-      <h2 id="cli-home-heading">外部バイナリ11件も、まとめてダウンロード</h2>
-      <p>Windows CLIなら、<strong>oracle_fdw 2.9.0・pgvector 0.8.7（それぞれPG14〜18）とpg_trickle 0.108.3（PG18）</strong>の計11 ZIPを、提供元から一括取得できます。pgextwin公開ZIPの一括取得にも対応しています。</p>
+      <h2 id="cli-home-heading">外部バイナリ11件もまとめてダウンロード</h2>
+      <p>Windows CLIなら、<strong>oracle_fdw 2.9.0・pgvector 0.8.7（それぞれPG14〜18）とpg_trickle 0.108.3（PG18）</strong>の計11 ZIPを提供元から一括取得できます。pgextwinが公開するZIPも一括取得できます。</p>
       <div class="cli-command-list">
         <div><strong>外部配布の11 ZIPを取得</strong><pre><code>.\pgextwin.exe download-all --source external</code></pre></div>
         <div><strong>pgextwinの公開ZIPを取得</strong><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
       </div>
-      <p>PostgreSQLの版や拡張機能を指定して絞り込むこともできます。CLIはダウンロード専用で、インストールは行いません。</p>
+      <p>PostgreSQLのバージョンや拡張機能を指定して絞り込むこともできます。CLIはダウンロード専用で、インストールは行いません。</p>
       <div class="cli-teaser-actions"><a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.15/pgextwin.exe">CLI v0.3.15 をダウンロード（12.90 MB）</a><a href="./cli.html">使い方とSHA-256の確認方法</a></div>
     </section>
 
@@ -92,10 +92,10 @@
         </div>
         <button id="landscape-reload" type="button">対応状況を再読み込み</button>
       </div>
-      <p>pgextwinで配布中の拡張機能、今後の実装候補、外部のWindowsバイナリ配布元を確認できます。<strong>「pgextwinで実装予定なし」は、Windowsで使用できないことを意味しません。</strong></p>
+      <p>pgextwinで配布中の拡張機能、今後の実装候補、外部のWindowsバイナリ配布元を確認できます。<strong>「pgextwinで実装予定なし」はWindowsで使用できないことを意味しません。</strong></p>
 
 
-      <p class="landscape-disclaimer">外部配布物は記載されたプロジェクトまたはベンダーが提供します。pgextwinはその正確性、安全性、更新状況、サポート、互換性を保証しません。導入前に提供元の利用条件と対象PostgreSQLバージョンの要件をご確認ください。</p>
+      <p class="landscape-disclaimer">外部配布物は、記載されたプロジェクトまたはベンダーが提供します。pgextwinは、その正確性、安全性、更新状況、サポート、互換性を保証しません。導入前に、提供元の利用条件と対象PostgreSQLバージョンの要件をご確認ください。</p>
 
 
       <div class="filters landscape-filters" aria-label="対応状況の検索と絞り込み">
@@ -131,8 +131,8 @@
 
     <section class="info" aria-labelledby="lifecycle-heading">
       <p class="eyebrow">PostgreSQLのサポート期間</p>
-      <h2 id="lifecycle-heading">ダウンロードできても、サポート期間内とは限りません</h2>
-      <p><strong>配布中</strong>は、そのPostgreSQLバージョン用のバイナリが公開されていることを示します。一方、<strong>サポート期間内</strong>はPostgreSQLコミュニティのサポート状況です。サポートが終了したバージョンのZIPも、過去の配布物として残る場合があります。</p>
+      <h2 id="lifecycle-heading">ダウンロードできてもサポート期間内とは限りません</h2>
+      <p><strong>「配布中」</strong>は、そのPostgreSQLバージョン用のバイナリが公開されていることを示します。一方、<strong>「サポート期間内」</strong>はPostgreSQLコミュニティのサポート状況を示します。サポートが終了したバージョンのZIPも、過去の配布物として残る場合があります。</p>
 
 
       <div id="lifecycle-notice" class="lifecycle-notice" aria-live="polite"></div>
@@ -141,14 +141,14 @@
     <section class="info" aria-labelledby="integrity-heading">
       <p class="eyebrow">ダウンロード後の確認</p>
       <h2 id="integrity-heading">ZIPのSHA-256を確認する</h2>
-      <p>ダウンロードしたZIPに対し、PowerShellで次のコマンドを実行します。表示された値が、拡張機能の詳細にあるSHA-256と一致することを確認してください。</p>
+      <p>ダウンロードしたZIPについて、PowerShellで次のコマンドを実行します。表示された値が拡張機能の詳細にあるSHA-256と一致することを確認してください。</p>
       <pre><code>Get-FileHash .\downloaded-file.zip -Algorithm SHA256</code></pre>
     </section>
 
     <section class="info" aria-labelledby="about-heading">
       <p class="eyebrow">このプロジェクトについて</p>
       <h2 id="about-heading">pgextwinが公開するパッケージについて</h2>
-      <p>pgextwinはPostgreSQL拡張機能の非公式Windows x64パッケージを公開する独立したコミュニティプロジェクトです。各パッケージの上流プロジェクト、ソースのバージョン、対応PostgreSQLバージョン、ライセンスを確認できます。</p>
+      <p>pgextwinは、PostgreSQL拡張機能の非公式Windows x64パッケージを公開する独立したコミュニティプロジェクトです。各パッケージの上流プロジェクト、ソースのバージョン、対応PostgreSQLバージョン、ライセンスを確認できます。</p>
 
 
     </section>
@@ -161,7 +161,7 @@
       <a href="./cli.html">Windows CLI</a>
       <section class="release-limitations" role="note" aria-labelledby="release-limitations-title">
         <h2 id="release-limitations-title">ご利用前の注意</h2>
-        <p>pgextwinの配布物は非公式です。対応するPostgreSQLのバージョン、提供元のライセンス、必要な設定を確認してください。ZIPをダウンロードするだけではインストールされません。外部配布物については各提供元の案内もご確認ください。</p>
+        <p>pgextwinの配布物は非公式です。対応するPostgreSQLのバージョン、提供元のライセンス、必要な設定を確認してください。ZIPをダウンロードするだけではインストールされません。外部配布物については、各提供元の案内もご確認ください。</p>
       </section>
     </div>
   </footer>
