@@ -7,9 +7,6 @@ on:
   workflow_dispatch:
   repository_dispatch:
     types: [catalog-updated]
-  schedule:
-    - cron: "30 0 * * *" # 09:30 JST; not guaranteed at exact minute
-
 permissions:
   contents: read
 
