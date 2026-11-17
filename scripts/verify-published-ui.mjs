@@ -7,44 +7,44 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
+import { assertApprovedIndexes, landscapeExpectations, assertApprovedNames } from "./published-data-expectations.mjs";
 
 const site = "https://pgextwin.github.io/website/en/";
 const catalogResponse = await fetch("https://raw.githubusercontent.com/pgextwin/catalog/main/index.json", {signal: AbortSignal.timeout(40000)});
 assert.equal(catalogResponse.status, 200, "Public Catalog unavailable");
 const catalogIndex = await catalogResponse.json();
-assert.equal(catalogIndex.schemaVersion, 2);
-const catalogCount = catalogIndex.extensions.length;
-const plpgsqlRecordResponse = await fetch("https://raw.githubusercontent.com/pgextwin/catalog/main/extensions/plpgsql_check.json", {signal: AbortSignal.timeout(40000)});
-assert.equal(plpgsqlRecordResponse.status,200,"Signed plpgsql_check Catalog record unavailable");
-const plpgsqlExpected=await plpgsqlRecordResponse.json();
-assert.equal(plpgsqlExpected.name,"plpgsql_check");
-assert.match(plpgsqlExpected.latest.releaseTag,/^v[0-9.]+-windows\.[1-9][0-9]*$/);
-const expectedPlpgsqlMajors=Object.entries(plpgsqlExpected.postgresql)
-  .filter(([,entry])=>entry.available===true).map(([major])=>Number(major)).sort((a,b)=>a-b);
-assert.ok(expectedPlpgsqlMajors.length>0,"No verified plpgsql_check binaries");
-
-const setUserRecordResponse=await fetch("https://raw.githubusercontent.com/pgextwin/catalog/main/extensions/set_user.json",
-  {signal:AbortSignal.timeout(40000)});
-assert.equal(setUserRecordResponse.status,200,"Signed set_user Catalog record unavailable");
-const setUserExpected=await setUserRecordResponse.json();
-assert.equal(setUserExpected.name,"set_user");
-assert.ok(/^v[0-9.]+-windows\.[1-9][0-9]*$/.test(setUserExpected.latest.releaseTag));
-assert.ok(Object.values(setUserExpected.postgresql).some(item=>item.available===true),
-  "No verified set_user binaries");
-
-assert.ok(catalogCount > 0, "Empty distribution Catalog");
 const landscapeResponse = await fetch("https://raw.githubusercontent.com/pgextwin/catalog/main/landscape/index.json", {signal: AbortSignal.timeout(40000)});
 assert.equal(landscapeResponse.status,200,"Public Landscape unavailable");
 const landscapeIndex=await landscapeResponse.json();
+assertApprovedIndexes(catalogIndex, landscapeIndex);
+const catalogCount=catalogIndex.extensions.length;
 const landscapeRecords=await Promise.all(landscapeIndex.extensions.map(async name=>{
   const response=await fetch(`https://raw.githubusercontent.com/pgextwin/catalog/main/landscape/extensions/${encodeURIComponent(name)}.json`,{signal:AbortSignal.timeout(40000)});
   assert.equal(response.status,200,`Landscape record unavailable: ${name}`);
-  return response.json();
+  const record=await response.json();
+  assert.equal(record.name,name);
+  return record;
 }));
 const landscapeCount=landscapeRecords.length;
-const expectedStatusCounts=Object.fromEntries(["implemented","candidate","not-planned"]
-  .map(status=>[status,landscapeRecords.filter(record=>record.status===status).length]));
-assert.equal(expectedStatusCounts.implemented,catalogCount,"Catalog/Landscape implemented count mismatch");
+const expected=landscapeExpectations(catalogIndex, landscapeIndex, landscapeRecords);
+const expectedStatusCounts=expected.counts;
+// Keep the existing bilingual ZIP/version/SHA/evidence checks, selecting records
+// from the approved index instead of requiring two historical extension names.
+// Sequential requests stay bounded by the Catalog index's existing resource cap.
+const catalogRecords=[];
+for (const name of catalogIndex.extensions) {
+  const response=await fetch(`https://raw.githubusercontent.com/pgextwin/catalog/main/extensions/${encodeURIComponent(name)}.json`,
+    {signal:AbortSignal.timeout(40000)});
+  assert.equal(response.status,200,`Signed Catalog record unavailable: ${name}`);
+  const record=await response.json();
+  assert.equal(record.name,name);
+  // Use the same bounded safe-tag grammar as the fleet audit: approved versions
+  // may include a date or prerelease component, not just dotted numbers.
+  assert.match(record.latest.releaseTag,/^v[A-Za-z0-9][A-Za-z0-9._-]{0,110}-windows\.[1-9][0-9]*$/);
+  assert.ok(Object.values(record.postgresql).some(item=>item.available===true),
+    `No verified binaries: ${name}`);
+  catalogRecords.push(record);
+}
 const chromeBin = process.env.CHROME_BIN || "google-chrome";
 execFileSync("which", [chromeBin]);
 const dir = await mkdtemp(join(tmpdir(), "pgextwin-browser-"));
@@ -113,7 +113,7 @@ try {
       .map(([major])=>Number(major)).sort((a,b)=>a-b);
     // Real, published DOM in Chrome: do not mistake correct JSON for correct visible UI.
     const displayed=await evaluate(`(() => {
-      const card=document.getElementById("extension-${record.name}");
+      const card=document.getElementById(${JSON.stringify("extension-"+record.name)});
       if (!card) return null;
       const rows=[...card.querySelectorAll(".binary-table tbody tr")].map(row=>({
         major:Number(row.querySelector("th")?.textContent.match(/[0-9]+/)?.[0]),
@@ -157,6 +157,12 @@ try {
     return {locale,extension:record.name,releaseTag:displayed.releaseTag,majors:expectedMajors,
       renderedDirectZipShaSbomGrypeAttestations:true};
   }
+  async function assertApprovedCards() {
+    assertApprovedNames(await evaluate('[...document.querySelectorAll("#extensions .extension-collapse")].map(card=>card.id.slice("extension-".length))'),
+      catalogIndex.extensions,"Published Catalog cards differ from approved index");
+    assertApprovedNames(await evaluate('[...document.querySelectorAll("#landscape-grid .landscape-collapse")].map(row=>row.id.slice("landscape-".length))'),
+      landscapeIndex.extensions,"Published Landscape cards differ from approved index");
+  }
   await send("Page.enable");
   await send("Runtime.enable");
   await send("Page.navigate",{url:site});
@@ -164,6 +170,7 @@ try {
     "public catalog and landscape data loaded");
   assert.equal(await evaluate('document.querySelectorAll("#extensions article").length'),catalogCount);
   assert.equal(await evaluate('document.querySelectorAll("#landscape-grid article").length'),landscapeCount);
+  await assertApprovedCards();
   assert.equal(await evaluate('document.querySelectorAll("#extensions details.extension-collapse:not([open])").length'),catalogCount);
   assert.equal(await evaluate('document.querySelectorAll("#landscape-grid details.landscape-collapse:not([open])").length'),landscapeCount);
   const catalogDisclosure = await evaluate(`(() => {
@@ -172,13 +179,14 @@ try {
     const hasTable=rows[0].querySelectorAll(".binary-table tbody tr").length>=1;
     const zip=rows[0].querySelector(".binary-table .download-link");
     const validZip=zip && zip.href.startsWith("https://") && zip.href.includes(".zip");
-    rows[1].querySelector("summary").click();
-    return {hasTable,validZip,exclusive:!rows[0].open && rows[1].open};
+    const second=rows[1];
+    if (second) second.querySelector("summary").click();
+    return {hasTable,validZip,exclusive:second ? !rows[0].open && second.open : rows[0].open};
   })()`);
   assert.ok(catalogDisclosure.hasTable && catalogDisclosure.validZip && catalogDisclosure.exclusive,
     "Original ZIP table and single-open catalog disclosure");
-  const enReleaseEvidence=await assertBilingualAssets("en",plpgsqlExpected);
-  const enSetUserEvidence=await assertBilingualAssets("en",setUserExpected);
+  const signedReleaseVisuals=[];
+  for (const record of catalogRecords) signedReleaseVisuals.push(await assertBilingualAssets("en",record));
   const landscapeDisclosure = await evaluate(`(() => {
     const row=document.querySelector("#landscape-grid .landscape-collapse");
     row.querySelector("summary").click();
@@ -195,51 +203,52 @@ try {
     })()`);
     assert.equal(counts[status],expected);
   }
-  const waveLabels=await evaluate(`(() => {
-    const s=document.getElementById("landscape-filter");
-    s.value="candidate";s.dispatchEvent(new Event("change",{bubbles:true}));
-    return [...document.querySelectorAll("#landscape-grid article")].map(x=>({
-      name:x.querySelector("h3")?.textContent,
-      label:x.querySelector(".landscape-roadmap-label")?.textContent
-    }));
-  })()`);
-  assert.ok(waveLabels.every(x=>!x.label?.startsWith("Wave 2 #")), "Completed Wave 2 must no longer be a candidate");
-  const distributedWaveLabels = await evaluate(`(() => {
-    const s=document.getElementById("landscape-filter");
-    s.value="implemented"; s.dispatchEvent(new Event("change",{bubbles:true}));
-    return [...document.querySelectorAll("#landscape-grid .landscape-roadmap-label")].map(x=>x.textContent);
-  })()`);
-  assert.equal(distributedWaveLabels.filter(x=>x?.startsWith("Wave 2 #")).length,3,
-    "All three Wave 2 selection history labels must remain visible");
-  // All researched/reserved Wave 3 entries legitimately disappear from the
-  // candidate filter once an independently verified Release is promoted.
-  // Keep validating the decision label on any entries still candidates.
-  assert.ok(waveLabels.every(x=>["Reserve candidate","Further research"].some(
-    decision=>x.label?.includes(decision))),
-    "A remaining Wave 3 candidate lost its reviewed decision label");
-  assert.equal(await evaluate(`(() => {
+  // Compare each record's label and identity, including candidate Wave 2 and
+  // decision-pending entries when they are present in the approved registry.
+  for (const [status, labels] of [["candidate",expected.candidateLabels],
+    ["implemented",expected.implementedLabels]]) {
+    const displayed=await evaluate(`(() => {
+      const s=document.getElementById("landscape-filter");
+      s.value=${JSON.stringify(status)};s.dispatchEvent(new Event("change",{bubbles:true}));
+      return [...document.querySelectorAll("#landscape-grid article")].flatMap(card=>{
+        const label=card.querySelector(".landscape-roadmap-label");
+        return label ? [{name:card.querySelector(".landscape-collapse").id.slice("landscape-".length),
+          label:label.textContent}] : [];
+      });
+    })()`);
+    assert.deepEqual(displayed.sort((a,b)=>a.name.localeCompare(b.name)),labels,
+      `Published ${status} roadmap labels differ from approved Landscape data`);
+  }
+  const searchNames=await evaluate(`(() => {
     document.getElementById("landscape-filter").value="";
     document.getElementById("landscape-filter").dispatchEvent(new Event("change",{bubbles:true}));
     const s=document.getElementById("landscape-search");
-    s.value="oracle_fdw";
+    s.value=${JSON.stringify(expected.query)};
     s.dispatchEvent(new Event("input",{bubbles:true}));
-    return document.querySelectorAll("#landscape-grid article").length;
-  })()`),1);
-  assert.ok((await evaluate(`(() => {
+    return [...document.querySelectorAll("#landscape-grid .landscape-collapse")]
+      .map(row=>row.id.slice("landscape-".length));
+  })()`);
+  assertApprovedNames(searchNames,expected.searchNames,"Landscape search differs from approved records");
+  const vendorNames=await evaluate(`(() => {
     const s=document.getElementById("landscape-search");s.value="";s.dispatchEvent(new Event("input",{bubbles:true}));
     const t=document.getElementById("landscape-source-filter");t.value="vendor";t.dispatchEvent(new Event("change",{bubbles:true}));
-    return document.querySelectorAll("#landscape-grid article").length;
-  })()`))>=3,"Vendor-only source filter did not find SRA OSS entries");
+    return [...document.querySelectorAll("#landscape-grid .landscape-collapse")]
+      .map(row=>row.id.slice("landscape-".length));
+  })()`);
+  assertApprovedNames(vendorNames,expected.vendorNames,"Vendor filter differs from approved records");
   const linkSafety=await evaluate(`(() => {
     document.getElementById("landscape-source-filter").value="";
     document.getElementById("landscape-source-filter").dispatchEvent(new Event("change",{bubbles:true}));
     const urls=[...document.querySelectorAll("#landscape-grid .landscape-sources a")].map(x=>x.href);
-    return {count:urls.length,allHttps:urls.every(x=>x.startsWith("https://")),
+    return {urls,allHttps:urls.every(x=>x.startsWith("https://")),
       vendorLabel:document.querySelector("#landscape-grid")?.textContent.includes("Support customers only"),
       condaLabel:document.querySelector("#landscape-grid")?.textContent.includes("Conda PostgreSQL environment")};
   })()`);
-  assert.ok(linkSafety.count>=10 && linkSafety.allHttps);
-  assert.ok(linkSafety.vendorLabel && linkSafety.condaLabel);
+  assert.ok(linkSafety.allHttps);
+  assertApprovedNames(linkSafety.urls,expected.sourceUrls.map(url=>new URL(url).href),
+    "Published source links differ from approved Landscape data");
+  assert.equal(linkSafety.vendorLabel,expected.vendorLabel);
+  assert.equal(linkSafety.condaLabel,expected.condaLabel);
   await send("Emulation.setDeviceMetricsOverride",{width:375,height:812,deviceScaleFactor:1,mobile:true});
   const mobile=await evaluate(`(() => ({
     width:window.innerWidth,
@@ -259,15 +268,14 @@ try {
   assert.equal(await evaluate('document.documentElement.lang'),"ja");
   assert.equal(await evaluate('document.querySelectorAll("#extensions article").length'),catalogCount);
   assert.equal(await evaluate('document.querySelectorAll("#landscape-grid article").length'),landscapeCount);
+  await assertApprovedCards();
   assert.ok((await evaluate('document.querySelector("#extensions article")?.textContent'))?.includes("ZIPをダウンロード"));
   assert.equal(await evaluate('document.querySelector("nav.language-nav [aria-current=page]")?.getAttribute("lang")'),"ja");
   assert.ok((await evaluate('document.querySelector("#landscape-grid")?.textContent'))?.includes("配布中"));
-  const jaReleaseEvidence=await assertBilingualAssets("ja",plpgsqlExpected);
-  const jaSetUserEvidence=await assertBilingualAssets("ja",setUserExpected);
+  for (const record of catalogRecords) signedReleaseVisuals.push(await assertBilingualAssets("ja",record));
   console.log(JSON.stringify({result:"PASS",site,realBrowser:"Chrome headless",japanesePage:true,catalogCards:catalogCount,
     landscapeCards:landscapeCount,statusFilterCounts:counts,search:true,sourceFilter:true,
-    externalHttpsLinks:linkSafety.count,vendorAndCondaLabels:true,mobile,
-    signedReleaseVisuals:[enReleaseEvidence,jaReleaseEvidence,enSetUserEvidence,jaSetUserEvidence]}));
+    externalHttpsLinks:linkSafety.urls.length,vendorAndCondaLabels:true,mobile,signedReleaseVisuals}));
 } finally {
   try { ws?.close(); } catch {}
   chrome.kill("SIGTERM");
