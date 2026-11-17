@@ -4,6 +4,7 @@
 import assert from "node:assert/strict";
 import { setTimeout as delay } from "node:timers/promises";
 import { verifyPublishedCli } from './published-cli-contract.mjs';
+import { assertApprovedIndexes, landscapeExpectations } from './published-data-expectations.mjs';
 
 const root = "https://pgextwin.github.io/website/";
 const site = root + "en/";
@@ -44,17 +45,17 @@ async function verify() {
     'id="pg-filter"','id="extensions"']) {
     assert.ok(html.includes(phrase), `Missing public Pages HTML control: ${phrase}`);
   }
-  const [js, app, css, rawIndex] = await Promise.all([
+  const [js, app, css, rawIndex, dist] = await Promise.all([
     get(root+"landscape-view.js").then(x=>x.text()),
     get(root+"landscape-app.js").then(x=>x.text()),
     get(root+"styles.css").then(x=>x.text()),
-    get(registry+"/landscape/index.json").then(x=>x.json())
+    get(registry+"/landscape/index.json").then(x=>x.json()),
+    get(registry+"/index.json").then(x=>x.json())
   ]);
   assert.ok(js.includes("partitionResults") && js.includes("filterRecords"),"Published Landscape logic missing");
   assert.ok(app.includes("landscape-status") && app.includes("External Windows binary sources"),"Published Landscape rendering missing");
   assert.ok(css.includes(".landscape-filters") && css.includes("@media"),"Published responsive Landscape styles missing");
-  assert.equal(rawIndex.schemaVersion,1);
-  assert.equal(new Set(rawIndex.extensions).size,rawIndex.extensions.length);
+  assertApprovedIndexes(dist, rawIndex);
   const records = await Promise.all(rawIndex.extensions.map(async name => {
     const data = await (await get(registry+"/landscape/extensions/"+encodeURIComponent(name)+".json")).json();
     assert.equal(data.name,name);
@@ -71,52 +72,9 @@ async function verify() {
     }
     return data;
   }));
-  const counts = Object.fromEntries(["implemented","candidate","not-planned"].map(status=>[status,records.filter(x=>x.status===status).length]));
-  assert.equal(Object.values(counts).reduce((sum,count)=>sum+count,0),records.length,
-    "Unknown Landscape status");
-  const wave=records.filter(x=>x.roadmap?.decision==="wave-2").sort((a,b)=>a.roadmap.order-b.roadmap.order);
-  assert.deepEqual(wave.map(x=>[x.name,x.roadmap.order]),[["plpgsql_check",1],["hypopg",2],["wal2json",3]]);
-  // Reserve/research are historical choices, not immutable live counts.
-  // Each named candidate keeps its reviewed rationale; promoted records must
-  // be listed as implemented with a Catalog identity and no stale roadmap.
-  const byName = new Map(records.map(x=>[x.name,x]));
-  const reviewedCandidates = [
-    ["pg_partman","reserve"],
-    ["pg_stat_monitor","reserve"],
-    ["orafce","research"]
-  ];
-  for (const [name, decision] of reviewedCandidates) {
-    const record=byName.get(name);
-    assert.ok(record, "Missing reviewed candidate: "+name);
-    if (record.status === "candidate") {
-      assert.equal(record.roadmap?.decision,decision,
-        name+": candidate roadmap unexpectedly changed");
-    } else {
-      assert.equal(record.status,"implemented",
-        name+": neither candidate nor implemented");
-      assert.equal(record.pgextwinCatalogName,name,
-        name+": promoted item missing Catalog link");
-      assert.equal(record.roadmap,undefined,
-        name+": stale candidate roadmap after promotion");
-    }
-  }
-  // Additional evidence-only candidates (e.g. PGroonga under Issue #112) are
-  // allowed without weakening the fixed, named historical candidate checks above.
-  // Requiring a GLOBAL exact count would prevent any new research candidate.
-  for (const decision of ["reserve", "research"]) {
-    const observed = records.filter(x=>x.roadmap?.decision===decision).length;
-    const required = reviewedCandidates.filter(([name, wanted]) =>
-      wanted===decision && byName.get(name).status==="candidate").length;
-    assert.ok(observed >= required,
-      decision + ": reviewed candidate roster lost a required entry");
-  }
+  const {counts} = landscapeExpectations(dist, rawIndex, records);
   assert.ok(js.includes("roadmapLabel") && js.includes("sortRecords"));
   assert.ok(app.includes("Selection rationale") && app.includes("landscape-roadmap-label"));
-  const dist = await (await get(registry+"/index.json")).json();
-  assert.equal(dist.schemaVersion,2);
-  assert.ok(dist.extensions.length > 0, "Empty distribution Catalog");
-  assert.equal(dist.extensions.length, counts.implemented, "Catalog/Landscape implemented count mismatch");
-  assert.ok(dist.extensions.includes("plpgsql_check"),"Pilot missing from Catalog v2");
   console.log(JSON.stringify({result:"PASS",liveSite:site,liveHtml:true,liveJs:true,responsiveCss:true,
     catalogSchema:dist.schemaVersion,landscapeSchema:rawIndex.schemaVersion,count:records.length,counts}));
 }
