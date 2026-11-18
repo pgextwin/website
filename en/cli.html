@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Download PostgreSQL extensions, tools, and drivers for Windows x64. CLI v0.3.18 download, command usage, and SHA-256 verification.">
-  <title>pgextwin — Windows CLI v0.3.18</title>
+  <meta name="description" content="Download PostgreSQL extensions, tools, and drivers for Windows x64. CLI v0.3.19 download, command usage, and SHA-256 verification.">
+  <title>pgextwin — Windows CLI v0.3.19</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/cli.html">
@@ -18,7 +18,7 @@
       <a href="../en/cli.html" lang="en" aria-current="page">English</a>
     </nav>
     <p class="eyebrow">pgextwin CLI</p>
-    <h1>Windows CLI v0.3.18</h1>
+    <h1>Windows CLI v0.3.19</h1>
     <p class="lead">Download PostgreSQL extension ZIPs on Windows, now including spatial bundles, tools, and drivers. Downloading also works on machines without PostgreSQL installed.</p>
     <p class="cli-hero-description">Browse what is available with <code>list</code> and <code>search</code>, fetch one item by name with <code>download</code>, or take a whole selection with <code>download-all</code>. Set <code>--pg</code> to your PostgreSQL major version.</p>
     <nav class="jump-nav" aria-label="CLI navigation">
@@ -30,15 +30,15 @@
   </div></header>
   <main class="shell cli-page">
     <section class="cli-download" aria-labelledby="download-heading">
-      <p class="eyebrow">Windows x64 · Stable · Released November 18, 2026</p>
+      <p class="eyebrow">Windows x64 · Stable · Released November 19, 2026</p>
       <h2 id="download-heading">Get the CLI</h2>
       <div class="cli-download-actions">
-        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.18/pgextwin.exe">Download pgextwin.exe (13.69 MB)</a>
-        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.18">GitHub Release v0.3.18</a>
-        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.18/SHA256SUMS.txt">View SHA256SUMS.txt</a>
+        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.19/pgextwin.exe">Download pgextwin.exe (13.69 MB)</a>
+        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.19">GitHub Release v0.3.19</a>
+        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.19/SHA256SUMS.txt">View SHA256SUMS.txt</a>
       </div>
-      <p class="cli-exe-size">EXE size: 13,693,197 bytes</p>
-      <p class="cli-sha"><strong>EXE SHA-256: </strong><code>177d05e24f39efc5327fb6e96444c6c33c0afacac5e89a34432394ddee5faf60</code></p>
+      <p class="cli-exe-size">EXE size: 13,694,185 bytes</p>
+      <p class="cli-sha"><strong>EXE SHA-256: </strong><code>78cb4dd79008fa31415155ae72a02f327832c2870de7474f6ab192518fc02f71</code></p>
       <p>After downloading, run the following in PowerShell. Compare the displayed SHA-256 with the value above or the value in SHA256SUMS.txt.</p>
       <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256</code></pre>
     </section>
@@ -104,6 +104,11 @@
     <section aria-labelledby="release-notes-heading">
       <h2 id="release-notes-heading">What's new</h2>
       <div class="cli-release-notes">
+        <article lang="en" class="cli-note-block">
+          <h3>CLI v0.3.19</h3>
+          <p>v0.3.19 (November 19, 2026) adds per-command help and aligns all usage text with the canonical forms: <code>download</code> fetches one item by name, and <code>download-all</code> is for bulk downloads. This page now lists generic usage for every command, with examples focused on realistic downloads. The published EXE is 13,694,185 bytes (13.69 MB).</p>
+          <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.19">GitHub Release v0.3.19</a></p>
+        </article>
         <article lang="en" class="cli-note-block">
           <h3>CLI v0.3.18</h3>
           <p>v0.3.18 (November 18, 2026) adds spatial bundles, tools, and drivers to the downloads. Browse with <code>list</code> and <code>search</code>, and fetch a single item by name with <code>download</code>. Downloads work on machines without PostgreSQL installed. New items: the PostGIS bundle for PostgreSQL 14, PgBouncer 1.26.1, and psqlODBC 13.02. External downloads still follow the Catalog’s pinned records, with no expiring approval. The published EXE is 13,693,197 bytes (13.69 MB).</p>
