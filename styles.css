@@ -133,6 +133,11 @@ button:disabled { opacity: 0.7; cursor: wait; }
 .landscape-filters { grid-template-columns: repeat(3,minmax(0,1fr)); }
 .landscape-disclaimer, .lifecycle-notice { border-left: 4px solid var(--accent); background: var(--surface); padding: 0.8rem 1rem; border-radius: 0.4rem; }
 .landscape-card { overflow-wrap: anywhere; }
+.landscape-summary { grid-template-columns: minmax(0,1fr) minmax(0,20rem) auto; }
+.landscape-status-label--implemented, .landscape-status-label--external-direct, .landscape-status-label--external-standalone {
+  color: var(--maintained); border-color: currentColor;
+}
+.landscape-status-label--license-excluded { color: var(--historical); border-color: currentColor; }
 .landscape-card .meta { grid-template-columns: minmax(9rem,auto) minmax(0,1fr); }
 .landscape-roadmap-label { border-left: 4px solid var(--accent); padding-left: 0.7rem; font-weight: 800; }
 .landscape-sources { display: grid; gap: 0.7rem; }

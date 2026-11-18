@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import { setTimeout as delay } from "node:timers/promises";
 import { verifyPublishedCli } from './published-cli-contract.mjs';
 import { assertApprovedIndexes, landscapeExpectations } from './published-data-expectations.mjs';
+import landscapeView from '../landscape-view.js';
 
 const root = "https://pgextwin.github.io/website/";
 const site = root + "en/";
@@ -27,6 +28,9 @@ async function verify() {
     assert.ok(page.includes('href="../ja/"') && page.includes('href="../en/"'));
     assert.ok(page.includes('src="../locale.js"'));
     assert.ok(page.includes('hreflang="x-default"'));
+    for (const status of Object.keys(landscapeView.distributionLabels)) {
+      assert.ok(page.includes(`value="${status}"`), `Missing distribution filter: ${status}`);
+    }
   }
   // Verify the current approved public CLI identity and each page's own locale.
   const [cliEnglish,cliJapanese] = await Promise.all([

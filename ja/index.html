@@ -22,7 +22,7 @@
       <nav class="jump-nav" aria-label="ページ内ナビゲーション">
         <a class="jump-nav-primary" href="#extensions-heading">バイナリを探す</a>
         <a href="./cli.html">CLI v0.3.18</a>
-        <a href="#landscape-heading">他のWindows配布元</a>
+        <a href="#landscape-heading">CLI対応状況</a>
         <a href="#about-heading">pgextwinについて</a>
       </nav>
 
@@ -51,7 +51,7 @@
         <button id="reload" type="button">カタログを再読み込み</button>
       </div>
 
-      <div class="catalog-hint" role="note"><strong>pgextwinが公開するWindows x64用ZIP<span id="catalog-count"></span></strong><p>拡張機能名とPostgreSQLのバージョンで絞り込んでください。拡張機能を開くと、対応するZIP、導入要件、SHA-256を確認できます。</p></div>
+      <div class="catalog-hint" role="note"><strong>pgextwinが公開するWindows x64用ZIP<span id="catalog-count"></span></strong><p>拡張機能名とPostgreSQLのバージョンで絞り込んでください。拡張機能を開くと、対応するZIP、導入要件、SHA-256を確認できます。CLIで取得すると、pgextwinの配布フィードの署名が検証されます。</p></div>
       <div class="filters" aria-label="拡張機能の絞り込み">
         <div class="filter-field filter-field--search">
           <label for="search">拡張機能を検索</label>
@@ -86,29 +86,35 @@
     <section class="landscape-section" aria-labelledby="landscape-heading">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">独立した拡張機能一覧</p>
-          <h2 id="landscape-heading">Windows拡張機能の対応状況</h2>
+          <h2 id="landscape-heading">Windows向けパッケージのCLI対応状況</h2>
         </div>
         <button id="landscape-reload" type="button">対応状況を再読み込み</button>
       </div>
-      <p>pgextwinで配布中の拡張機能、今後の実装候補、外部のWindowsバイナリ配布元を確認できます。<strong>「pgextwinで実装予定なし」はWindowsで使用できないことを意味しません。</strong></p>
+      <p>Windows向けの拡張機能・ツール・ドライバーをCLIで取得できるか確認できます。複数の配布区分に該当する項目もあります。項目を開くと、対象ファイルや、CLIで取得できない理由を確認できます。</p>
 
 
-      <p class="landscape-disclaimer">外部配布物は、記載されたプロジェクトまたはベンダーが提供します。pgextwinは、その正確性、安全性、更新状況、サポート、互換性を保証しません。導入前に、提供元の利用条件と対象PostgreSQLバージョンの要件をご確認ください。</p>
+      <p class="landscape-disclaimer">外部パッケージをCLIの取得対象に加える際は、バージョンごとにライセンスを確認します。CLIは提供元から原本を取得し、SHA-256とファイルサイズを照合します。互換性やサポートについては提供元の案内をご確認ください。</p>
 
 
       <div class="filters landscape-filters" aria-label="対応状況の検索と絞り込み">
         <div class="filter-field">
           <label for="landscape-search">対応状況を検索</label>
-          <input id="landscape-search" type="search" autocomplete="off" placeholder="拡張機能名・提供元">
+          <input id="landscape-search" type="search" autocomplete="off" placeholder="パッケージ名・提供元">
         </div>
         <div class="filter-field">
           <label for="landscape-filter">配布区分</label>
           <select id="landscape-filter">
             <option value="">すべて</option>
-            <option value="implemented">pgextwinで配布中</option>
-            <option value="candidate">今後の実装候補</option>
-            <option value="not-planned">pgextwinでは実装予定なし</option>
+            <optgroup label="CLIで取得できるもの">
+              <option value="implemented"></option>
+              <option value="external-direct"></option>
+              <option value="external-standalone"></option>
+            </optgroup>
+            <optgroup label="CLIで取得できないもの">
+              <option value="candidate"></option>
+              <option value="license-excluded"></option>
+              <option value="not-planned"></option>
+            </optgroup>
           </select>
         </div>
         <div class="filter-field">
@@ -124,7 +130,7 @@
       </div>
       <div id="landscape-status" class="status" role="status" aria-live="polite">対応状況を読み込んでいます…</div>
       <p id="landscape-count" class="results-count" role="status" aria-live="polite"></p>
-      <p id="landscape-empty" class="empty-state" hidden>条件に一致する拡張機能はありません。</p>
+      <p id="landscape-empty" class="empty-state" hidden>条件に一致するパッケージはありません。</p>
       <div id="landscape-grid" class="extension-grid"></div>
     </section>
 
