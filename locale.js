@@ -62,6 +62,7 @@
       if ((match = /^SBOM attestation: (Available|Not published for this release)$/.exec(original))) return "SBOMの証明：" + t(match[1]);
       if ((match = /^Client executable: required(.*)$/.exec(original))) return "クライアント実行ファイル：必要" + match[1];
       if ((match = /^Copy ZIP SHA-256 for (.+), PostgreSQL (\d+)$/.exec(original))) return match[1] + " のPostgreSQL " + match[2] + "用ZIPのSHA-256をコピー";
+      if ((match = /^ \((\d+) extensions?\)$/.exec(original))) return "（拡張機能 " + match[1] + "件）";
       if ((match = /^(\d+) of (\d+) extensions shown\.$/.exec(original))) return match[2] + "件中" + match[1] + "件の拡張機能を表示しています。";
       if ((match = /^(\d+) of (\d+) Landscape entries shown\.$/.exec(original))) return "対応状況" + match[2] + "件中" + match[1] + "件を表示しています。";
       if ((match = /^(\d+) extension records loaded\.(.*)$/.exec(original))) return match[1] + "件の拡張機能を読み込みました。" + translateSuffix(match[2]);
@@ -90,7 +91,12 @@
         .replace(" Lifecycle data unavailable; binary availability and downloads are still shown.",t(" Lifecycle data unavailable; binary availability and downloads are still shown."))
         .replace(" External source details are point-in-time research, not pgextwin guarantees.",t(" External source details are point-in-time research, not pgextwin guarantees."));
     }
-    return Object.freeze({language:japanese?"ja":"en",t});
+    function describe(value) {
+      const translated = t(value);
+      return japanese && !/[\u3040-\u30ff\u3400-\u9fff]/.test(translated)
+        ? "日本語の説明は準備中です。" : translated;
+    }
+    return Object.freeze({language:japanese?"ja":"en",t,describe});
   }
   const api = {selectLanguage,createLocale};
   if (typeof module === "object" && module.exports) module.exports = api;

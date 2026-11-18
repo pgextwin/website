@@ -2,6 +2,7 @@
   "use strict";
   const view = globalThis.pgextwinLandscapeView;
   const t = (value) => globalThis.pgextwinI18n ? globalThis.pgextwinI18n.t(value) : String(value);
+  const describe = (value) => globalThis.pgextwinI18n?.describe(value) ?? String(value);
   const BASE = "https://raw.githubusercontent.com/pgextwin/catalog/main";
   const status = document.getElementById("landscape-status");
   const count = document.getElementById("landscape-count");
@@ -48,7 +49,7 @@
     const article = node("article","extension-card landscape-card");
     const heading = node("h3",null,record.displayName);
     article.append(heading,node("p","landscape-status-label",view.statusLabels[record.status]));
-    article.append(node("p",null,record.description));
+    article.append(node("p",null,describe(record.description)));
     const meta = node("dl","meta");
     field(meta,"Upstream",record.upstreamRepository);
     field(meta,"Last reviewed / 最終確認",record.lastReviewed + " (recheck before use)");
@@ -121,7 +122,7 @@
     const summary = node("summary", "landscape-summary");
     const identity = node("span", "extension-identity");
     identity.append(node("span", "extension-title", record.displayName),
-      node("span", "extension-description", record.description));
+      node("span", "extension-description", describe(record.description)));
     const badges = node("span", "extension-summary-badges");
     badges.append(node("span", "landscape-status-label", view.statusLabels[record.status]));
     if (record.roadmap) badges.append(node("span", "summary-roadmap", view.roadmapLabel(record)));
