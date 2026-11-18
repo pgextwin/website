@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Download PostgreSQL extension ZIPs for Windows x64. CLI v0.3.17 download, command examples, and SHA-256 verification.">
-  <title>pgextwin — Windows CLI v0.3.17</title>
+  <meta name="description" content="Download PostgreSQL extensions, tools, and drivers for Windows x64. CLI v0.3.18 download, command examples, and SHA-256 verification.">
+  <title>pgextwin — Windows CLI v0.3.18</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/cli.html">
@@ -18,9 +18,9 @@
       <a href="../en/cli.html" lang="en" aria-current="page">English</a>
     </nav>
     <p class="eyebrow">pgextwin CLI</p>
-    <h1>Windows CLI v0.3.17</h1>
-    <p class="lead">Download PostgreSQL extension ZIPs in batches on Windows.</p>
-    <p class="cli-hero-description">Use the command for pgextwin builds or fetch selected ZIPs directly from external providers. Set <code>--pg</code> to your PostgreSQL major version.</p>
+    <h1>Windows CLI v0.3.18</h1>
+    <p class="lead">Download PostgreSQL extension ZIPs on Windows, now including spatial bundles, tools, and drivers. Downloading also works on machines without PostgreSQL installed.</p>
+    <p class="cli-hero-description">Browse what is available with <code>list</code> and <code>search</code>, fetch one item by name with <code>download</code>, or take a whole selection with <code>download-all</code>. Set <code>--pg</code> to your PostgreSQL major version.</p>
     <nav class="jump-nav" aria-label="CLI navigation">
       <a class="jump-nav-primary" href="#download-heading">Get the CLI</a>
       <a href="#commands-heading">Download commands</a>
@@ -33,12 +33,12 @@
       <p class="eyebrow">Windows x64 · Stable · Released November 18, 2026</p>
       <h2 id="download-heading">Get the CLI</h2>
       <div class="cli-download-actions">
-        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.17/pgextwin.exe">Download pgextwin.exe (13.68 MB)</a>
-        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.17">GitHub Release v0.3.17</a>
-        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.17/SHA256SUMS.txt">View SHA256SUMS.txt</a>
+        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.18/pgextwin.exe">Download pgextwin.exe (13.69 MB)</a>
+        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.18">GitHub Release v0.3.18</a>
+        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.18/SHA256SUMS.txt">View SHA256SUMS.txt</a>
       </div>
-      <p class="cli-exe-size">EXE size: 13,683,305 bytes</p>
-      <p class="cli-sha"><strong>EXE SHA-256: </strong><code>bfac89a324029339603caab6c0ec39139419a005f523969500bdd861711c7a83</code></p>
+      <p class="cli-exe-size">EXE size: 13,693,197 bytes</p>
+      <p class="cli-sha"><strong>EXE SHA-256: </strong><code>177d05e24f39efc5327fb6e96444c6c33c0afacac5e89a34432394ddee5faf60</code></p>
       <p>After downloading, run the following in PowerShell. Compare the displayed SHA-256 with the value above or the value in SHA256SUMS.txt.</p>
       <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256</code></pre>
     </section>
@@ -46,6 +46,10 @@
       <p class="eyebrow">Download commands</p>
       <h2 id="commands-heading">Download commands</h2>
       <div class="cli-command-list">
+        <div><h3>Browse the downloads</h3><pre><code>.\pgextwin.exe list</code></pre></div>
+        <div><h3>Browse one category (tools)</h3><pre><code>.\pgextwin.exe list --category tools</code></pre></div>
+        <div><h3>Download one item by name (PgBouncer)</h3><pre><code>.\pgextwin.exe download pgbouncer</code></pre></div>
+        <div><h3>Search the drivers</h3><pre><code>.\pgextwin.exe search odbc --category drivers</code></pre></div>
         <div><h3>Download the external selection</h3><pre><code>.\pgextwin.exe download-all --source external</code></pre></div>
         <div><h3>Download external ZIPs for PostgreSQL 18</h3><pre><code>.\pgextwin.exe download-all --source external --pg 18</code></pre></div>
         <div><h3>Choose pgvector 0.8.7 for PostgreSQL 18</h3><pre><code>.\pgextwin.exe download-all --source external --extension pgvector --version 0.8.7 --pg 18</code></pre></div>
@@ -54,9 +58,9 @@
         <div><h3>Show download progress</h3><pre><code>.\pgextwin.exe download-all --source external --verbose</code></pre></div>
       </div>
       <div class="cli-included">
-        <h3>Current external selection (23 ZIPs)</h3>
-        <ul><li>oracle_fdw 2.9.0: PostgreSQL 14–18 (5 ZIPs)</li><li>pgvector 0.8.7: PostgreSQL 14–18 (5 ZIPs)</li><li>pglogical 2.4.8: PostgreSQL 15–18 (4 ZIPs)</li><li>pg_crash 0.3: PostgreSQL 15–18 (4 ZIPs)</li><li>PostGIS/pgRouting bundles: PostgreSQL 15–18 (4 ZIPs)</li><li>pg_trickle 0.108.3: PostgreSQL 18 (1 ZIP)</li></ul>
-        <p>The CLI reads the current selection from the Catalog’s direct-get records. No expiring approval is needed, and every downloaded ZIP is verified against its pinned SHA-256 and size.</p>
+        <h3>Current external selection (26 files)</h3>
+        <ul><li>oracle_fdw 2.9.0: PostgreSQL 14–18 (5 ZIPs)</li><li>pgvector 0.8.7: PostgreSQL 14–18 (5 ZIPs)</li><li>pglogical 2.4.8: PostgreSQL 15–18 (4 ZIPs)</li><li>pg_crash 0.3: PostgreSQL 15–18 (4 ZIPs)</li><li>PostGIS/pgRouting bundles: PostgreSQL 15–18 (4 ZIPs)</li><li>pg_trickle 0.108.3: PostgreSQL 18 (1 ZIP)</li><li>Spatial: PostGIS bundle 3.6.2 with pgRouting 4.0.1 (installer): PostgreSQL 14 (1 file)</li><li>Tools: PgBouncer 1.26.1 (1 file)</li><li>Drivers: psqlODBC 13.02 (1 file)</li></ul>
+        <p>The CLI reads the current selection from the Catalog’s download records. No expiring approval is needed, and every downloaded file is verified against its pinned SHA-256 and size. Downloads also work on machines without PostgreSQL installed.</p>
       </div>
     </section>
     <section aria-labelledby="flow-heading">
@@ -64,7 +68,7 @@
       <h2 id="flow-heading">Three steps to download</h2>
       <ol class="cli-flow-steps">
         <li><h3>1. Download pgextwin.exe</h3><p>Use the download button above and save the EXE in your preferred folder.</p></li>
-        <li><h3>2. Run a command</h3><p>Open PowerShell in that folder. Choose a command above and use <code>--pg</code> for your PostgreSQL version. For external ZIPs, use <code>--extension</code> and <code>--version</code> to select a specific release.</p></li>
+        <li><h3>2. Run a command</h3><p>Open PowerShell in that folder. Choose a command above and use <code>--pg</code> for your PostgreSQL version. Use <code>download</code> to pick an item by name, or <code>--extension</code> and <code>--version</code> with <code>download-all</code> to select a specific release.</p></li>
         <li><h3>3. Verify your ZIP</h3><p>Check the ZIP's SHA-256, then follow the provider's installation instructions.</p></li>
       </ol>
     </section>
@@ -81,9 +85,9 @@
       <h2 id="release-notes-heading">What's new</h2>
       <div class="cli-release-notes">
         <article lang="en" class="cli-note-block">
-          <h3>CLI v0.3.17</h3>
-          <p>v0.3.17 (November 18, 2026) downloads external ZIPs from the Catalog’s pinned direct-get records, with no expiring approval, and follows the latest Catalog as pgextwin adds extensions. Use <code>--fixed</code> for the older fixed selection or <code>--verbose</code> to show progress. The published EXE is 13,683,305 bytes (13.68 MB).</p>
-          <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.17">GitHub Release v0.3.17</a></p>
+          <h3>CLI v0.3.18</h3>
+          <p>v0.3.18 (November 18, 2026) adds spatial bundles, tools, and drivers to the downloads. Browse with <code>list</code> and <code>search</code>, and fetch a single item by name with <code>download</code>. Downloads work on machines without PostgreSQL installed. New items: the PostGIS bundle for PostgreSQL 14, PgBouncer 1.26.1, and psqlODBC 13.02. External downloads still follow the Catalog’s pinned records, with no expiring approval. The published EXE is 13,693,197 bytes (13.69 MB).</p>
+          <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.18">GitHub Release v0.3.18</a></p>
         </article>
       </div>
     </section>
