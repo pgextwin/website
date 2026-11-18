@@ -1,8 +1,10 @@
 const t = (value) => globalThis.pgextwinI18n ? globalThis.pgextwinI18n.t(value) : String(value);
+const describe = (value) => globalThis.pgextwinI18n?.describe(value) ?? String(value);
 const CATALOG_BASE = "https://raw.githubusercontent.com/pgextwin/catalog/main";
 const POSTGRESQL_LIFECYCLE_URL = "https://raw.githubusercontent.com/pgextwin/build/main/metadata/postgresql.json";
 
 const statusElement = document.getElementById("status");
+const catalogCountElement = document.getElementById("catalog-count");
 const resultsCountElement = document.getElementById("results-count");
 const emptyStateElement = document.getElementById("empty-state");
 const gridElement = document.getElementById("extensions");
@@ -250,7 +252,7 @@ function renderCapabilities(record, selectedMajor) {
   for (const scenario of scenarios) {
     const item = element("li", "scenario-item");
     const description = element("span");
-    description.append(text(scenario.description));
+    description.textContent = describe(scenario.description);
     item.append(description);
     const scope = catalogView.scenarioScopeLabel(scenario);
     if (scope) {
@@ -360,7 +362,7 @@ function renderExtension(record, lifecycleByMajor, effectiveDate, selectedMajor)
   title.append(text(record.displayName));
   header.append(title);
   const description = element("p");
-  description.append(text(record.description));
+  description.textContent = describe(record.description);
   header.append(description);
   card.append(header);
 
@@ -417,7 +419,7 @@ function renderExtension(record, lifecycleByMajor, effectiveDate, selectedMajor)
   const identity = element("span", "extension-identity");
   identity.append(element("span", "extension-title"), element("span", "extension-description"));
   identity.children[0].append(text(record.displayName));
-  identity.children[1].append(text(record.description));
+  identity.children[1].textContent = describe(record.description);
   const badges = element("span", "extension-summary-badges");
   const release = element("span", "summary-release");
   release.append(text(record.latest.releaseTag));
@@ -558,6 +560,7 @@ async function loadLifecycleMetadata() {
 async function loadCatalog() {
   reloadButton.disabled = true;
   statusElement.textContent = t("Loading catalog…");
+  catalogCountElement.textContent = "";
   resultsCountElement.textContent = t("");
   emptyStateElement.hidden = true;
   gridElement.replaceChildren();
@@ -593,6 +596,7 @@ async function loadCatalog() {
       ? ` Lifecycle status uses the ${state.effectiveDate} UTC calendar date.`
       : " Lifecycle data unavailable; binary availability and downloads are still shown.";
     statusElement.textContent = t(`${state.records.length} extension records loaded.${partial}${lifecycleSuffix}`);
+    catalogCountElement.textContent = t(` (${state.records.length} ${state.records.length === 1 ? "extension" : "extensions"})`);
   } catch (error) {
     console.error(error);
     state.records = [];

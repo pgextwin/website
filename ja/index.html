@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="PostgreSQL拡張機能のWindows x64バイナリを探し、外部配布の11 ZIPをCLIで一括取得できます。">
+  <meta name="description" content="PostgreSQL拡張機能のWindows x64用ZIPを探せます。個別にダウンロードするか、CLIでまとめて取得できます。">
   <title>pgextwin — PostgreSQL拡張機能のWindowsバイナリ</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/ja/">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/">
@@ -18,10 +18,10 @@
       <nav class="language-nav" aria-label="表示言語"><a href="../ja/" lang="ja" aria-current="page">日本語</a><a href="../en/" lang="en">English</a></nav>
       <p class="eyebrow">pgextwin</p>
       <h1>PostgreSQL拡張機能のWindowsバイナリ</h1>
-      <p class="lead">お使いのPostgreSQLのバージョンに対応するWindows x64向け拡張機能の非公式バイナリを探せます。公開済みZIPのダウンロード先、導入要件、SHA-256の確認方法を案内します。</p>
+      <p class="lead">pgextwinは、PostgreSQL拡張機能の非公式ビルドをWindows x64向けに配布しています。お使いのPostgreSQLに合うZIPを選び、SHA-256を照合してから、拡張機能ごとの手順に従って導入してください。</p>
       <nav class="jump-nav" aria-label="ページ内ナビゲーション">
         <a class="jump-nav-primary" href="#extensions-heading">バイナリを探す</a>
-        <a href="./cli.html">CLI v0.3.15</a>
+        <a href="./cli.html">CLI v0.3.16</a>
         <a href="#landscape-heading">他のWindows配布元</a>
         <a href="#about-heading">pgextwinについて</a>
       </nav>
@@ -51,7 +51,7 @@
         <button id="reload" type="button">カタログを再読み込み</button>
       </div>
 
-      <div class="catalog-hint" role="note"><strong>pgextwinが公開するWindows x64用ZIP（17拡張機能）</strong><p>拡張機能名とPostgreSQLのバージョンで絞り込んでください。拡張機能を開くと、対応するZIPとSHA-256を確認できます。</p></div>
+      <div class="catalog-hint" role="note"><strong>pgextwinが公開するWindows x64用ZIP<span id="catalog-count"></span></strong><p>拡張機能名とPostgreSQLのバージョンで絞り込んでください。拡張機能を開くと、対応するZIP、導入要件、SHA-256を確認できます。</p></div>
       <div class="filters" aria-label="拡張機能の絞り込み">
         <div class="filter-field filter-field--search">
           <label for="search">拡張機能を検索</label>
@@ -73,15 +73,15 @@
 
 
     <section class="cli-home-teaser" aria-labelledby="cli-home-heading">
-      <p class="eyebrow">Windows CLI · v0.3.15 · 正式版</p>
-      <h2 id="cli-home-heading">外部バイナリ11件もまとめてダウンロード</h2>
-      <p>Windows CLIなら、<strong>oracle_fdw 2.9.0・pgvector 0.8.7（それぞれPG14〜18）とpg_trickle 0.108.3（PG18）</strong>の計11 ZIPを提供元から一括取得できます。pgextwin公開ZIPの一括取得にも対応しています。</p>
+      <p class="eyebrow">Windows CLI · v0.3.16 · 正式版</p>
+      <h2 id="cli-home-heading">Windows CLIでZIPをまとめてダウンロード</h2>
+      <p>pgextwinの配布ZIPを1つのコマンドで取得できます。カタログのダウンロード許可が有効な間は、対象の外部ZIPも提供元から直接取得できます。</p>
       <div class="cli-command-list">
-        <div><strong>外部配布の11 ZIPを取得</strong><pre><code>.\pgextwin.exe download-all --source external</code></pre></div>
+        <div><strong>外部の提供元からZIPを取得</strong><pre><code>.\pgextwin.exe download-all --source external</code></pre></div>
         <div><strong>pgextwinの公開ZIPを取得</strong><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
       </div>
-      <p>PostgreSQLのバージョンや拡張機能を指定して絞り込むこともできます。CLIはダウンロード専用で、インストールは行いません。</p>
-      <div class="cli-teaser-actions"><a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.15/pgextwin.exe">CLI v0.3.15 をダウンロード（12.90 MB）</a><a href="./cli.html">使い方とSHA-256の確認方法</a></div>
+      <p><code>--pg</code>でお使いのPostgreSQLに合うZIPに絞り込めます。外部ZIPの場合は、拡張機能名とバージョンも指定できます。</p>
+      <div class="cli-teaser-actions"><a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.16/pgextwin.exe">CLI v0.3.16 をダウンロード（12.90 MB）</a><a href="./cli.html">使い方とSHA-256の確認方法</a></div>
     </section>
 
     <section class="landscape-section" aria-labelledby="landscape-heading">

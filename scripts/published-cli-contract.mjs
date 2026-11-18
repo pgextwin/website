@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
 import {elements, hasClass, textContent} from './html-contract.mjs';
 
-export const cliVersion = '0.3.15';
-export const cliExeSha = '2f573a33765c1c0103ac898674b11e849a643f174844c8caeddf15afd64ebb9f';
-export const cliExeBytes = 12904699;
+export const cliVersion = '0.3.16';
+export const cliExeSha = 'a59f36b1f247faa76ea40bf52c386ffdcfb5af84378364b8e52c11bcaf73457b';
+export const cliExeBytes = 12905090;
+const cliExeSize = (Math.floor(cliExeBytes / 10_000) / 100).toFixed(2) + ' MB';
 
 const exe = 'https://github.com/pgextwin/catalog/releases/download/cli-v' + cliVersion + '/pgextwin.exe';
 const sums = 'https://github.com/pgextwin/catalog/releases/download/cli-v' + cliVersion + '/SHA256SUMS.txt';
@@ -22,7 +23,7 @@ export function verifyPublishedCli(page, home, locale) {
   for (const [label, value] of [
     ['CLI version', 'CLI v' + cliVersion],
     ['CLI executable SHA-256', cliExeSha], ['EXE exact bytes', cliExeBytes.toLocaleString('en-US')],
-    ['EXE readable size', '12.90 MB'],
+    ['EXE readable size', cliExeSize],
     ['external all ZIPs', 'download-all --source external'],
     ['external PostgreSQL selection', 'download-all --source external --pg 18'],
     ['extension and version selection', '--extension pgvector --version 0.8.7 --pg 18'],

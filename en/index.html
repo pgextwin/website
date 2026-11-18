@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Find Windows x64 PostgreSQL extensions and download 11 external ZIPs with the CLI.">
+  <meta name="description" content="Find PostgreSQL extension ZIPs for Windows x64 and download them individually or in batches with the CLI.">
   <title>pgextwin — PostgreSQL Extensions for Windows</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/en/">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/">
@@ -18,10 +18,10 @@
       <nav class="language-nav" aria-label="Language"><a href="../en/" lang="en" aria-current="page">English</a><a href="../ja/" lang="ja">日本語</a></nav>
       <p class="eyebrow">pgextwin</p>
       <h1>PostgreSQL Extensions for Windows</h1>
-      <p class="lead">Find unofficial Windows x64 extension binaries for your PostgreSQL version. Browse published ZIP downloads, installation requirements, and SHA-256 checksums in one place.</p>
+      <p class="lead">pgextwin publishes unofficial PostgreSQL extension builds for Windows x64. Find the ZIP for your PostgreSQL version, check its SHA-256, and follow the extension’s installation instructions.</p>
       <nav class="jump-nav" aria-label="Page sections">
         <a class="jump-nav-primary" href="#extensions-heading">Browse downloads</a>
-        <a href="./cli.html">CLI v0.3.15</a>
+        <a href="./cli.html">CLI v0.3.16</a>
         <a href="#landscape-heading">Other Windows sources</a>
         <a href="#about-heading">About pgextwin</a>
       </nav>
@@ -51,7 +51,7 @@
         <button id="reload" type="button">Reload catalog</button>
       </div>
 
-      <div class="catalog-hint" role="note"><strong>pgextwin Windows x64 ZIP downloads (17 extensions)</strong><p>Filter by name and PostgreSQL version. Open an extension to see its matching ZIP and SHA-256.</p></div>
+      <div class="catalog-hint" role="note"><strong>pgextwin Windows x64 ZIP downloads<span id="catalog-count"></span></strong><p>Filter by name and PostgreSQL version. Open an extension to find its ZIP, installation requirements, and SHA-256.</p></div>
       <div class="filters" aria-label="Extension filters">
         <div class="filter-field filter-field--search">
           <label for="search">Search extensions</label>
@@ -73,15 +73,15 @@
 
 
     <section class="cli-home-teaser" aria-labelledby="cli-home-heading">
-      <p class="eyebrow">Windows CLI · v0.3.15 · Stable</p>
-      <h2 id="cli-home-heading">Get all 11 external Windows ZIPs in one command</h2>
-      <p>The Windows CLI can download <strong>oracle_fdw 2.9.0 and pgvector 0.8.7 (PG14–18 each), plus pg_trickle 0.108.3 (PG18)</strong> directly from their providers. It also supports batch downloads of pgextwin-published ZIPs.</p>
+      <p class="eyebrow">Windows CLI · v0.3.16 · Stable</p>
+      <h2 id="cli-home-heading">Download multiple ZIPs with the Windows CLI</h2>
+      <p>Get pgextwin builds in one command. You can also fetch selected ZIPs directly from their providers when the Catalog's download approval is current.</p>
       <div class="cli-command-list">
-        <div><strong>All 11 external ZIPs</strong><pre><code>.\pgextwin.exe download-all --source external</code></pre></div>
+        <div><strong>ZIPs from external providers</strong><pre><code>.\pgextwin.exe download-all --source external</code></pre></div>
         <div><strong>pgextwin ZIPs</strong><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
       </div>
-      <p>Choose an extension or PostgreSQL version to narrow your download. The CLI downloads files but does not install them.</p>
-      <div class="cli-teaser-actions"><a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.15/pgextwin.exe">Download CLI v0.3.15 (12.90 MB)</a><a href="./cli.html">Commands and SHA-256 verification</a></div>
+      <p>Use <code>--pg</code> to download ZIPs for your PostgreSQL version. For external ZIPs, you can also select an extension and its version.</p>
+      <div class="cli-teaser-actions"><a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.16/pgextwin.exe">Download CLI v0.3.16 (12.90 MB)</a><a href="./cli.html">Commands and SHA-256 verification</a></div>
     </section>
 
     <section class="landscape-section" aria-labelledby="landscape-heading">
