@@ -22,6 +22,11 @@ test('published expectations follow approved membership, roadmap and source data
   assert.deepEqual(before.counts, {implemented: 1, candidate: 1, 'not-planned': 0});
   assert.match(before.implementedLabels[0].label, /Wave 2 #2.*selection history/);
   assert.match(before.candidateLabels[0].label, /Further research/);
+  // Exact EN-rendered labels: the raw bilingual roadmapLabel() output must not
+  // leak into expectations (Run 44136863239: http/pgroonga "Further research").
+  assert.deepEqual(before.implementedLabels,
+    [{name: 'alpha', label: 'Wave 2 #2 \u2014 selection history (now distributed)'}]);
+  assert.deepEqual(before.candidateLabels, [{name: 'beta', label: 'Further research'}]);
   assert.deepEqual(before.vendorNames, ['beta']);
   assert.deepEqual(before.sourceUrls, ['https://example.org/beta']);
   assert.equal(before.vendorLabel, true);
@@ -42,6 +47,10 @@ test('published expectations follow approved membership, roadmap and source data
   assert.deepEqual(after.candidateLabels.map(item => item.name), ['delta', 'gamma']);
   assert.match(after.candidateLabels[0].label, /Decision pending/);
   assert.match(after.candidateLabels[1].label, /Wave 2 #1/);
+  assert.deepEqual(after.candidateLabels, [
+    {name: 'delta', label: 'Decision pending'},
+    {name: 'gamma', label: 'Wave 2 #1'},
+  ]);
   assert.deepEqual(after.vendorNames, []);
   assert.deepEqual(after.sourceUrls, []);
   assert.equal(after.vendorLabel, false);
