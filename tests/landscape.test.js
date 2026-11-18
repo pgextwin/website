@@ -80,3 +80,36 @@ test("old candidates and migrated implemented Wave 2 entries coexist",()=>{
   assert.deepEqual(view.sortRecords([wal,implemented,hypopg]).filter(x=>x.status==="candidate").map(x=>x.name),["hypopg","wal2json"]);
   assert.equal(view.filterRecords([implemented,hypopg,wal],{status:"implemented"}).length,1);
 });
+
+test("distribution filters show both PostGIS routes and the shared pgRouting packages", () => {
+  const olderEntries = ["oracle_fdw", "postgis", "pgrouting"].map(name => ({...notPlanned(), name}));
+  const zip = {extension: "postgis", pgMajor: "15"};
+  const installer = {item: "postgis", pgMajor: "14", pgroutingVersion: "4.0.1"};
+  const packages = {
+    "external-direct": [zip, {extension: "oracle_fdw"}, {extension: "pglogical"}],
+    "external-standalone": [installer, {item: "pgbouncer"}]
+  };
+  const records = view.browseRecords(olderEntries, packages);
+  const names = status => view.filterRecords(records, {status}).map(record => record.name).sort();
+  assert.deepEqual(names("external-direct"), ["oracle_fdw", "pglogical", "pgrouting", "postgis"]);
+  assert.deepEqual(names("external-standalone"), ["pgbouncer", "pgrouting", "postgis"]);
+  assert.deepEqual(names("not-planned"), ["edb_commercial_tools", "postgresql_minor_updates"]);
+  assert.deepEqual(records.find(record => record.name === "pgrouting").packages,
+    {"external-direct": [zip], "external-standalone": [installer]});
+});
+
+test("license exclusions and missing external data never become download claims", () => {
+  const olderEntries = ["timescaledb", "pg_sphere", "postgis"].map(name => ({...notPlanned(), name}));
+  const records = view.browseRecords(olderEntries, {
+    "external-direct": null,
+    "external-standalone": [{item: "postgis"}]
+  });
+  const get = name => records.find(record => record.name === name);
+  assert.deepEqual(get("timescaledb").distributions, ["license-excluded"]);
+  assert.deepEqual(get("timescaledb").windowsBinarySources, []);
+  assert.deepEqual(get("timescaledb").evidenceUrls, []);
+  assert.deepEqual(get("pgagent").distributions, ["license-excluded"]);
+  assert.deepEqual(get("pg_lockout").distributions, ["candidate"]);
+  assert.deepEqual(get("pg_sphere").distributions, []);
+  assert.deepEqual(get("postgis").distributions, ["external-standalone"]);
+});

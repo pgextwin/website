@@ -8,8 +8,12 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 import { assertApprovedIndexes, landscapeExpectations, assertApprovedNames } from "./published-data-expectations.mjs";
+import landscapeView from "../landscape-view.js";
+import locale from "../locale.js";
 
-const site = "https://pgextwin.github.io/website/en/";
+const siteRoot = process.env.PGEXTWIN_SITE_ROOT || "https://pgextwin.github.io/website/";
+const site = new URL("en/", siteRoot).href;
+const catalogBase = "https://raw.githubusercontent.com/pgextwin/catalog/main";
 const catalogResponse = await fetch("https://raw.githubusercontent.com/pgextwin/catalog/main/index.json", {signal: AbortSignal.timeout(40000)});
 assert.equal(catalogResponse.status, 200, "Public Catalog unavailable");
 const catalogIndex = await catalogResponse.json();
@@ -25,9 +29,15 @@ const landscapeRecords=await Promise.all(landscapeIndex.extensions.map(async nam
   assert.equal(record.name,name);
   return record;
 }));
-const landscapeCount=landscapeRecords.length;
 const expected=landscapeExpectations(catalogIndex, landscapeIndex, landscapeRecords);
-const expectedStatusCounts=expected.counts;
+const packageLists = Object.fromEntries(await Promise.all(
+  Object.entries(landscapeView.packageRoutes).map(async ([route, path]) =>
+    [route, await landscapeView.loadPackages(fetch, catalogBase, path)])
+));
+const distributionRecords = landscapeView.browseRecords(landscapeRecords, packageLists);
+const landscapeCount = distributionRecords.length;
+const roster = status => landscapeView.filterRecords(distributionRecords, {status}).map(record => record.name);
+const sourceRecords = distributionRecords.flatMap(record => record.windowsBinarySources);
 // Keep the existing bilingual ZIP/version/SHA/evidence checks, selecting records
 // from the approved index instead of requiring two historical extension names.
 // Sequential requests stay bounded by the Catalog index's existing resource cap.
@@ -161,7 +171,35 @@ try {
     assertApprovedNames(await evaluate('[...document.querySelectorAll("#extensions .extension-collapse")].map(card=>card.id.slice("extension-".length))'),
       catalogIndex.extensions,"Published Catalog cards differ from approved index");
     assertApprovedNames(await evaluate('[...document.querySelectorAll("#landscape-grid .landscape-collapse")].map(row=>row.id.slice("landscape-".length))'),
-      landscapeIndex.extensions,"Published Landscape cards differ from approved index");
+      roster(),"Published Landscape cards differ from the distribution sources");
+  }
+  async function assertDistributionFilters(language) {
+    const {t} = locale.createLocale(language);
+    const counts = {};
+    for (const [status, label] of Object.entries(landscapeView.distributionLabels)) {
+      const displayed = await evaluate(`(() => {
+        const select = document.getElementById("landscape-filter");
+        select.value = ${JSON.stringify(status)};
+        select.dispatchEvent(new Event("change", {bubbles:true}));
+        return {
+          option: select.selectedOptions[0]?.textContent,
+          rows: [...document.querySelectorAll("#landscape-grid .landscape-collapse")].map(row => ({
+            name: row.id.slice("landscape-".length),
+            label: row.querySelector(${JSON.stringify(".landscape-status-label--" + status)})?.textContent
+          }))
+        };
+      })()`);
+      assert.equal(displayed.option, t(label));
+      assert.ok(displayed.rows.every(row => row.label === t(label)), "Wrong distribution badge");
+      assertApprovedNames(displayed.rows.map(row => row.name), roster(status), "Wrong distribution membership");
+      counts[status] = displayed.rows.length;
+    }
+    await evaluate(`(() => {
+      const select = document.getElementById("landscape-filter");
+      select.value = "";
+      select.dispatchEvent(new Event("change", {bubbles:true}));
+    })()`);
+    return counts;
   }
   await send("Page.enable");
   await send("Runtime.enable");
@@ -193,16 +231,7 @@ try {
     return row.open && !!row.querySelector(".landscape-detail-body");
   })()`);
   assert.ok(landscapeDisclosure,"Landscape details expand on click");
-  const counts={};
-  for(const [status,expected] of Object.entries(expectedStatusCounts)) {
-    counts[status]=await evaluate(`(() => {
-      const s=document.getElementById("landscape-filter");
-      s.value="${status}";
-      s.dispatchEvent(new Event("change",{bubbles:true}));
-      return document.querySelectorAll("#landscape-grid article").length;
-    })()`);
-    assert.equal(counts[status],expected);
-  }
+  const counts = await assertDistributionFilters("en");
   // Compare each record's label and identity, including candidate Wave 2 and
   // decision-pending entries when they are present in the approved registry.
   for (const [status, labels] of [["candidate",expected.candidateLabels],
@@ -216,7 +245,8 @@ try {
           label:label.textContent}] : [];
       });
     })()`);
-    assert.deepEqual(displayed.sort((a,b)=>a.name.localeCompare(b.name)),labels,
+    assert.deepEqual(displayed.sort((a,b)=>a.name.localeCompare(b.name)),
+      labels.filter(label => roster(status).includes(label.name)),
       `Published ${status} roadmap labels differ from approved Landscape data`);
   }
   const searchNames=await evaluate(`(() => {
@@ -228,14 +258,16 @@ try {
     return [...document.querySelectorAll("#landscape-grid .landscape-collapse")]
       .map(row=>row.id.slice("landscape-".length));
   })()`);
-  assertApprovedNames(searchNames,expected.searchNames,"Landscape search differs from approved records");
+  assertApprovedNames(searchNames,landscapeView.filterRecords(distributionRecords,{query:expected.query}).map(record => record.name),
+    "Landscape search differs from approved records");
   const vendorNames=await evaluate(`(() => {
     const s=document.getElementById("landscape-search");s.value="";s.dispatchEvent(new Event("input",{bubbles:true}));
     const t=document.getElementById("landscape-source-filter");t.value="vendor";t.dispatchEvent(new Event("change",{bubbles:true}));
     return [...document.querySelectorAll("#landscape-grid .landscape-collapse")]
       .map(row=>row.id.slice("landscape-".length));
   })()`);
-  assertApprovedNames(vendorNames,expected.vendorNames,"Vendor filter differs from approved records");
+  assertApprovedNames(vendorNames,landscapeView.filterRecords(distributionRecords,{sourceType:"vendor"}).map(record => record.name),
+    "Vendor filter differs from approved records");
   const linkSafety=await evaluate(`(() => {
     document.getElementById("landscape-source-filter").value="";
     document.getElementById("landscape-source-filter").dispatchEvent(new Event("change",{bubbles:true}));
@@ -245,10 +277,10 @@ try {
       condaLabel:document.querySelector("#landscape-grid")?.textContent.includes("Conda PostgreSQL environment")};
   })()`);
   assert.ok(linkSafety.allHttps);
-  assertApprovedNames(linkSafety.urls,expected.sourceUrls.map(url=>new URL(url).href),
+  assertApprovedNames(linkSafety.urls,sourceRecords.map(source => new URL(source.url).href),
     "Published source links differ from approved Landscape data");
-  assert.equal(linkSafety.vendorLabel,expected.vendorLabel);
-  assert.equal(linkSafety.condaLabel,expected.condaLabel);
+  assert.equal(linkSafety.vendorLabel,sourceRecords.some(source => source.availability === "support-customer"));
+  assert.equal(linkSafety.condaLabel,sourceRecords.some(source => source.postgresqlDistribution === "conda-postgresql"));
   await send("Emulation.setDeviceMetricsOverride",{width:375,height:812,deviceScaleFactor:1,mobile:true});
   const mobile=await evaluate(`(() => ({
     width:window.innerWidth,
@@ -262,7 +294,7 @@ try {
   assert.ok(mobile.singleColumn && mobile.catalogVisible && mobile.landscapeVisible &&
     mobile.inputVisible && mobile.focusCss);
   assert.ok(mobile.scrollWidth<=mobile.width+2,`Mobile horizontal overflow: ${JSON.stringify(mobile)}`);
-  await send("Page.navigate",{url:"https://pgextwin.github.io/website/ja/"});
+  await send("Page.navigate",{url:new URL("ja/", siteRoot).href});
   await until(`document.getElementById("landscape-count")?.textContent.includes("${landscapeCount}件中${landscapeCount}件") && document.getElementById("results-count")?.textContent.includes("${catalogCount}件中${catalogCount}件")`,
     "Japanese catalog and landscape data loaded");
   assert.equal(await evaluate('document.documentElement.lang'),"ja");
@@ -271,7 +303,7 @@ try {
   await assertApprovedCards();
   assert.ok((await evaluate('document.querySelector("#extensions article")?.textContent'))?.includes("ZIPをダウンロード"));
   assert.equal(await evaluate('document.querySelector("nav.language-nav [aria-current=page]")?.getAttribute("lang")'),"ja");
-  assert.ok((await evaluate('document.querySelector("#landscape-grid")?.textContent'))?.includes("配布中"));
+  assert.deepEqual(await assertDistributionFilters("ja"), counts);
   for (const record of catalogRecords) signedReleaseVisuals.push(await assertBilingualAssets("ja",record));
   console.log(JSON.stringify({result:"PASS",site,realBrowser:"Chrome headless",japanesePage:true,catalogCards:catalogCount,
     landscapeCards:landscapeCount,statusFilterCounts:counts,search:true,sourceFilter:true,

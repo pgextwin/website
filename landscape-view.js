@@ -13,6 +13,112 @@
   const namePattern = /^[a-z][a-z0-9_]*$/;
   const datePattern = /^\d{4}-\d{2}-\d{2}$/;
   const nonempty = value => typeof value === "string" && value.trim().length > 0;
+  const distributionLabels = {
+    implemented: "CLI download · pgextwin builds (signed feed) / CLI取得可・pgextwinビルド（署名付きフィード）",
+    "external-direct": "CLI download · External binaries / CLI取得可・外部バイナリ",
+    "external-standalone": "CLI download · Standalone packages / CLI取得可・単体パッケージ",
+    candidate: "Candidate · CLI unavailable / 候補・CLI未対応",
+    "license-excluded": "License exclusion · CLI unavailable / ライセンス上の理由で対象外・CLI未対応",
+    "not-planned": "No plans · CLI unavailable / 対応予定なし・CLI未対応"
+  };
+  const packageRoutes = {
+    "external-direct": "external/direct-get.json",
+    "external-standalone": "external/standalone-get.json"
+  };
+  const packageDetails = {
+    pg_trickle: ["pg_trickle", "Incrementally maintained stream tables / 差分更新によるストリームテーブル"],
+    pglogical: ["pglogical", "Logical replication / 論理レプリケーション"],
+    pg_crash: ["pg_crash", "Crash simulation for PostgreSQL tests / PostgreSQLの障害テスト用の拡張機能"],
+    pgbouncer: ["PgBouncer", "Connection pooler / コネクションプーラー"],
+    psqlodbc: ["psqlODBC", "PostgreSQL ODBC driver / PostgreSQLのODBCドライバー"]
+  };
+  // These decisions concern the named packages. They do not grant download rights.
+  const decisions = {
+    pgroonga: {
+      reason: "Waiting for signed evidence linking the Windows package to its upstream build. / Windowsパッケージと上流ビルドの対応を示す署名付きの証明を待っています。"
+    },
+    pg_lockout: {
+      type: "candidate", displayName: "pg_lockout",
+      reason: "License evidence for the exact Windows package is still unavailable. / 対象のWindowsパッケージのライセンス根拠を確認できていません。"
+    },
+    pg_prohibit_commands: {
+      type: "candidate", displayName: "pg_prohibit_commands",
+      reason: "License evidence for the exact Windows package is still unavailable. / 対象のWindowsパッケージのライセンス根拠を確認できていません。"
+    },
+    pgagent: {
+      type: "license-excluded", displayName: "pgAgent 4.2.3-1",
+      reason: "The source uses the PostgreSQL License. The installer has no package-wide terms, and three bundled helper EXEs could not be traced to a licensed source revision. / ソースにはPostgreSQL Licenseが適用されます。インストーラー全体の利用条件が確認できず、同梱の補助EXE 3本もライセンスを確認できるソースの版に紐づけられませんでした。"
+    },
+    edb_language_pack: {
+      type: "license-excluded", displayName: "EDB Language Pack 3.13-1 / 4.12-1",
+      reason: "Package-wide terms are missing. The third-party notice omits OpenSSL, SQLite, the MSVC runtime and libraries bundled with pip. / パッケージ全体の利用条件が確認できず、第三者ライセンスの通知にもOpenSSL、SQLite、MSVCランタイム、pip同梱ライブラリの記載がありません。"
+    },
+    asp_bluefin: {
+      type: "license-excluded", displayName: "ASP Bluefin 1.7.0-1",
+      reason: "The bundled EnterpriseDB Limited Use License 2.10 limits use to internal, non-commercial evaluation and prohibits distribution. / 同梱のEnterpriseDB Limited Use License 2.10は社内での非商用評価に利用を限り、配布を禁止しています。"
+    },
+    timescaledb: {
+      type: "license-excluded", displayName: "TimescaleDB",
+      reason: "The reviewed Windows builds include Timescale-licensed (-tsl) components and did not pass pgextwin's license review. / 確認したWindowsビルドにはTimescale Licenseが適用されるコンポーネント（-tsl）が含まれており、pgextwinのライセンス審査では対象外となりました。"
+    },
+    postgresql_minor_updates: {
+      type: "not-planned", displayName: "PostgreSQL minor-update installers / PostgreSQLのマイナーアップデート用インストーラー",
+      reason: "pgextwin does not plan to add PostgreSQL server updates. / PostgreSQLサーバーの更新用インストーラーはpgextwinの対象外です。"
+    },
+    edb_commercial_tools: {
+      type: "not-planned", displayName: "EDB commercial tools / EDBの商用ツール",
+      reason: "PEM, Migration Toolkit and other registration-required tools are outside pgextwin's download scope. / PEM、Migration Toolkitなど、EDBへの登録が必要なツールはpgextwinの取得対象外です。"
+    }
+  };
+
+  function browseRecords(records, packageLists) {
+    const byName = new Map(records.map(record => [record.name, {...record}]));
+    for (const [name, {displayName}] of Object.entries(decisions)) {
+      if (displayName && !byName.has(name)) {
+        byName.set(name, {name, displayName, windowsBinarySources: []});
+      }
+    }
+    const addPackage = (name, route, pkg) => {
+      if (!byName.has(name)) {
+        const [displayName, description] = packageDetails[name] || [name];
+        byName.set(name, {name, displayName, description, windowsBinarySources: []});
+      }
+      const record = byName.get(name);
+      record.packages ??= {};
+      (record.packages[route] ??= []).push(pkg);
+    };
+    for (const route of Object.keys(packageRoutes)) {
+      for (const pkg of packageLists[route] || []) {
+        const name = pkg.extension || pkg.item;
+        addPackage(name, route, pkg);
+        // The CLI selects the same PostGIS package when asked for pgRouting.
+        if (name === "postgis") addPackage("pgrouting", route, pkg);
+      }
+    }
+    const packagesAvailable = Object.values(packageLists).every(list => list !== null);
+    for (const record of byName.values()) {
+      const decision = decisions[record.name];
+      record.reason = decision?.reason;
+      record.distributions = [
+        ...(record.status === "implemented" ? ["implemented"] : []),
+        ...Object.keys(record.packages || {})
+      ];
+      if (decision?.type === "license-excluded") {
+        record.distributions = [decision.type];
+        delete record.packages;
+        record.evidenceUrls = [];
+        record.windowsBinarySources = [];
+      } else {
+        if (!record.distributions.length) {
+          const fallback = decision?.type || record.status;
+          if (decision?.type || packagesAvailable) record.distributions = [fallback];
+        }
+        // The older GIS source notes describe pre-admission packages.
+        if (record.name === "postgis" || record.name === "pgrouting") record.windowsBinarySources = [];
+      }
+    }
+    return sortRecords([...byName.values()]);
+  }
   function safeHttpsUrl(url) {
     if (!nonempty(url)) return null;
     try {
@@ -116,20 +222,19 @@
   }
   function matches(record, options = {}) {
     const q = String(options.query || "").trim().toLowerCase();
-    if (options.status && record.status !== options.status) return false;
+    if (options.status && !(record.distributions || [record.status]).includes(options.status)) return false;
     if (options.sourceType && !record.windowsBinarySources.some(s => s.type === options.sourceType)) return false;
     return !q || [record.name,record.displayName,record.description,record.upstreamRepository,
-      record.candidateRationale,record.notPlannedReason,record.roadmap?.rationale,record.roadmap?.decision,...record.windowsBinarySources.map(s => s.provider)]
-      .filter(Boolean).join(" ").toLowerCase().includes(q);
+      record.reason,record.candidateRationale,record.notPlannedReason,record.notPlannedReasonJa,
+      record.roadmap?.rationale,record.roadmap?.decision,
+      ...record.windowsBinarySources.flatMap(s => [s.provider, s.notes]),
+      ...Object.values(record.packages || {}).flatMap(packages => packages.map(pkg => pkg.sourceRepo))]
+      .filter(Boolean).some(value => value.toLowerCase().includes(q) ||
+        options.translate?.(value).toLowerCase().includes(q));
   }
   function filterRecords(records, options) {
     return (Array.isArray(records) ? records : []).filter(x => matches(x, options));
   }
-  const statusLabels = {
-    implemented:"Available in pgextwin / pgextwinで配布中",
-    candidate:"Future candidate / 今後の候補",
-    "not-planned":"Not planned in pgextwin / 他の配布元を案内"
-  };
   const typeLabels = {
     "upstream-official":"Official upstream / 公式",
     community:"Community / コミュニティ",
@@ -171,6 +276,13 @@
     }));
     return partitionResults(results,index.extensions);
   }
+  async function loadPackages(fetcher, base, path) {
+    const response = await fetcher(base + "/" + path, {cache:"no-store"});
+    if (!response.ok) throw new Error("External catalog HTTP " + response.status);
+    const {records} = await response.json();
+    if (!Array.isArray(records)) throw new Error("External catalog records unavailable");
+    return records;
+  }
   return {safeHttpsUrl,validDate,validateIndex,validateRecord,validateRoadmap,roadmapLabel,sortRecords,partitionResults,filterRecords,sourceLabel,
-    statusLabels,typeLabels,accessLabels,targetLabels,compatibilityLabels,load};
+    distributionLabels,packageRoutes,browseRecords,typeLabels,accessLabels,targetLabels,compatibilityLabels,load,loadPackages};
 });

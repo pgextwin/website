@@ -22,7 +22,7 @@
       <nav class="jump-nav" aria-label="Page sections">
         <a class="jump-nav-primary" href="#extensions-heading">Browse downloads</a>
         <a href="./cli.html">CLI v0.3.18</a>
-        <a href="#landscape-heading">Other Windows sources</a>
+        <a href="#landscape-heading">Check CLI availability</a>
         <a href="#about-heading">About pgextwin</a>
       </nav>
 
@@ -51,7 +51,7 @@
         <button id="reload" type="button">Reload catalog</button>
       </div>
 
-      <div class="catalog-hint" role="note"><strong>pgextwin Windows x64 ZIP downloads<span id="catalog-count"></span></strong><p>Filter by name and PostgreSQL version. Open an extension to find its ZIP, installation requirements, and SHA-256.</p></div>
+      <div class="catalog-hint" role="note"><strong>pgextwin Windows x64 ZIP downloads<span id="catalog-count"></span></strong><p>Filter by name and PostgreSQL version. Open an extension to find its ZIP, installation requirements, and SHA-256. The CLI verifies the signature of the pgextwin feed.</p></div>
       <div class="filters" aria-label="Extension filters">
         <div class="filter-field filter-field--search">
           <label for="search">Search extensions</label>
@@ -86,29 +86,35 @@
     <section class="landscape-section" aria-labelledby="landscape-heading">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Independent Landscape Registry</p>
-          <h2 id="landscape-heading">Windows extension landscape</h2>
+          <h2 id="landscape-heading">Windows packages and CLI availability</h2>
         </div>
         <button id="landscape-reload" type="button">Reload landscape</button>
       </div>
-      <p>Find pgextwin downloads, future candidates, and alternative Windows binary sources. <strong>Not planned by pgextwin does not mean unavailable or incompatible with Windows.</strong></p>
+      <p>Check which Windows extensions, tools, and drivers the CLI can download. An item can appear under more than one route. Open an entry for package details or the reason it is unavailable.</p>
 
 
-      <p class="landscape-disclaimer">External distributions are provided by their listed projects or vendors. pgextwin does not guarantee their correctness, security, freshness, support, or compatibility. Check provider conditions and version-specific requirements before installation.</p>
+      <p class="landscape-disclaimer">For external CLI downloads, pgextwin checks the license for each package version. The CLI fetches the provider’s original file and checks its SHA-256 and size. Consult the provider for compatibility and support.</p>
 
 
       <div class="filters landscape-filters" aria-label="Landscape search and filters">
         <div class="filter-field">
           <label for="landscape-search">Search landscape</label>
-          <input id="landscape-search" type="search" autocomplete="off" placeholder="Extension or provider">
+          <input id="landscape-search" type="search" autocomplete="off" placeholder="Package or provider">
         </div>
         <div class="filter-field">
           <label for="landscape-filter">Distribution status</label>
           <select id="landscape-filter">
             <option value="">All</option>
-            <option value="implemented">Available in pgextwin</option>
-            <option value="candidate">Future candidate</option>
-            <option value="not-planned">Not planned</option>
+            <optgroup label="Downloadable with the CLI">
+              <option value="implemented"></option>
+              <option value="external-direct"></option>
+              <option value="external-standalone"></option>
+            </optgroup>
+            <optgroup label="Unavailable through the CLI">
+              <option value="candidate"></option>
+              <option value="license-excluded"></option>
+              <option value="not-planned"></option>
+            </optgroup>
           </select>
         </div>
         <div class="filter-field">
@@ -124,7 +130,7 @@
       </div>
       <div id="landscape-status" class="status" role="status" aria-live="polite">Loading landscape…</div>
       <p id="landscape-count" class="results-count" role="status" aria-live="polite"></p>
-      <p id="landscape-empty" class="empty-state" hidden>No matching Landscape entries.</p>
+      <p id="landscape-empty" class="empty-state" hidden>No matching packages.</p>
       <div id="landscape-grid" class="extension-grid"></div>
     </section>
 
