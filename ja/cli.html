@@ -20,10 +20,10 @@
     <p class="eyebrow">pgextwin CLI</p>
     <h1>Windows CLI v0.3.18</h1>
     <p class="lead">PostgreSQL拡張機能のZIPに加えて、空間拡張・ツール・ドライバもWindowsでダウンロードできます。PostgreSQLが入っていない環境でも、ダウンロードだけなら使えます。</p>
-    <p class="cli-hero-description">pgextwinの配布ZIPと、外部の提供元から直接取得するファイルでコマンドが異なります。<code>list</code>や<code>search</code>で対象を探し、<code>download</code>で名前を指定して取得します。<code>--pg</code>でお使いのPostgreSQLのメジャーバージョンを指定してください。</p>
+    <p class="cli-hero-description"><code>list</code>や<code>search</code>で対象を探し、<code>download</code>で名前を指定して取得できます。まとめて取得する場合は<code>download-all</code>を使います。<code>--pg</code>でお使いのPostgreSQLのメジャーバージョンを指定してください。</p>
     <nav class="jump-nav" aria-label="ページ内ナビゲーション">
       <a class="jump-nav-primary" href="#download-heading">CLIを入手</a>
-      <a href="#commands-heading">コマンド例</a>
+      <a href="#commands-heading">コマンドの使い方</a>
       <a href="#checksum-heading">SHA-256を確認</a>
       <a href="./">拡張機能一覧</a>
     </nav>
@@ -43,19 +43,32 @@
       <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256</code></pre>
     </section>
     <section aria-labelledby="commands-heading">
-      <p class="eyebrow">コマンド例</p>
-      <h2 id="commands-heading">コマンド例</h2>
+      <h2 id="commands-heading">コマンドの使い方</h2>
+      <p><code>&lt; &gt;</code>で囲んだ箇所は実際の値に置き換えてください。<code>[ ]</code>で囲んだオプションは省略できます。</p>
+      <h3>一覧表示と検索</h3>
+      <pre class="cli-usage"><code>.\pgextwin.exe list [--category &lt;category&gt;] [--pg &lt;major|all&gt;] [--format &lt;text|json&gt;]
+.\pgextwin.exe search &lt;term&gt; [--category &lt;category&gt;] [--pg &lt;major|all&gt;] [--format &lt;text|json&gt;]</code></pre>
+      <p>カテゴリは<code>extensions</code>（拡張機能）、<code>spatial</code>（空間拡張）、<code>tools</code>（ツール）、<code>drivers</code>（ドライバー）です。</p>
+      <h3>名前を指定して取得</h3>
+      <pre class="cli-usage"><code>.\pgextwin.exe download &lt;item&gt; [--version &lt;version&gt;] [--pg &lt;major|all&gt;] [--category &lt;category&gt;] [--output &lt;dir&gt;]
+.\pgextwin.exe download &lt;item&gt; --source pgextwin --pg &lt;major&gt; [--output &lt;dir&gt;]</code></pre>
+      <p>既定では外部の提供元から取得します。<code>--version</code>でカタログに記録された外部パッケージのバージョンを指定できます。</p>
+      <h3>まとめて取得</h3>
+      <pre class="cli-usage"><code>.\pgextwin.exe download-all --pg &lt;major|all&gt; [--output &lt;dir&gt;] [--latest|--fixed]
+.\pgextwin.exe download-all --source external [--pg &lt;major|all&gt;] [--category &lt;category&gt;] [--output &lt;dir&gt;]</code></pre>
+      <p>既定ではpgextwinの最新の配布一覧を使います。過去の固定版を使うには<code>--fixed</code>を指定します。外部の配布物を取得するときに<code>--pg</code>を省略すると、カタログに記録されたすべてのPostgreSQLメジャーバージョンが対象になります。<code>--output</code>で既存のフォルダーを指定できます。省略時は作業中のフォルダーに保存します。詳細な実行ログを表示するには<code>--verbose</code>を付けます。</p>
+      <h3>ヘルプとCLIのバージョンを表示</h3>
+      <pre class="cli-usage"><code>.\pgextwin.exe --help
+.\pgextwin.exe --version</code></pre>
+      <h3>コマンド例</h3>
       <div class="cli-command-list">
-        <div><h3>取得できるものを探す</h3><pre><code>.\pgextwin.exe list</code></pre></div>
-        <div><h3>カテゴリで探す（ツール）</h3><pre><code>.\pgextwin.exe list --category tools</code></pre></div>
-        <div><h3>名前を指定して取得（PgBouncer）</h3><pre><code>.\pgextwin.exe download pgbouncer</code></pre></div>
-        <div><h3>ドライバを検索する</h3><pre><code>.\pgextwin.exe search odbc --category drivers</code></pre></div>
-        <div><h3>対象の外部ZIPをまとめて取得</h3><pre><code>.\pgextwin.exe download-all --source external</code></pre></div>
-        <div><h3>外部配布からPostgreSQL 18用を取得</h3><pre><code>.\pgextwin.exe download-all --source external --pg 18</code></pre></div>
-        <div><h3>pgvector 0.8.7のPostgreSQL 18用ZIPを取得</h3><pre><code>.\pgextwin.exe download-all --source external --extension pgvector --version 0.8.7 --pg 18</code></pre></div>
-        <div><h3>pgextwin公開ZIPをまとめて取得</h3><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
-        <div><h3>過去の固定版を選ぶ</h3><pre><code>.\pgextwin.exe download-all --pg all --fixed</code></pre></div>
-        <div><h3>進行状況を表示</h3><pre><code>.\pgextwin.exe download-all --source external --verbose</code></pre></div>
+        <div><h4>PostgreSQL 18用のpgvectorを取得</h4><pre><code>.\pgextwin.exe download pgvector --pg 18</code></pre></div>
+        <div><h4>PostgreSQL 18用のpgvector 0.8.7を取得</h4><pre><code>.\pgextwin.exe download pgvector --version 0.8.7 --pg 18</code></pre></div>
+        <div><h4>PostgreSQL 18用の外部拡張機能を一覧表示</h4><pre><code>.\pgextwin.exe list --category extensions --pg 18</code></pre></div>
+        <div><h4>PostgreSQL 18用のベクトル関連パッケージを検索</h4><pre><code>.\pgextwin.exe search vector --pg 18</code></pre></div>
+        <div><h4>PostgreSQL 18用の外部拡張機能ZIPをまとめて取得</h4><pre><code>.\pgextwin.exe download-all --source external --pg 18 --category extensions</code></pre></div>
+        <div><h4>PostgreSQL 18用のpgextwin配布ZIPをまとめて取得</h4><pre><code>.\pgextwin.exe download-all --pg 18</code></pre></div>
+        <div><h4>psqlODBCドライバーを取得</h4><pre><code>.\pgextwin.exe download psqlodbc</code></pre></div>
       </div>
       <div class="cli-included">
         <h3>現在の外部ダウンロード対象（全26件）</h3>
@@ -68,7 +81,7 @@
       <h2 id="flow-heading">使い方は3ステップ</h2>
       <ol class="cli-flow-steps">
         <li><h3>1. pgextwin.exeを取得</h3><p>上のボタンからEXEをダウンロードし、使用するフォルダーに保存します。</p></li>
-        <li><h3>2. コマンドを実行</h3><p>そのフォルダーでPowerShellを開き、上のコマンド例から選びます。<code>--pg</code>でPostgreSQLのバージョンを指定します。<code>download</code>では名前で、<code>download-all</code>では<code>--extension</code>と<code>--version</code>で拡張機能とバージョンを選べます。</p></li>
+        <li><h3>2. コマンドを実行</h3><p>そのフォルダーでPowerShellを開きます。<code>download</code>に取得したい名前を指定します。外部配布物のバージョンを指定する場合は<code>--version</code>を付けます。まとめて取得する場合は<code>download-all</code>を使います。<code>--pg</code>でPostgreSQLのメジャーバージョンを指定します。</p></li>
         <li><h3>3. ZIPを照合</h3><p>取得したZIPのSHA-256を確認し、提供元の導入手順に従ってください。</p></li>
       </ol>
     </section>
@@ -76,6 +89,13 @@
       <h2 id="checksum-heading">ZIPの照合例</h2>
       <p>実際のファイル名に置き換えて実行し、提供元やダウンロード結果のSHA-256と照合してください。</p>
       <pre><code>Get-FileHash .\downloaded-file.zip -Algorithm SHA256</code></pre>
+    </section>
+    <section aria-labelledby="verify-heading">
+      <h2 id="verify-heading">ローカルファイルの検証</h2>
+      <p><code>verify external</code>は、取得済みの外部ZIPをレビュー記録と照合し、SHA-256、ファイルサイズ、ZIPの構造を確認します。</p>
+      <pre class="cli-usage"><code>.\pgextwin.exe verify external --ledger &lt;file&gt; --input-dir &lt;dir&gt; --pg &lt;major|all&gt;</code></pre>
+      <p><code>verify report</code>は、別途確認したハッシュ値と手元のファイルを使って、拡張機能1件の署名付きレポートを認証します。</p>
+      <pre class="cli-usage"><code>.\pgextwin.exe verify report &lt;item&gt; --pg &lt;major&gt; --catalog-dir &lt;dir&gt; --policy &lt;file&gt; --policy-sha256 &lt;hex&gt; --trusted-root-sha256 &lt;hex&gt; --p1-verifier-sha256 &lt;hex&gt; --report &lt;file&gt; --signature &lt;file&gt; --authority-key &lt;pem&gt; --authority-key-sha256 &lt;hex&gt;</code></pre>
     </section>
     <section class="cli-caution" role="note" aria-labelledby="caution-heading">
       <h2 id="caution-heading">ご利用前の注意</h2>

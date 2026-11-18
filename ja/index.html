@@ -37,7 +37,7 @@
       <ol class="quickstart-steps">
         <li><strong>探す</strong> — 拡張機能名で検索し、PostgreSQLのバージョンで絞り込みます。</li>
         <li><strong>選ぶ</strong> — 対応するバージョンと導入要件を確認します。</li>
-        <li><strong>ダウンロード</strong> — 対象のZIPを取得します。複数のZIPをまとめて取得する場合は<a href="./cli.html">Windows CLI</a>が便利です。</li>
+        <li><strong>ダウンロード</strong> — 対象のZIPを取得します。<a href="./cli.html">Windows CLI</a>でも名前を指定して取得したり、複数のZIPをまとめて取得したりできます。</li>
         <li><strong>SHA-256で照合</strong> — ダウンロードしたZIPのハッシュ値を確認してから、拡張機能ごとの導入手順に従います。</li>
       </ol>
     </section>
@@ -74,13 +74,12 @@
 
     <section class="cli-home-teaser" aria-labelledby="cli-home-heading">
       <p class="eyebrow">Windows CLI · v0.3.18 · 正式版</p>
-      <h2 id="cli-home-heading">Windows CLIでZIPをまとめてダウンロード</h2>
-      <p>pgextwinの配布ZIPを1つのコマンドで取得できます。対象の外部ZIPも提供元から直接取得できます。</p>
+      <h2 id="cli-home-heading">Windows CLIでパッケージを取得</h2>
       <div class="cli-command-list">
-        <div><strong>外部の提供元からZIPを取得</strong><pre><code>.\pgextwin.exe download-all --source external</code></pre></div>
-        <div><strong>pgextwinの公開ZIPを取得</strong><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
+        <div><strong>PostgreSQL 18用のpgvector</strong><pre><code>.\pgextwin.exe download pgvector --pg 18</code></pre></div>
+        <div><strong>PostgreSQL 18用のpgextwin配布ZIP</strong><pre><code>.\pgextwin.exe download-all --pg 18</code></pre></div>
       </div>
-      <p><code>--pg</code>でお使いのPostgreSQLに合うZIPに絞り込めます。外部ZIPの場合は、拡張機能名とバージョンも指定できます。</p>
+      <p><code>download</code>で名前を指定して取得し、<code>download-all</code>でまとめて取得します。<code>--pg</code>でPostgreSQLのメジャーバージョンを指定します。</p>
       <div class="cli-teaser-actions"><a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.18/pgextwin.exe">CLI v0.3.18 をダウンロード（13.69 MB）</a><a href="./cli.html">使い方とSHA-256の確認方法</a></div>
     </section>
 

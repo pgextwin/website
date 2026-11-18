@@ -37,7 +37,7 @@
       <ol class="quickstart-steps">
         <li><strong>Find</strong> — Search by extension name and filter by your PostgreSQL major version.</li>
         <li><strong>Choose</strong> — Check the matching version and installation requirements.</li>
-        <li><strong>Download</strong> — Get the ZIP file, or use the <a href="./cli.html">Windows CLI</a> for multiple packages.</li>
+        <li><strong>Download</strong> — Get the ZIP file, or use the <a href="./cli.html">Windows CLI</a> to download by name or in bulk.</li>
         <li><strong>Verify</strong> — Compare the downloaded ZIP's SHA-256, then follow that extension's installation steps.</li>
       </ol>
     </section>
@@ -74,13 +74,12 @@
 
     <section class="cli-home-teaser" aria-labelledby="cli-home-heading">
       <p class="eyebrow">Windows CLI · v0.3.18 · Stable</p>
-      <h2 id="cli-home-heading">Download multiple ZIPs with the Windows CLI</h2>
-      <p>Get pgextwin builds in one command. You can also fetch selected ZIPs directly from their providers.</p>
+      <h2 id="cli-home-heading">Download packages with the Windows CLI</h2>
       <div class="cli-command-list">
-        <div><strong>ZIPs from external providers</strong><pre><code>.\pgextwin.exe download-all --source external</code></pre></div>
-        <div><strong>pgextwin ZIPs</strong><pre><code>.\pgextwin.exe download-all --pg all</code></pre></div>
+        <div><strong>pgvector for PostgreSQL 18</strong><pre><code>.\pgextwin.exe download pgvector --pg 18</code></pre></div>
+        <div><strong>pgextwin ZIPs for PostgreSQL 18</strong><pre><code>.\pgextwin.exe download-all --pg 18</code></pre></div>
       </div>
-      <p>Use <code>--pg</code> to download ZIPs for your PostgreSQL version. For external ZIPs, you can also select an extension and its version.</p>
+      <p>Use <code>download</code> for one named item or <code>download-all</code> for a batch. Set <code>--pg</code> to your PostgreSQL major version.</p>
       <div class="cli-teaser-actions"><a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.18/pgextwin.exe">Download CLI v0.3.18 (13.69 MB)</a><a href="./cli.html">Commands and SHA-256 verification</a></div>
     </section>
 
