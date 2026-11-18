@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="PostgreSQL拡張機能のWindows x64用ZIPをまとめて取得。CLI v0.3.16のダウンロード、コマンド例、SHA-256照合方法。">
-  <title>pgextwin — Windows CLI v0.3.16</title>
+  <meta name="description" content="PostgreSQL拡張機能のWindows x64用ZIPをまとめて取得。CLI v0.3.17のダウンロード、コマンド例、SHA-256照合方法。">
+  <title>pgextwin — Windows CLI v0.3.17</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/ja/cli.html">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/cli.html">
@@ -18,7 +18,7 @@
       <a href="../en/cli.html" lang="en">English</a>
     </nav>
     <p class="eyebrow">pgextwin CLI</p>
-    <h1>Windows CLI v0.3.16</h1>
+    <h1>Windows CLI v0.3.17</h1>
     <p class="lead">PostgreSQL拡張機能のZIPをWindowsでまとめてダウンロードできます。</p>
     <p class="cli-hero-description">pgextwinの配布ZIPと、外部の提供元から直接取得するZIPでコマンドが異なります。<code>--pg</code>でお使いのPostgreSQLのメジャーバージョンを指定してください。</p>
     <nav class="jump-nav" aria-label="ページ内ナビゲーション">
@@ -30,15 +30,15 @@
   </div></header>
   <main class="shell cli-page">
     <section class="cli-download" aria-labelledby="download-heading">
-      <p class="eyebrow">Windows x64 · 正式版 · 2026年11月13日公開</p>
+      <p class="eyebrow">Windows x64 · 正式版 · 2026年11月18日公開</p>
       <h2 id="download-heading">CLIを入手</h2>
       <div class="cli-download-actions">
-        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.16/pgextwin.exe">pgextwin.exe をダウンロード（12.90 MB）</a>
-        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.16">GitHubでリリース情報を見る</a>
-        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.16/SHA256SUMS.txt">SHA256SUMS.txt を表示</a>
+        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.17/pgextwin.exe">pgextwin.exe をダウンロード（13.68 MB）</a>
+        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.17">GitHubでリリース情報を見る</a>
+        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.3.17/SHA256SUMS.txt">SHA256SUMS.txt を表示</a>
       </div>
-      <p class="cli-exe-size">EXEサイズ：12,905,090 バイト</p>
-      <p class="cli-sha"><strong>EXEのSHA-256：</strong><code>a59f36b1f247faa76ea40bf52c386ffdcfb5af84378364b8e52c11bcaf73457b</code></p>
+      <p class="cli-exe-size">EXEサイズ：13,683,305 バイト</p>
+      <p class="cli-sha"><strong>EXEのSHA-256：</strong><code>bfac89a324029339603caab6c0ec39139419a005f523969500bdd861711c7a83</code></p>
       <p>ダウンロード後、PowerShellで次のコマンドを実行してください。表示されたSHA-256が上記の値またはSHA256SUMS.txtの値と一致することを確認します。</p>
       <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256</code></pre>
     </section>
@@ -54,9 +54,9 @@
         <div><h3>進行状況を表示</h3><pre><code>.\pgextwin.exe download-all --source external --verbose</code></pre></div>
       </div>
       <div class="cli-included">
-        <h3>リリース時点の対象外部ZIP（11件）</h3>
-        <ul><li>oracle_fdw 2.9.0：PostgreSQL 14～18（5 ZIP）</li><li>pgvector 0.8.7：PostgreSQL 14～18（5 ZIP）</li><li>pg_trickle 0.108.3：PostgreSQL 18（1 ZIP）</li></ul>
-        <p>CLIはカタログから最新の対象一覧を読み込みます。取得には有効なダウンロード許可が必要です。許可が確認できない場合は、<a href="./#landscape-heading">Windows向けの配布元一覧</a>をご覧ください。</p>
+        <h3>現在の対象外部ZIP（23件）</h3>
+        <ul><li>oracle_fdw 2.9.0：PostgreSQL 14～18（5 ZIP）</li><li>pgvector 0.8.7：PostgreSQL 14～18（5 ZIP）</li><li>pglogical 2.4.8：PostgreSQL 15～18（4 ZIP）</li><li>pg_crash 0.3：PostgreSQL 15～18（4 ZIP）</li><li>PostGIS／pgRoutingバンドル：PostgreSQL 15～18（4 ZIP）</li><li>pg_trickle 0.108.3：PostgreSQL 18（1 ZIP）</li></ul>
+        <p>CLIはカタログの外部取得レコードから最新の対象一覧を読み込みます。期限付きの許可は不要で、取得したZIPはハッシュとサイズで照合します。</p>
       </div>
     </section>
     <section aria-labelledby="flow-heading">
@@ -81,9 +81,9 @@
       <h2 id="release-notes-heading">リリースノート</h2>
       <div class="cli-release-notes">
         <article lang="ja" class="cli-note-block">
-          <h3>CLI v0.3.16</h3>
-          <p>v0.3.16（2026年11月13日）は、拡張機能が追加されるたびに最新のカタログに追従します。過去の固定版を取得するには<code>--fixed</code>、進行状況を表示するには<code>--verbose</code>を指定します。公開EXEは12,905,090バイト（12.90 MB）です。</p>
-          <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.16">GitHubでリリース情報を見る</a></p>
+          <h3>CLI v0.3.17</h3>
+          <p>v0.3.17（2026年11月18日）は、外部ZIPの取得を期限付きの認可から切り離し、カタログの取得レコード（ハッシュ・サイズ固定）に基づいて常時取得できるようにしました。拡張機能が追加されるたびに最新のカタログに追従します。過去の固定版を取得するには<code>--fixed</code>、進行状況を表示するには<code>--verbose</code>を指定します。公開EXEは13,683,305バイト（13.68 MB）です。</p>
+          <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.3.17">GitHubでリリース情報を見る</a></p>
         </article>
       </div>
     </section>
