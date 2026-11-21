@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Download PostgreSQL extensions, tools, and drivers for Windows x64. CLI v0.5.0 download, command usage, and SHA-256 verification.">
-  <title>pgextwin — Windows CLI v0.5.0</title>
+  <meta name="description" content="Download PostgreSQL extensions, tools, and drivers for Windows x64. CLI v0.6.0 download, command usage, and SHA-256 verification.">
+  <title>pgextwin — Windows CLI v0.6.0</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/cli.html">
@@ -18,7 +18,7 @@
       <a href="../en/cli.html" lang="en" aria-current="page">English</a>
     </nav>
     <p class="eyebrow">pgextwin CLI</p>
-    <h1>Windows CLI v0.5.0</h1>
+    <h1>Windows CLI v0.6.0</h1>
     <p class="lead">Download PostgreSQL extension ZIPs on Windows, now including spatial bundles, tools, and drivers. Downloading also works on machines without PostgreSQL installed.</p>
     <p class="cli-hero-description">Browse what is available with <code>list</code> and <code>search</code>, fetch one item by name with <code>download</code>, or take a whole selection with <code>download-all</code>. Set <code>--pg</code> to your PostgreSQL major version.</p>
     <nav class="jump-nav" aria-label="CLI navigation">
@@ -33,12 +33,12 @@
       <p class="eyebrow">Windows x64 · Stable · Released November 21, 2026</p>
       <h2 id="download-heading">Get the CLI</h2>
       <div class="cli-download-actions">
-        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.5.0/pgextwin.exe">Download pgextwin.exe (13.69 MB)</a>
-        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.5.0">GitHub Release v0.5.0</a>
-        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.5.0/SHA256SUMS.txt">View SHA256SUMS.txt</a>
+        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.6.0/pgextwin.exe">Download pgextwin.exe (13.69 MB)</a>
+        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.6.0">GitHub Release v0.6.0</a>
+        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.6.0/SHA256SUMS.txt">View SHA256SUMS.txt</a>
       </div>
-      <p class="cli-exe-size">EXE size: 13,696,414 bytes</p>
-      <p class="cli-sha"><strong>EXE SHA-256: </strong><code>bcad2243f994a2b0f756971f557d1bbd760ee47f6cb91f2de5e6f57ec5433294</code></p>
+      <p class="cli-exe-size">EXE size: 13,696,554 bytes</p>
+      <p class="cli-sha"><strong>EXE SHA-256: </strong><code>0845a9838910ce362f39c07d005a09011c5237c4285d97d9b3afe036ce6dc371</code></p>
       <p>After downloading, run the following in PowerShell. Compare the displayed SHA-256 with the value above or the value in SHA256SUMS.txt.</p>
       <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256</code></pre>
     </section>
@@ -51,8 +51,8 @@
       <p>Categories are <code>extensions</code>, <code>spatial</code>, <code>tools</code>, and <code>drivers</code>.</p>
       <h3>Download one named item</h3>
       <pre class="cli-usage"><code>.\pgextwin.exe download &lt;item&gt; [--version &lt;version&gt;] [--pg &lt;major|all&gt;] [--category &lt;category&gt;] [--output &lt;dir&gt;]
-.\pgextwin.exe download &lt;item&gt; --source pgextwin --pg &lt;major&gt; [--output &lt;dir&gt;]</code></pre>
-      <p>Named downloads use external providers by default. Add <code>--version</code> to select an exact version recorded in the Catalog.</p>
+.\pgextwin.exe download &lt;item&gt; --source pgextwin --pg &lt;major&gt; [--version &lt;version&gt;] [--output &lt;dir&gt;]</code></pre>
+      <p>Named downloads use external providers by default. Add <code>--version</code> to select an exact version recorded in the Catalog, for external packages and for pgextwin-distributed extensions fetched with <code>--source pgextwin</code>.</p>
       <h3>Download packages in bulk</h3>
       <pre class="cli-usage"><code>.\pgextwin.exe download-all --pg &lt;major|all&gt; [--output &lt;dir&gt;] [--latest|--fixed]
 .\pgextwin.exe download-all --source external [--pg &lt;major|all&gt;] [--category &lt;category&gt;] [--output &lt;dir&gt;]</code></pre>
@@ -64,6 +64,7 @@
       <div class="cli-command-list">
         <div><h4>Download pgvector for PostgreSQL 18</h4><pre><code>.\pgextwin.exe download pgvector --pg 18</code></pre></div>
         <div><h4>Download pgvector 0.8.7 for PostgreSQL 18</h4><pre><code>.\pgextwin.exe download pgvector --version 0.8.7 --pg 18</code></pre></div>
+        <div><h4>Download HypoPG 1.4.4 for PostgreSQL 15</h4><pre><code>.\pgextwin.exe download hypopg --source pgextwin --pg 15 --version 1.4.4</code></pre></div>
         <div><h4>List external extensions for PostgreSQL 18</h4><pre><code>.\pgextwin.exe list --category extensions --pg 18</code></pre></div>
         <div><h4>Search for vector packages for PostgreSQL 18</h4><pre><code>.\pgextwin.exe search vector --pg 18</code></pre></div>
         <div><h4>Download external extension ZIPs for PostgreSQL 18</h4><pre><code>.\pgextwin.exe download-all --source external --pg 18 --category extensions</code></pre></div>
@@ -107,9 +108,9 @@
       <h2 id="release-notes-heading">What's new</h2>
       <div class="cli-release-notes">
         <article lang="en" class="cli-note-block">
-          <h3>CLI v0.5.0</h3>
-          <p>v0.5.0 (November 21, 2026) covers the external catalog including the PostgreSQL 19 OSGeo bundle (PostGIS 3.7.0 and pgRouting 4.0.1). External extensions and spatial bundles are available for PostgreSQL 15-19, and <code>download postgis --pg 19</code> and <code>download pgrouting --pg 19</code> both get the same ZIP. The published EXE is 13,696,414 bytes (13.69 MB).</p>
-          <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.5.0">GitHub Release v0.5.0</a></p>
+          <h3>CLI v0.6.0</h3>
+          <p>v0.6.0 (November 22, 2026) downloads pgextwin-distributed extensions at an exact version from the signed Catalog. For example, HypoPG for PostgreSQL 15 is available as the latest 1.4.5 and as 1.4.4 via <code>download hypopg --source pgextwin --pg 15 --version 1.4.4</code>. It also covers the external catalog including the PostgreSQL 19 OSGeo bundle (PostGIS 3.7.0 and pgRouting 4.0.1); external extensions and spatial bundles are available for PostgreSQL 15-19. The published EXE is 13,696,554 bytes (13.69 MB).</p>
+          <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.6.0">GitHub Release v0.6.0</a></p>
         </article>
       </div>
     </section>
