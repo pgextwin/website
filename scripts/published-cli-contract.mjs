@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import {elements, hasClass, textContent} from './html-contract.mjs';
 
-export const cliVersion = '0.5.0';
-export const cliExeSha = 'bcad2243f994a2b0f756971f557d1bbd760ee47f6cb91f2de5e6f57ec5433294';
-export const cliExeBytes = 13696414;
+export const cliVersion = '0.6.0';
+export const cliExeSha = '0845a9838910ce362f39c07d005a09011c5237c4285d97d9b3afe036ce6dc371';
+export const cliExeBytes = 13696554;
 const cliExeSize = (Math.floor(cliExeBytes / 10_000) / 100).toFixed(2) + ' MB';
 
 const exe = 'https://github.com/pgextwin/catalog/releases/download/cli-v' + cliVersion + '/pgextwin.exe';
@@ -45,7 +45,7 @@ export function verifyPublishedCli(page, home, locale) {
     'list [--category <category>] [--pg <major|all>] [--format <text|json>]',
     'search <term> [--category <category>] [--pg <major|all>] [--format <text|json>]',
     'download <item> [--version <version>] [--pg <major|all>] [--category <category>] [--output <dir>]',
-    'download <item> --source pgextwin --pg <major> [--output <dir>]',
+    'download <item> --source pgextwin --pg <major> [--version <version>] [--output <dir>]',
     'download-all --pg <major|all> [--output <dir>] [--latest|--fixed]',
     'download-all --source external [--pg <major|all>] [--category <category>] [--output <dir>]',
     'verify external --ledger <file> --input-dir <dir> --pg <major|all>',
