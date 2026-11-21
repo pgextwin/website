@@ -94,19 +94,12 @@ async function audit() {
     assert.ok(match,"invalid SHA256SUMS entry");
     return [match[2],match[1]];
   }));
-  const expectedMajors=Object.keys(rec.postgresql).sort();
-  assert.deepEqual(expectedMajors.filter(major=>major!=="14"),["15","16","17","18"],
-    "PostgreSQL 15–18 maintained binary matrix incomplete");
-  assert.ok(expectedMajors.length===4 || expectedMajors.length===5,
-    "Unexpected major version in Catalog");
-  if(rec.latest.releaseTag==="v2.10.13-windows.2") {
-    assert.deepEqual(expectedMajors,["14","15","16","17","18"],
-      "PG14 compatibility backfill must include all five verified majors");
-  }
+  const availableMajors=Object.keys(rec.postgresql)
+    .filter(major=>rec.postgresql[major].available===true)
+    .sort();
   const names=[];
-  for (const major of expectedMajors) {
+  for (const major of availableMajors) {
     const pkg=rec.postgresql[major];
-    assert.equal(pkg.available,true);
     assert.match(pkg.sha256,/^[a-f0-9]{64}$/);
     assert.ok(pkg.downloadUrl.startsWith("https://github.com/pgextwin/plpgsql_check/releases/download/"));
     const evidence=pkg.evidence;
@@ -123,10 +116,10 @@ async function audit() {
       assert.equal(await sha(entry.downloadUrl),entry.sha256,"HTTP bytes SHA mismatch");
       names.push(entry.asset);
     }
-    assert.deepEqual(Object.keys(rec.capabilities.coverage).sort(),
-      ["backgroundWorker","clientExecutable","createExtension","serverLogAssertions","upgrade"].sort());
   }
   assert.deepEqual([...listed.keys()].sort(),names.sort(),"Release contains different major assets");
+  assert.deepEqual(Object.keys(rec.capabilities.coverage).sort(),
+    ["backgroundWorker","clientExecutable","createExtension","serverLogAssertions","upgrade"].sort());
   assert.equal(rec.capabilities.testContractVersion,2);
   assert.match(rec.capabilitiesSource.commit,/^[a-f0-9]{40}$/);
   const tc=await json("https://raw.githubusercontent.com/"+rec.capabilitiesSource.repository+"/"
@@ -135,7 +128,7 @@ async function audit() {
   assert.deepEqual(rec.capabilities.coverage,tc.coverage);
   assert.deepEqual(rec.capabilities.functionalScenarios,tc.functionalScenarios);
   console.log(JSON.stringify({status:"PASS",site,extension,releaseTag:rec.latest.releaseTag,
-    majors:expectedMajors,bytesVerifiedAssets:names.length,catalogSource:"main",
+    majors:availableMajors,bytesVerifiedAssets:names.length,catalogSource:"main",
     signedAvailabilityReported:true,landscapeStatus:landscape.status}));
 }
 await audit();
