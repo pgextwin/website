@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Download PostgreSQL extensions, tools, and drivers for Windows x64. CLI v0.4.0 download, command usage, and SHA-256 verification.">
-  <title>pgextwin — Windows CLI v0.4.0</title>
+  <meta name="description" content="Download PostgreSQL extensions, tools, and drivers for Windows x64. CLI v0.5.0 download, command usage, and SHA-256 verification.">
+  <title>pgextwin — Windows CLI v0.5.0</title>
   <link rel="canonical" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/cli.html">
   <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/cli.html">
@@ -18,7 +18,7 @@
       <a href="../en/cli.html" lang="en" aria-current="page">English</a>
     </nav>
     <p class="eyebrow">pgextwin CLI</p>
-    <h1>Windows CLI v0.4.0</h1>
+    <h1>Windows CLI v0.5.0</h1>
     <p class="lead">Download PostgreSQL extension ZIPs on Windows, now including spatial bundles, tools, and drivers. Downloading also works on machines without PostgreSQL installed.</p>
     <p class="cli-hero-description">Browse what is available with <code>list</code> and <code>search</code>, fetch one item by name with <code>download</code>, or take a whole selection with <code>download-all</code>. Set <code>--pg</code> to your PostgreSQL major version.</p>
     <nav class="jump-nav" aria-label="CLI navigation">
@@ -30,15 +30,15 @@
   </div></header>
   <main class="shell cli-page">
     <section class="cli-download" aria-labelledby="download-heading">
-      <p class="eyebrow">Windows x64 · Stable · Released November 20, 2026</p>
+      <p class="eyebrow">Windows x64 · Stable · Released November 21, 2026</p>
       <h2 id="download-heading">Get the CLI</h2>
       <div class="cli-download-actions">
-        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.4.0/pgextwin.exe">Download pgextwin.exe (13.69 MB)</a>
-        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.4.0">GitHub Release v0.4.0</a>
-        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.4.0/SHA256SUMS.txt">View SHA256SUMS.txt</a>
+        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.5.0/pgextwin.exe">Download pgextwin.exe (13.69 MB)</a>
+        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.5.0">GitHub Release v0.5.0</a>
+        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.5.0/SHA256SUMS.txt">View SHA256SUMS.txt</a>
       </div>
-      <p class="cli-exe-size">EXE size: 13,696,415 bytes</p>
-      <p class="cli-sha"><strong>EXE SHA-256: </strong><code>6b983fe4f44248a23d9cbb61a13595a97dcc3dbd1dc8a4781d8d5988428e02a8</code></p>
+      <p class="cli-exe-size">EXE size: 13,696,414 bytes</p>
+      <p class="cli-sha"><strong>EXE SHA-256: </strong><code>bcad2243f994a2b0f756971f557d1bbd760ee47f6cb91f2de5e6f57ec5433294</code></p>
       <p>After downloading, run the following in PowerShell. Compare the displayed SHA-256 with the value above or the value in SHA256SUMS.txt.</p>
       <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256</code></pre>
     </section>
@@ -69,10 +69,12 @@
         <div><h4>Download external extension ZIPs for PostgreSQL 18</h4><pre><code>.\pgextwin.exe download-all --source external --pg 18 --category extensions</code></pre></div>
         <div><h4>Download pgextwin ZIPs for PostgreSQL 18</h4><pre><code>.\pgextwin.exe download-all --pg 18</code></pre></div>
         <div><h4>Download the psqlODBC driver</h4><pre><code>.\pgextwin.exe download psqlodbc</code></pre></div>
+        <div><h4>Download PostGIS for PostgreSQL 19</h4><pre><code>.\pgextwin.exe download postgis --pg 19</code></pre></div>
+        <div><h4>Download pgRouting for PostgreSQL 19</h4><pre><code>.\pgextwin.exe download pgrouting --pg 19</code></pre></div>
       </div>
       <div class="cli-included">
-        <h3>Current external selection (26 files)</h3>
-        <ul><li>oracle_fdw 2.9.0: PostgreSQL 14–18 (5 ZIPs)</li><li>pgvector 0.8.7: PostgreSQL 14–18 (5 ZIPs)</li><li>pglogical 2.4.8: PostgreSQL 15–18 (4 ZIPs)</li><li>pg_crash 0.3: PostgreSQL 15–18 (4 ZIPs)</li><li>PostGIS/pgRouting bundles: PostgreSQL 15–18 (4 ZIPs)</li><li>pg_trickle 0.108.3: PostgreSQL 18 (1 ZIP)</li><li>Spatial: PostGIS bundle 3.6.2 with pgRouting 4.0.1 (installer): PostgreSQL 14 (1 file)</li><li>Tools: PgBouncer 1.26.1 (1 file)</li><li>Drivers: psqlODBC 13.02 (1 file)</li></ul>
+        <h3>Current external selection</h3>
+        <ul><li>oracle_fdw 2.9.0: PostgreSQL 14–18</li><li>pgvector 0.8.7: PostgreSQL 14–18</li><li>pglogical 2.4.8: PostgreSQL 15–18</li><li>pg_crash 0.3: PostgreSQL 15–18</li><li>PostGIS/pgRouting bundles: PostgreSQL 15–19</li><li>pg_trickle 0.108.3: PostgreSQL 18</li><li>Spatial: PostGIS bundle 3.6.2 with pgRouting 4.0.1 (installer): PostgreSQL 14</li><li>Tools: PgBouncer 1.26.1</li><li>Drivers: psqlODBC 13.02</li></ul>
         <p>The CLI reads the current selection from the Catalog’s download records. No expiring approval is needed, and every downloaded file is verified against its pinned SHA-256 and size. Downloads also work on machines without PostgreSQL installed.</p>
       </div>
     </section>
@@ -105,9 +107,9 @@
       <h2 id="release-notes-heading">What's new</h2>
       <div class="cli-release-notes">
         <article lang="en" class="cli-note-block">
-          <h3>CLI v0.4.0</h3>
-          <p>v0.4.0 (November 20, 2026) reads a single catalog feed covering PostgreSQL 15-19, so one EXE handles every supported major version. PostgreSQL 19 builds are available for nine extensions so far, alongside the full PostgreSQL 15-18 selection. The published EXE is 13,696,415 bytes (13.69 MB).</p>
-          <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.4.0">GitHub Release v0.4.0</a></p>
+          <h3>CLI v0.5.0</h3>
+          <p>v0.5.0 (November 21, 2026) covers the external catalog including the PostgreSQL 19 OSGeo bundle (PostGIS 3.7.0 and pgRouting 4.0.1). External extensions and spatial bundles are available for PostgreSQL 15-19, and <code>download postgis --pg 19</code> and <code>download pgrouting --pg 19</code> both get the same ZIP. The published EXE is 13,696,414 bytes (13.69 MB).</p>
+          <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.5.0">GitHub Release v0.5.0</a></p>
         </article>
       </div>
     </section>

@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import {elements, hasClass, textContent} from './html-contract.mjs';
 
-export const cliVersion = '0.4.0';
-export const cliExeSha = '6b983fe4f44248a23d9cbb61a13595a97dcc3dbd1dc8a4781d8d5988428e02a8';
-export const cliExeBytes = 13696415;
+export const cliVersion = '0.5.0';
+export const cliExeSha = 'bcad2243f994a2b0f756971f557d1bbd760ee47f6cb91f2de5e6f57ec5433294';
+export const cliExeBytes = 13696414;
 const cliExeSize = (Math.floor(cliExeBytes / 10_000) / 100).toFixed(2) + ' MB';
 
 const exe = 'https://github.com/pgextwin/catalog/releases/download/cli-v' + cliVersion + '/pgextwin.exe';
