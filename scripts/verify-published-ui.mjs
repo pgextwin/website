@@ -48,8 +48,7 @@ for (const name of catalogIndex.extensions) {
   assert.equal(response.status,200,`Signed Catalog record unavailable: ${name}`);
   const record=await response.json();
   assert.equal(record.name,name);
-  // Use the same bounded safe-tag grammar as the fleet audit: approved versions
-  // may include a date or prerelease component, not just dotted numbers.
+  // Approved versions can include a date or prerelease component.
   assert.match(record.latest.releaseTag,/^v[A-Za-z0-9][A-Za-z0-9._-]{0,110}-windows\.[1-9][0-9]*$/);
   assert.ok(Object.values(record.postgresql).some(item=>item.available===true),
     `No verified binaries: ${name}`);
