@@ -3,118 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="PostgreSQL拡張機能・ツール・ドライバをWindows x64でダウンロード。CLI v0.6.0のダウンロード、コマンド例、SHA-256照合方法。">
-  <title>pgextwin — Windows CLI v0.6.0</title>
-  <link rel="canonical" href="https://pgextwin.github.io/website/ja/cli.html">
-  <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/cli.html">
-  <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/cli.html">
-  <link rel="stylesheet" href="../styles.css">
+  <meta name="robots" content="noindex,follow">
+  <title>pgextwin CLI — 移転しました</title>
+  <link rel="canonical" href="https://pgextwin.github.io/catalog/ja/cli.html">
+  <meta http-equiv="refresh" content="0; url=https://pgextwin.github.io/catalog/ja/cli.html">
+  <script>
+    window.location.replace("https://pgextwin.github.io/catalog/ja/cli.html" + window.location.search + window.location.hash);
+  </script>
 </head>
 <body>
-  <a class="skip-link" href="#download-heading">CLIのダウンロードへ</a>
-  <header class="site-header"><div class="shell">
-    <nav class="language-nav" aria-label="表示言語">
-      <a href="../ja/cli.html" lang="ja" aria-current="page">日本語</a>
-      <a href="../en/cli.html" lang="en">English</a>
-    </nav>
-    <p class="eyebrow">pgextwin CLI</p>
-    <h1>Windows CLI v0.6.0</h1>
-    <p class="lead">PostgreSQL拡張機能のZIPに加えて、空間拡張・ツール・ドライバもWindowsでダウンロードできます。PostgreSQLが入っていない環境でも、ダウンロードだけなら使えます。</p>
-    <p class="cli-hero-description"><code>list</code>や<code>search</code>で対象を探し、<code>download</code>で名前を指定して取得できます。まとめて取得する場合は<code>download-all</code>を使います。<code>--pg</code>でお使いのPostgreSQLのメジャーバージョンを指定してください。</p>
-    <nav class="jump-nav" aria-label="ページ内ナビゲーション">
-      <a class="jump-nav-primary" href="#download-heading">CLIを入手</a>
-      <a href="#commands-heading">コマンドの使い方</a>
-      <a href="#checksum-heading">SHA-256を確認</a>
-      <a href="./">拡張機能一覧</a>
-    </nav>
-  </div></header>
-  <main class="shell cli-page">
-    <section class="cli-download" aria-labelledby="download-heading">
-      <p class="eyebrow">Windows x64 · プレリリース · 2026年11月21日公開</p>
-      <h2 id="download-heading">CLIを入手</h2>
-      <div class="cli-download-actions">
-        <a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.6.0/pgextwin.exe">pgextwin.exe をダウンロード（13.69 MB）</a>
-        <a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.6.0">GitHubでリリース情報を見る</a>
-        <a href="https://github.com/pgextwin/catalog/releases/download/cli-v0.6.0/SHA256SUMS.txt">SHA256SUMS.txt を表示</a>
-      </div>
-      <p class="cli-exe-size">EXEサイズ：13,696,554 バイト</p>
-      <p class="cli-sha"><strong>EXEのSHA-256：</strong><code>0845a9838910ce362f39c07d005a09011c5237c4285d97d9b3afe036ce6dc371</code></p>
-      <p>ダウンロード後、PowerShellで次のコマンドを実行してください。表示されたSHA-256が上記の値またはSHA256SUMS.txtの値と一致することを確認します。</p>
-      <pre><code>Get-FileHash .\pgextwin.exe -Algorithm SHA256</code></pre>
-    </section>
-    <section aria-labelledby="commands-heading">
-      <h2 id="commands-heading">コマンドの使い方</h2>
-      <p><code>&lt; &gt;</code>で囲んだ箇所は実際の値に置き換えてください。<code>[ ]</code>で囲んだオプションは省略できます。</p>
-      <h3>一覧表示と検索</h3>
-      <pre class="cli-usage"><code>.\pgextwin.exe list [--category &lt;category&gt;] [--pg &lt;major|all&gt;] [--format &lt;text|json&gt;]
-.\pgextwin.exe search &lt;term&gt; [--category &lt;category&gt;] [--pg &lt;major|all&gt;] [--format &lt;text|json&gt;]</code></pre>
-      <p>カテゴリは<code>extensions</code>（拡張機能）、<code>spatial</code>（空間拡張）、<code>tools</code>（ツール）、<code>drivers</code>（ドライバー）です。</p>
-      <h3>名前を指定して取得</h3>
-      <pre class="cli-usage"><code>.\pgextwin.exe download &lt;item&gt; [--version &lt;version&gt;] [--pg &lt;major|all&gt;] [--category &lt;category&gt;] [--output &lt;dir&gt;]
-.\pgextwin.exe download &lt;item&gt; --source pgextwin --pg &lt;major&gt; [--version &lt;version&gt;] [--output &lt;dir&gt;]</code></pre>
-      <p>既定では外部の提供元から取得します。<code>--version</code>でカタログに記録されたバージョンを指定できます（外部パッケージと、<code>--source pgextwin</code>で取得するpgextwin配布の拡張機能の両方）。</p>
-      <h3>まとめて取得</h3>
-      <pre class="cli-usage"><code>.\pgextwin.exe download-all --pg &lt;major|all&gt; [--output &lt;dir&gt;] [--latest|--fixed]
-.\pgextwin.exe download-all --source external [--pg &lt;major|all&gt;] [--category &lt;category&gt;] [--output &lt;dir&gt;]</code></pre>
-      <p>既定ではpgextwinの最新の配布一覧を使います。過去の固定版を使うには<code>--fixed</code>を指定します。外部の配布物を取得するときに<code>--pg</code>を省略すると、カタログに記録されたすべてのPostgreSQLメジャーバージョンが対象になります。<code>--output</code>で既存のフォルダーを指定できます。省略時は作業中のフォルダーに保存します。詳細な実行ログを表示するには<code>--verbose</code>を付けます。</p>
-      <h3>ヘルプとCLIのバージョンを表示</h3>
-      <pre class="cli-usage"><code>.\pgextwin.exe --help
-.\pgextwin.exe --version</code></pre>
-      <h3>コマンド例</h3>
-      <div class="cli-command-list">
-        <div><h4>PostgreSQL 18用のpgvectorを取得</h4><pre><code>.\pgextwin.exe download pgvector --pg 18</code></pre></div>
-        <div><h4>PostgreSQL 18用のpgvector 0.8.7を取得</h4><pre><code>.\pgextwin.exe download pgvector --version 0.8.7 --pg 18</code></pre></div>
-        <div><h4>PostgreSQL 15用のHypoPG 1.4.4を取得</h4><pre><code>.\pgextwin.exe download hypopg --source pgextwin --pg 15 --version 1.4.4</code></pre></div>
-        <div><h4>PostgreSQL 18用の外部拡張機能を一覧表示</h4><pre><code>.\pgextwin.exe list --category extensions --pg 18</code></pre></div>
-        <div><h4>PostgreSQL 18用のベクトル関連パッケージを検索</h4><pre><code>.\pgextwin.exe search vector --pg 18</code></pre></div>
-        <div><h4>PostgreSQL 18用の外部拡張機能ZIPをまとめて取得</h4><pre><code>.\pgextwin.exe download-all --source external --pg 18 --category extensions</code></pre></div>
-        <div><h4>PostgreSQL 18用のpgextwin配布ZIPをまとめて取得</h4><pre><code>.\pgextwin.exe download-all --pg 18</code></pre></div>
-        <div><h4>psqlODBCドライバーを取得</h4><pre><code>.\pgextwin.exe download psqlodbc</code></pre></div>
-        <div><h4>PostgreSQL 19用のPostGISを取得</h4><pre><code>.\pgextwin.exe download postgis --pg 19</code></pre></div>
-        <div><h4>PostgreSQL 19用のpgRoutingを取得</h4><pre><code>.\pgextwin.exe download pgrouting --pg 19</code></pre></div>
-      </div>
-      <div class="cli-included">
-        <h3>現在の外部ダウンロード対象</h3>
-        <ul><li>oracle_fdw 2.9.0：PostgreSQL 14～18</li><li>pgvector 0.8.7：PostgreSQL 14～18</li><li>pglogical 2.4.8：PostgreSQL 15～18</li><li>pg_crash 0.3：PostgreSQL 15～18</li><li>PostGIS／pgRoutingバンドル：PostgreSQL 15～19</li><li>pg_trickle 0.108.3：PostgreSQL 18</li><li>空間拡張：PostGISバンドル 3.6.2（pgRouting 4.0.1入り、インストーラー形式）：PostgreSQL 14</li><li>ツール：PgBouncer 1.26.1</li><li>ドライバ：psqlODBC 13.02</li></ul>
-        <p>CLIはカタログの取得レコードから最新の対象一覧を読み込みます。期限付きの許可は不要で、取得したファイルはハッシュとサイズで照合します。PostgreSQLがインストールされていない環境でも、ダウンロードのみに使えます。</p>
-      </div>
-    </section>
-    <section aria-labelledby="flow-heading">
-      <p class="eyebrow">使い方は3ステップ</p>
-      <h2 id="flow-heading">使い方は3ステップ</h2>
-      <ol class="cli-flow-steps">
-        <li><h3>1. pgextwin.exeを取得</h3><p>上のボタンからEXEをダウンロードし、使用するフォルダーに保存します。</p></li>
-        <li><h3>2. コマンドを実行</h3><p>そのフォルダーでPowerShellを開きます。<code>download</code>に取得したい名前を指定します。外部配布物のバージョンを指定する場合は<code>--version</code>を付けます。まとめて取得する場合は<code>download-all</code>を使います。<code>--pg</code>でPostgreSQLのメジャーバージョンを指定します。</p></li>
-        <li><h3>3. ZIPを照合</h3><p>取得したZIPのSHA-256を確認し、提供元の導入手順に従ってください。</p></li>
-      </ol>
-    </section>
-    <section class="info" aria-labelledby="checksum-heading">
-      <h2 id="checksum-heading">ZIPの照合例</h2>
-      <p>実際のファイル名に置き換えて実行し、提供元やダウンロード結果のSHA-256と照合してください。</p>
-      <pre><code>Get-FileHash .\downloaded-file.zip -Algorithm SHA256</code></pre>
-    </section>
-    <section aria-labelledby="verify-heading">
-      <h2 id="verify-heading">ローカルファイルの検証</h2>
-      <p><code>verify external</code>は、取得済みの外部ZIPをレビュー記録と照合し、SHA-256、ファイルサイズ、ZIPの構造を確認します。</p>
-      <pre class="cli-usage"><code>.\pgextwin.exe verify external --ledger &lt;file&gt; --input-dir &lt;dir&gt; --pg &lt;major|all&gt;</code></pre>
-      <p><code>verify report</code>は、別途確認したハッシュ値と手元のファイルを使って、拡張機能1件の署名付きレポートを認証します。</p>
-      <pre class="cli-usage"><code>.\pgextwin.exe verify report &lt;item&gt; --pg &lt;major&gt; --catalog-dir &lt;dir&gt; --policy &lt;file&gt; --policy-sha256 &lt;hex&gt; --trusted-root-sha256 &lt;hex&gt; --p1-verifier-sha256 &lt;hex&gt; --report &lt;file&gt; --signature &lt;file&gt; --authority-key &lt;pem&gt; --authority-key-sha256 &lt;hex&gt;</code></pre>
-    </section>
-    <section class="cli-caution" role="note" aria-labelledby="caution-heading">
-      <h2 id="caution-heading">ご利用前の注意</h2>
-      <p>外部配布物は、それぞれの提供元が公開しています。対応するPostgreSQLバージョンとライセンスを確認してください。PostgreSQL 14の公式サポートは2026年11月12日に終了しました。CLIはダウンロード専用で、拡張機能のインストールや設定変更は行いません。</p>
-    </section>
-    <section aria-labelledby="release-notes-heading">
-      <h2 id="release-notes-heading">リリースノート</h2>
-      <div class="cli-release-notes">
-        <article lang="ja" class="cli-note-block">
-          <h3>CLI v0.6.0</h3>
-          <p>v0.6.0（2026年11月22日）は、署名付きカタログからpgextwin配布の拡張機能をバージョン指定で取得できます。たとえばPostgreSQL 15用のHypoPGは、最新版1.4.5に加えて<code>download hypopg --source pgextwin --pg 15 --version 1.4.4</code>で1.4.4も取得できます。PostgreSQL 19向けのOSGeoバンドル（PostGIS 3.7.0、pgRouting 4.0.1）を含む外部カタログにも対応し、外部拡張・空間バンドルはPostgreSQL 15〜19で取得できます。公開EXEは13,696,554バイト（13.69 MB）です。</p>
-          <p><a href="https://github.com/pgextwin/catalog/releases/tag/cli-v0.6.0">GitHubでリリース情報を見る</a></p>
-        </article>
-      </div>
-    </section>
-    <p class="cli-back"><a href="./">カタログへ戻る</a></p>
+  <main>
+    <h1>pgextwin</h1>
+    <p>CLI ガイドは Catalog の Pages サイトへ移転しました。</p>
+    <p><a href="https://pgextwin.github.io/catalog/ja/cli.html">新しいサイトへ</a></p>
   </main>
 </body>
 </html>
