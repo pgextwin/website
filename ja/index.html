@@ -3,179 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="PostgreSQL拡張機能のWindows x64用ZIPを探せます。個別にダウンロードするか、CLIでまとめて取得できます。">
-  <title>pgextwin — PostgreSQL拡張機能のWindowsバイナリ</title>
-  <link rel="canonical" href="https://pgextwin.github.io/website/ja/">
-  <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/">
-  <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/">
-  <link rel="alternate" hreflang="x-default" href="https://pgextwin.github.io/website/">
-  <link rel="stylesheet" href="../styles.css">
+  <meta name="robots" content="noindex,follow">
+  <title>pgextwin — 移転しました</title>
+  <link rel="canonical" href="https://pgextwin.github.io/catalog/ja/">
+  <meta http-equiv="refresh" content="0; url=https://pgextwin.github.io/catalog/ja/">
+  <script>
+    window.location.replace("https://pgextwin.github.io/catalog/ja/" + window.location.search + window.location.hash);
+  </script>
 </head>
 <body>
-  <a class="skip-link" href="#extensions-heading">ダウンロード一覧へ移動</a>
-  <header class="site-header">
-    <div class="shell">
-      <nav class="language-nav" aria-label="表示言語"><a href="../ja/" lang="ja" aria-current="page">日本語</a><a href="../en/" lang="en">English</a></nav>
-      <p class="eyebrow">pgextwin</p>
-      <h1>PostgreSQL拡張機能のWindowsバイナリ</h1>
-      <p class="lead">pgextwinは、PostgreSQL拡張機能の非公式ビルドをWindows x64向けに配布しています。お使いのPostgreSQLに合うZIPを選び、SHA-256を照合してから、拡張機能ごとの手順に従って導入してください。</p>
-      <nav class="jump-nav" aria-label="ページ内ナビゲーション">
-        <a class="jump-nav-primary" href="#extensions-heading">バイナリを探す</a>
-        <a href="./cli.html">CLI v0.6.0</a>
-        <a href="#landscape-heading">CLI対応状況</a>
-        <a href="#about-heading">pgextwinについて</a>
-      </nav>
-
-
-    </div>
-  </header>
-
-  <main class="shell">
-    <section class="info quickstart" aria-labelledby="quickstart-heading">
-      <p class="eyebrow">はじめて利用する方へ</p>
-      <h2 id="quickstart-heading">探す → 選ぶ → ダウンロード → 照合</h2>
-      <ol class="quickstart-steps">
-        <li><strong>探す</strong> — 拡張機能名で検索し、PostgreSQLのバージョンで絞り込みます。</li>
-        <li><strong>選ぶ</strong> — 対応するバージョンと導入要件を確認します。</li>
-        <li><strong>ダウンロード</strong> — 対象のZIPを取得します。<a href="./cli.html">Windows CLI</a>でも名前を指定して取得したり、複数のZIPをまとめて取得したりできます。</li>
-        <li><strong>SHA-256で照合</strong> — ダウンロードしたZIPのハッシュ値を確認してから、拡張機能ごとの導入手順に従います。</li>
-      </ol>
-    </section>
-
-    <section aria-labelledby="extensions-heading">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">配布カタログ</p>
-          <h2 id="extensions-heading">配布中の拡張機能</h2>
-        </div>
-        <button id="reload" type="button">カタログを再読み込み</button>
-      </div>
-
-      <div class="catalog-hint" role="note"><strong>pgextwinが公開するWindows x64用ZIP<span id="catalog-count"></span></strong><p>拡張機能名とPostgreSQLのバージョンで絞り込んでください。拡張機能を開くと、対応するZIP、導入要件、SHA-256を確認できます。CLIで取得すると、pgextwinの配布フィードの署名が検証されます。</p></div>
-      <div class="filters" aria-label="拡張機能の絞り込み">
-        <div class="filter-field filter-field--search">
-          <label for="search">拡張機能を検索</label>
-          <input id="search" name="search" type="search" autocomplete="off" placeholder="拡張機能名・説明・上流リポジトリ">
-        </div>
-        <div class="filter-field">
-          <label for="pg-filter">PostgreSQLのバージョン</label>
-          <select id="pg-filter" name="pg-filter">
-            <option value="">すべてのPostgreSQLバージョン</option>
-          </select>
-        </div>
-      </div>
-
-      <div id="status" class="status" role="status" aria-live="polite">カタログを読み込んでいます…</div>
-      <p id="results-count" class="results-count" role="status" aria-live="polite"></p>
-      <div id="empty-state" class="empty-state" role="status" hidden>条件に一致する拡張機能はありません。</div>
-      <div id="extensions" class="extension-grid"></div>
-    </section>
-
-
-    <section class="cli-home-teaser" aria-labelledby="cli-home-heading">
-      <p class="eyebrow">Windows CLI · v0.6.0 · プレリリース</p>
-      <h2 id="cli-home-heading">Windows CLIでパッケージを取得</h2>
-      <div class="cli-command-list">
-        <div><strong>PostgreSQL 18用のpgvector</strong><pre><code>.\pgextwin.exe download pgvector --pg 18</code></pre></div>
-        <div><strong>PostgreSQL 18用のpgextwin配布ZIP</strong><pre><code>.\pgextwin.exe download-all --pg 18</code></pre></div>
-      </div>
-      <p><code>download</code>で名前を指定して取得し、<code>download-all</code>でまとめて取得します。<code>--pg</code>でPostgreSQLのメジャーバージョンを指定します。</p>
-      <div class="cli-teaser-actions"><a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.6.0/pgextwin.exe">CLI v0.6.0 をダウンロード（13.69 MB）</a><a href="./cli.html">使い方とSHA-256の確認方法</a></div>
-    </section>
-
-    <section class="landscape-section" aria-labelledby="landscape-heading">
-      <div class="section-heading">
-        <div>
-          <h2 id="landscape-heading">Windows向けパッケージのCLI対応状況</h2>
-        </div>
-        <button id="landscape-reload" type="button">対応状況を再読み込み</button>
-      </div>
-      <p>Windows向けの拡張機能・ツール・ドライバーをCLIで取得できるか確認できます。複数の配布区分に該当する項目もあります。項目を開くと、対象ファイルや、CLIで取得できない理由を確認できます。</p>
-
-
-      <p class="landscape-disclaimer">外部パッケージをCLIの取得対象に加える際は、バージョンごとにライセンスを確認します。CLIは提供元から原本を取得し、SHA-256とファイルサイズを照合します。互換性やサポートについては提供元の案内をご確認ください。</p>
-
-
-      <div class="filters landscape-filters" aria-label="対応状況の検索と絞り込み">
-        <div class="filter-field">
-          <label for="landscape-search">対応状況を検索</label>
-          <input id="landscape-search" type="search" autocomplete="off" placeholder="パッケージ名・提供元">
-        </div>
-        <div class="filter-field">
-          <label for="landscape-filter">配布区分</label>
-          <select id="landscape-filter">
-            <option value="">すべて</option>
-            <optgroup label="CLIで取得できるもの">
-              <option value="implemented"></option>
-              <option value="external-direct"></option>
-              <option value="external-standalone"></option>
-            </optgroup>
-            <optgroup label="CLIで取得できないもの">
-              <option value="candidate"></option>
-              <option value="license-excluded"></option>
-              <option value="not-planned"></option>
-            </optgroup>
-          </select>
-        </div>
-        <div class="filter-field">
-          <label for="landscape-source-filter">外部取得元の種別</label>
-          <select id="landscape-source-filter">
-            <option value="">すべての取得元</option>
-            <option value="upstream-official">公式</option>
-            <option value="community">コミュニティ</option>
-            <option value="vendor">ベンダー</option>
-            <option value="package-manager">パッケージ管理ツール</option>
-          </select>
-        </div>
-      </div>
-      <div id="landscape-status" class="status" role="status" aria-live="polite">対応状況を読み込んでいます…</div>
-      <p id="landscape-count" class="results-count" role="status" aria-live="polite"></p>
-      <p id="landscape-empty" class="empty-state" hidden>条件に一致するパッケージはありません。</p>
-      <div id="landscape-grid" class="extension-grid"></div>
-    </section>
-
-    <section class="info" aria-labelledby="lifecycle-heading">
-      <p class="eyebrow">PostgreSQLのサポート期間</p>
-      <h2 id="lifecycle-heading">ダウンロードできてもサポート期間内とは限りません</h2>
-      <p><strong>「配布中」</strong>は、そのPostgreSQLバージョン用のバイナリが公開されていることを示します。一方、<strong>「サポート期間内」</strong>はPostgreSQLコミュニティのサポート状況を示します。サポートが終了したバージョンのZIPも、過去の配布物として残る場合があります。</p>
-
-
-      <div id="lifecycle-notice" class="lifecycle-notice" aria-live="polite"></div>
-    </section>
-
-    <section class="info" aria-labelledby="integrity-heading">
-      <p class="eyebrow">ダウンロード後の確認</p>
-      <h2 id="integrity-heading">ZIPのSHA-256を確認する</h2>
-      <p>ダウンロードしたZIPについて、PowerShellで次のコマンドを実行します。表示された値が拡張機能の詳細にあるSHA-256と一致することを確認してください。</p>
-      <pre><code>Get-FileHash .\downloaded-file.zip -Algorithm SHA256</code></pre>
-    </section>
-
-    <section class="info" aria-labelledby="about-heading">
-      <p class="eyebrow">このプロジェクトについて</p>
-      <h2 id="about-heading">pgextwinが公開するパッケージについて</h2>
-      <p>pgextwinは、PostgreSQL拡張機能の非公式Windows x64パッケージを公開する独立したコミュニティプロジェクトです。各パッケージの上流プロジェクト、ソースのバージョン、対応PostgreSQLバージョン、ライセンスを確認できます。</p>
-
-
-    </section>
+  <main>
+    <h1>pgextwin</h1>
+    <p>このサイトは Catalog の Pages サイトへ移転しました。</p>
+    <p><a href="https://pgextwin.github.io/catalog/ja/">新しいサイトへ</a></p>
   </main>
-
-  <footer class="site-footer">
-    <div class="shell">
-      <a href="https://github.com/pgextwin">GitHub</a>
-      <a href="https://github.com/pgextwin/catalog">公開カタログ</a>
-      <a href="./cli.html">Windows CLI</a>
-      <section class="release-limitations" role="note" aria-labelledby="release-limitations-title">
-        <h2 id="release-limitations-title">ご利用前の注意</h2>
-        <p>pgextwinの配布物は非公式です。対応するPostgreSQLのバージョン、提供元のライセンス、必要な設定を確認してください。ZIPをダウンロードするだけではインストールされません。外部配布物については、各提供元の案内もご確認ください。</p>
-      </section>
-    </div>
-  </footer>
-
-  <script src="../lifecycle.js" defer></script>
-  <script src="../catalog-view.js" defer></script>
-  <script src="../locale.js" defer></script>
-  <script src="../app.js" defer></script>
-  <script src="../landscape-view.js" defer></script>
-  <script src="../landscape-app.js" defer></script>
 </body>
 </html>

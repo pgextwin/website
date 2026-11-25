@@ -3,179 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Find PostgreSQL extension ZIPs for Windows x64 and download them individually or in batches with the CLI.">
-  <title>pgextwin — PostgreSQL Extensions for Windows</title>
-  <link rel="canonical" href="https://pgextwin.github.io/website/en/">
-  <link rel="alternate" hreflang="en" href="https://pgextwin.github.io/website/en/">
-  <link rel="alternate" hreflang="ja" href="https://pgextwin.github.io/website/ja/">
-  <link rel="alternate" hreflang="x-default" href="https://pgextwin.github.io/website/">
-  <link rel="stylesheet" href="../styles.css">
+  <meta name="robots" content="noindex,follow">
+  <title>pgextwin — Moved</title>
+  <link rel="canonical" href="https://pgextwin.github.io/catalog/en/">
+  <meta http-equiv="refresh" content="0; url=https://pgextwin.github.io/catalog/en/">
+  <script>
+    window.location.replace("https://pgextwin.github.io/catalog/en/" + window.location.search + window.location.hash);
+  </script>
 </head>
 <body>
-  <a class="skip-link" href="#extensions-heading">Skip to downloads</a>
-  <header class="site-header">
-    <div class="shell">
-      <nav class="language-nav" aria-label="Language"><a href="../en/" lang="en" aria-current="page">English</a><a href="../ja/" lang="ja">日本語</a></nav>
-      <p class="eyebrow">pgextwin</p>
-      <h1>PostgreSQL Extensions for Windows</h1>
-      <p class="lead">pgextwin publishes unofficial PostgreSQL extension builds for Windows x64. Find the ZIP for your PostgreSQL version, check its SHA-256, and follow the extension’s installation instructions.</p>
-      <nav class="jump-nav" aria-label="Page sections">
-        <a class="jump-nav-primary" href="#extensions-heading">Browse downloads</a>
-        <a href="./cli.html">CLI v0.6.0</a>
-        <a href="#landscape-heading">Check CLI availability</a>
-        <a href="#about-heading">About pgextwin</a>
-      </nav>
-
-
-    </div>
-  </header>
-
-  <main class="shell">
-    <section class="info quickstart" aria-labelledby="quickstart-heading">
-      <p class="eyebrow">Getting started</p>
-      <h2 id="quickstart-heading">Find → Choose → Download → Verify</h2>
-      <ol class="quickstart-steps">
-        <li><strong>Find</strong> — Search by extension name and filter by your PostgreSQL major version.</li>
-        <li><strong>Choose</strong> — Check the matching version and installation requirements.</li>
-        <li><strong>Download</strong> — Get the ZIP file, or use the <a href="./cli.html">Windows CLI</a> to download by name or in bulk.</li>
-        <li><strong>Verify</strong> — Compare the downloaded ZIP's SHA-256, then follow that extension's installation steps.</li>
-      </ol>
-    </section>
-
-    <section aria-labelledby="extensions-heading">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Catalog</p>
-          <h2 id="extensions-heading">Available extensions</h2>
-        </div>
-        <button id="reload" type="button">Reload catalog</button>
-      </div>
-
-      <div class="catalog-hint" role="note"><strong>pgextwin Windows x64 ZIP downloads<span id="catalog-count"></span></strong><p>Filter by name and PostgreSQL version. Open an extension to find its ZIP, installation requirements, and SHA-256. The CLI verifies the signature of the pgextwin feed.</p></div>
-      <div class="filters" aria-label="Extension filters">
-        <div class="filter-field filter-field--search">
-          <label for="search">Search extensions</label>
-          <input id="search" name="search" type="search" autocomplete="off" placeholder="Name, description, or upstream repository">
-        </div>
-        <div class="filter-field">
-          <label for="pg-filter">PostgreSQL version</label>
-          <select id="pg-filter" name="pg-filter">
-            <option value="">All PostgreSQL versions</option>
-          </select>
-        </div>
-      </div>
-
-      <div id="status" class="status" role="status" aria-live="polite">Loading catalog…</div>
-      <p id="results-count" class="results-count" role="status" aria-live="polite"></p>
-      <div id="empty-state" class="empty-state" role="status" hidden>No extensions match the current filters.</div>
-      <div id="extensions" class="extension-grid"></div>
-    </section>
-
-
-    <section class="cli-home-teaser" aria-labelledby="cli-home-heading">
-      <p class="eyebrow">Windows CLI · v0.6.0 · Pre-release</p>
-      <h2 id="cli-home-heading">Download packages with the Windows CLI</h2>
-      <div class="cli-command-list">
-        <div><strong>pgvector for PostgreSQL 18</strong><pre><code>.\pgextwin.exe download pgvector --pg 18</code></pre></div>
-        <div><strong>pgextwin ZIPs for PostgreSQL 18</strong><pre><code>.\pgextwin.exe download-all --pg 18</code></pre></div>
-      </div>
-      <p>Use <code>download</code> for one named item or <code>download-all</code> for a batch. Set <code>--pg</code> to your PostgreSQL major version.</p>
-      <div class="cli-teaser-actions"><a class="download-link" href="https://github.com/pgextwin/catalog/releases/download/cli-v0.6.0/pgextwin.exe">Download CLI v0.6.0 (13.69 MB)</a><a href="./cli.html">Commands and SHA-256 verification</a></div>
-    </section>
-
-    <section class="landscape-section" aria-labelledby="landscape-heading">
-      <div class="section-heading">
-        <div>
-          <h2 id="landscape-heading">Windows packages and CLI availability</h2>
-        </div>
-        <button id="landscape-reload" type="button">Reload landscape</button>
-      </div>
-      <p>Check which Windows extensions, tools, and drivers the CLI can download. An item can appear under more than one route. Open an entry for package details or the reason it is unavailable.</p>
-
-
-      <p class="landscape-disclaimer">For external CLI downloads, pgextwin checks the license for each package version. The CLI fetches the provider’s original file and checks its SHA-256 and size. Consult the provider for compatibility and support.</p>
-
-
-      <div class="filters landscape-filters" aria-label="Landscape search and filters">
-        <div class="filter-field">
-          <label for="landscape-search">Search landscape</label>
-          <input id="landscape-search" type="search" autocomplete="off" placeholder="Package or provider">
-        </div>
-        <div class="filter-field">
-          <label for="landscape-filter">Distribution status</label>
-          <select id="landscape-filter">
-            <option value="">All</option>
-            <optgroup label="Downloadable with the CLI">
-              <option value="implemented"></option>
-              <option value="external-direct"></option>
-              <option value="external-standalone"></option>
-            </optgroup>
-            <optgroup label="Unavailable through the CLI">
-              <option value="candidate"></option>
-              <option value="license-excluded"></option>
-              <option value="not-planned"></option>
-            </optgroup>
-          </select>
-        </div>
-        <div class="filter-field">
-          <label for="landscape-source-filter">External source type</label>
-          <select id="landscape-source-filter">
-            <option value="">All sources</option>
-            <option value="upstream-official">Official</option>
-            <option value="community">Community</option>
-            <option value="vendor">Vendor</option>
-            <option value="package-manager">Package manager</option>
-          </select>
-        </div>
-      </div>
-      <div id="landscape-status" class="status" role="status" aria-live="polite">Loading landscape…</div>
-      <p id="landscape-count" class="results-count" role="status" aria-live="polite"></p>
-      <p id="landscape-empty" class="empty-state" hidden>No matching packages.</p>
-      <div id="landscape-grid" class="extension-grid"></div>
-    </section>
-
-    <section class="info" aria-labelledby="lifecycle-heading">
-      <p class="eyebrow">PostgreSQL lifecycle</p>
-      <h2 id="lifecycle-heading">Downloadable does not always mean supported</h2>
-      <p><strong>Available</strong> means a binary has been published for that PostgreSQL version. <strong>Maintained</strong> refers to the PostgreSQL community support period. ZIPs for unsupported PostgreSQL versions may remain downloadable as historical releases.</p>
-
-
-      <div id="lifecycle-notice" class="lifecycle-notice" aria-live="polite"></div>
-    </section>
-
-    <section class="info" aria-labelledby="integrity-heading">
-      <p class="eyebrow">After downloading</p>
-      <h2 id="integrity-heading">Check the ZIP's SHA-256</h2>
-      <p>Run the following in PowerShell with your downloaded ZIP file name. Compare the result with the SHA-256 shown in the extension details.</p>
-      <pre><code>Get-FileHash .\downloaded-file.zip -Algorithm SHA256</code></pre>
-    </section>
-
-    <section class="info" aria-labelledby="about-heading">
-      <p class="eyebrow">About</p>
-      <h2 id="about-heading">About pgextwin packages</h2>
-      <p>pgextwin is an independent community project publishing unofficial Windows x64 packages for PostgreSQL extensions. Each package identifies the upstream project, source version, supported PostgreSQL versions, architecture, and license.</p>
-
-
-    </section>
+  <main>
+    <h1>pgextwin</h1>
+    <p>This site has moved to the Catalog Pages site.</p>
+    <p><a href="https://pgextwin.github.io/catalog/en/">Continue to the new site</a></p>
   </main>
-
-  <footer class="site-footer">
-    <div class="shell">
-      <a href="https://github.com/pgextwin">GitHub</a>
-      <a href="https://github.com/pgextwin/catalog">Published catalog</a>
-      <a href="./cli.html">Windows CLI</a>
-      <section class="release-limitations" role="note" aria-labelledby="release-limitations-title">
-        <h2 id="release-limitations-title">Before you install</h2>
-        <p>pgextwin packages are unofficial. Check PostgreSQL compatibility, provider licenses, and required configuration. Downloading a ZIP does not install it. For third-party packages, consult the original provider's documentation.</p>
-      </section>
-    </div>
-  </footer>
-
-  <script src="../lifecycle.js" defer></script>
-  <script src="../catalog-view.js" defer></script>
-  <script src="../locale.js" defer></script>
-  <script src="../app.js" defer></script>
-  <script src="../landscape-view.js" defer></script>
-  <script src="../landscape-app.js" defer></script>
 </body>
 </html>
