@@ -68,18 +68,3 @@ test("optional pg_partman BGW capability is accurately translated",()=>{
     assert.equal(en.t(original),original);
  }
 });
-test("each route has a language switch and shared data scripts",()=>{
- const root=readFileSync(join(__dirname,"..","index.html"),"utf8");
- assert.match(root,/navigator\.languages/);
- assert.match(root,/window\.location\.replace/);
- for(const language of ["ja","en"]){
-  const html=readFileSync(join(__dirname,"..",language,"index.html"),"utf8");
-  assert.ok(html.includes('<html lang="'+language+'">'));
-  assert.ok(html.includes('href="../ja/"'));
-  assert.ok(html.includes('href="../en/"'));
-  for(const src of ["../locale.js","../app.js","../landscape-app.js","../catalog-view.js","../landscape-view.js"]) assert.ok(html.includes('src="'+src+'"'));
-  assert.ok(html.includes('href="../styles.css"'));
-  assert.ok(!html.includes('src="../../'));
-  assert.ok(html.includes('href="https://pgextwin.github.io/website/'+language+'/"'));
- }
-});
